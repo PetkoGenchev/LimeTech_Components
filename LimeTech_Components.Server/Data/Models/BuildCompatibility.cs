@@ -1,4 +1,4 @@
-﻿namespace LimeTech_Components.Server.Models
+﻿namespace LimeTech_Components.Server.Data.Models
 {
     using System.ComponentModel.DataAnnotations;
     using static Constants.DataConstants;

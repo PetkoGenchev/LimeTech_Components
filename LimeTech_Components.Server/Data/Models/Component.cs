@@ -1,4 +1,4 @@
-﻿namespace LimeTech_Components.Server.Models
+﻿namespace LimeTech_Components.Server.Data.Models
 {
     using System.ComponentModel.DataAnnotations;
     using static Constants.DataConstants;
@@ -10,6 +10,10 @@
         [Required]
         [MaxLength(ComponentConstants.PartNameMaxLength)]
         public string Name { get; set; }
+
+        [Required]
+        [MaxLength(ComponentConstants.PartNameMaxLength)]
+        public string TypeOfProduct { get; set; }
 
         [Required]
         public int Price { get; set; }
@@ -25,6 +29,14 @@
         public int BuildId { get; set; }
 
         public BuildCompatibility BuildCompatibility { get; init; }
+
+        public int PublicId { get; set; }
+
+        public User User { get; init; }
+
+        public int DiscountId { get; set; }
+
+        public DiscountMonth DiscountMonth { get; init; }
 
     }
 }

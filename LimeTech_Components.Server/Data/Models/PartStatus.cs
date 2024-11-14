@@ -4,7 +4,6 @@
     {
         Available,
         Sold,
-        Discounted,
         WaitingStock,
     }
 

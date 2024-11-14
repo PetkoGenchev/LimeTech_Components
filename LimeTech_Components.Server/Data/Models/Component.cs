@@ -18,6 +18,8 @@
         [Required]
         public int Price { get; set; }
 
+        public int DiscountedPrice { get; set; }
+
         [Required]
         public int ProductionYear { get; set; }
 

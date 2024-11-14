@@ -10,7 +10,10 @@ namespace LimeTech_Components.Server.Data.Models
         public string Month { get; set; }
 
         [Required]
-        public int Discount { get; set; }
+        public string TypeOfProduct { get; set; }
+
+        [Required]
+        public int DiscountPercentage { get; set; }
 
         public IEnumerable<Component> Components { get; init; } = new List<Component>();
     }

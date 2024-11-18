@@ -1,21 +1,30 @@
 ﻿using LimeTech_Components.Server.Data.Models;
+using LimeTech_Components.Server.Services.Components.Models;
 using System.Collections.Generic;
 
 namespace LimeTech_Components.Server.Repositories.Components
 {
     public interface IComponentRepository
     {
-        Task<IEnumerable<Component>> GetComponentsAsync(
-            string name, string typeOfProduct, int? minPrice, 
-            int? maxPrice, int? productionYear,
+
+        Task<ComponentQueryServiceModel> GetComponentsAsync(
+            int currentPage,
+            int componentsPerPage);
+
+        Task<ComponentQueryServiceModel> GetComponentsAsync(
+            string name, 
+            string typeOfProduct, 
+            int? minPrice, 
+            int? maxPrice, 
+            int? productionYear,
             PartStatus? status);
 
         Task<IEnumerable<Component>> GetTopDiscountedComponentsAsync(int top);
 
-        Task AddComponentAsync(Component component);
+        Task CreateComponentAsync(Component component);
 
-        Task UpdateComponentAsync(Component component);
+        Task EditComponentAsync(Component component);
 
-        Task UpdateComponentVisibilityAsync(int componentId, bool isVisible);
+        Task ChangeComponentVisibilityAsync(int componentId, bool isVisible);
     }
 }

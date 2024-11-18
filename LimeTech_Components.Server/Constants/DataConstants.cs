@@ -9,6 +9,7 @@
             public const int MinPartPrice = 1;
             public const int MinPartPowerUsage = 1;
             public const int MaxPartPowerUsage = 5000;
+            public const int ComponentsPerPage = 10;
         }
 
         public class DiscountConstants

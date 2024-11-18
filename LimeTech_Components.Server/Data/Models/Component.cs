@@ -16,6 +16,9 @@
         public string TypeOfProduct { get; set; }
 
         [Required]
+        public string ImageUrl { get; set; }
+
+        [Required]
         public int Price { get; set; }
 
         public int DiscountedPrice { get; set; }
@@ -27,6 +30,8 @@
         public int PowerUsage { get; set; }
 
         public PartStatus Status { get; set; }
+
+        public bool IsPublic { get; set; }
 
         public int BuildId { get; set; }
 

@@ -1,11 +1,23 @@
 ﻿using LimeTech_Components.Server.Data.Models;
+using LimeTech_Components.Server.Services.Components.Models;
 
 namespace LimeTech_Components.Server.Services.Components
 {
     public interface IComponentService
     {
-        Task<IEnumerable<Component>> GetComponentsAsync(
-        string name, string typeOfProduct, int? minPrice, int? maxPrice, int? productionYear, PartStatus? status);
+
+        Task<ComponentQueryServiceModel> GetComponentsAsync(
+            int currentPage,
+            int componentsPerPage);
+
+        Task<ComponentQueryServiceModel> GetComponentsAsync(
+            string name,
+            string typeOfProduct,
+            int? minPrice,
+            int? maxPrice,
+            int? productionYear,
+            PartStatus? status);
+
 
         Task<IEnumerable<Component>> GetTopDiscountedComponentsAsync(int top);
 

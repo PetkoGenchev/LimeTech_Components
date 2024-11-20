@@ -1,6 +1,7 @@
 ﻿using LimeTech_Components.Server.Data.Models;
 using LimeTech_Components.Server.Services.Components.Models;
 using System.Collections.Generic;
+using static LimeTech_Components.Server.Constants.DataConstants;
 
 namespace LimeTech_Components.Server.Repositories.Components
 {
@@ -17,7 +18,9 @@ namespace LimeTech_Components.Server.Repositories.Components
             int? minPrice, 
             int? maxPrice, 
             int? productionYear,
-            PartStatus? status);
+            PartStatus? status,
+            int currentPage = 1,
+            int componentsPerPage = ComponentConstants.ComponentsPerPage);
 
         Task<IEnumerable<Component>> GetTopDiscountedComponentsAsync(int top);
 

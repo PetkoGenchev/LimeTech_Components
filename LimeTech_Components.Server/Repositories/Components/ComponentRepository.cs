@@ -43,39 +43,59 @@
 
 
         public async Task<ComponentQueryServiceModel> GetComponentsAsync(
-            string name, 
-            string typeOfProduct, 
-            int? minPrice, 
-            int? maxPrice, 
-            int? productionYear, 
-            PartStatus? status)
+            string name,
+            string typeOfProduct,
+            int? minPrice,
+            int? maxPrice,
+            int? productionYear,
+            PartStatus? status,
+            int currentPage = 1,
+            int componentsPerPage = ComponentConstants.ComponentsPerPage)
         {
-            //var query = _context.Components.AsQueryable();
+            var query = _context.Components.AsQueryable();
 
-            //if (!string.IsNullOrEmpty(name))
-            //    query = query.Where(c => c.Name.Contains(name));
 
-            //if (!string.IsNullOrEmpty(typeOfProduct))
-            //    query = query.Where(c => c.TypeOfProduct == typeOfProduct);
-
-            //if (minPrice.HasValue)
-            //    query = query.Where(c => c.Price >= minPrice.Value);
-
-            //if (maxPrice.HasValue)
-            //    query = query.Where(c => c.Price <= maxPrice.Value);
-
-            //if (productionYear.HasValue)
-            //    query = query.Where(c => c.ProductionYear == productionYear.Value);
-
-            //if (status.HasValue)
-            //    query = query.Where(c => c.Status == status.Value);
-
-            var componentModel = new ComponentQueryServiceModel
+            if (!string.IsNullOrEmpty(typeOfProduct))
             {
+                query = query.Where(t => t.TypeOfProduct == typeOfProduct);
+            }
 
+            if (!string.IsNullOrEmpty(name))
+            {
+                query = query.Where(c => c.Name.Contains(name));
+            }
+
+            if (minPrice.HasValue)
+            {
+                query = query.Where(c => c.Price >= minPrice.Value);
+            }
+
+            if (maxPrice.HasValue)
+            {
+                query = query.Where(c => c.Price <= maxPrice.Value);
+            }
+
+            if (productionYear.HasValue)
+            {
+                query = query.Where(c => c.ProductionYear == productionYear.Value);
+            }
+
+            if (status.HasValue)
+            {
+                query = query.Where(c => c.Status == status.Value);
+            }
+
+            var components = await GetComponents(query
+                .Skip((currentPage - 1) * componentsPerPage)
+                .Take(componentsPerPage));
+
+            var totalComponents = components.Count();
+
+            return new ComponentQueryServiceModel
+            {
+                Components = components,
+                TotalComponents = totalComponents
             };
-
-            return componentModel;
         }
 
 

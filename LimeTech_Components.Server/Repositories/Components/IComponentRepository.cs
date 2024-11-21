@@ -19,8 +19,8 @@ namespace LimeTech_Components.Server.Repositories.Components
             int? maxPrice, 
             int? productionYear,
             PartStatus? status,
-            int currentPage = 1,
-            int componentsPerPage = ComponentConstants.ComponentsPerPage);
+            int currentPage,
+            int componentsPerPage);
 
         Task<IEnumerable<Component>> GetTopDiscountedComponentsAsync(int top);
 

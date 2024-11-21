@@ -31,6 +31,9 @@
 
         public PartStatus Status { get; set; }
 
+        [Required]
+        public int StockCount { get; set; }
+
         public bool IsPublic { get; set; }
 
         public int BuildId { get; set; }

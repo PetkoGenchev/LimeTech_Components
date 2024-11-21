@@ -23,14 +23,24 @@
         }
 
         public async Task<ComponentQueryServiceModel> GetComponentsAsync(
-        string name,
-        string typeOfProduct,
-        int? minPrice,
-        int? maxPrice,
-        int? productionYear,
-        PartStatus? status)
+            string name,
+            string typeOfProduct,
+            int? minPrice,
+            int? maxPrice,
+            int? productionYear,
+            PartStatus? status,
+            int currentPage = 1,
+            int componentsPerPage = ComponentConstants.ComponentsPerPage)
         {
-            return await _componentRepository.GetComponentsAsync(name, typeOfProduct, minPrice, maxPrice, productionYear, status);
+            return await _componentRepository.GetComponentsAsync(
+                name, 
+                typeOfProduct, 
+                minPrice, 
+                maxPrice, 
+                productionYear, 
+                status,
+                currentPage,
+                componentsPerPage);
         }
 
         public async Task<IEnumerable<Component>> GetTopDiscountedComponentsAsync(int top)

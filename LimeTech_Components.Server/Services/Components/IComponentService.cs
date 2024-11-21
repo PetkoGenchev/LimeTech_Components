@@ -16,7 +16,9 @@ namespace LimeTech_Components.Server.Services.Components
             int? minPrice,
             int? maxPrice,
             int? productionYear,
-            PartStatus? status);
+            PartStatus? status,
+            int currentPage,
+            int componentsPerPage);
 
 
         Task<IEnumerable<Component>> GetTopDiscountedComponentsAsync(int top);

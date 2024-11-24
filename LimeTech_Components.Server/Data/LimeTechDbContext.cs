@@ -26,12 +26,12 @@ namespace LimeTech_Components.Server.Data
                 .HasForeignKey(b => b.Id)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder
-                .Entity<Component>()
-                .HasOne(u => u.User)
-                .WithMany(c => c.ComponentBasket)
-                .HasForeignKey(b => b.Id)
-                .OnDelete(DeleteBehavior.Restrict);
+            //builder
+            //    .Entity<Component>()
+            //    .HasOne(u => u.User)
+            //    .WithMany(c => c.ComponentBasket)
+            //    .HasForeignKey(b => b.Id)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
             builder
                 .Entity<Component>()

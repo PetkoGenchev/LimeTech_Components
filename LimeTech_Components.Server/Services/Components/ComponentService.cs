@@ -58,7 +58,14 @@
         {
             // Business validation, e.g., check if component exists
             var existingComponent = await _componentRepository.GetComponentsAsync(
-                component.Name, component.TypeOfProduct, null, null, component.ProductionYear, component.Status);
+                component.Name, 
+                component.TypeOfProduct, 
+                null, 
+                null, 
+                component.ProductionYear, 
+                component.Status,
+                1,
+                ComponentConstants.ComponentsPerPage);
 
             if (existingComponent == null)
             {

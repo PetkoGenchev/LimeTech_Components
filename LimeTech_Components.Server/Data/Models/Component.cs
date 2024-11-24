@@ -40,9 +40,9 @@
 
         public BuildCompatibility BuildCompatibility { get; init; }
 
-        public int PublicId { get; set; }
+        //public string PublicId { get; set; }
 
-        public User User { get; init; }
+        //public User User { get; init; }
 
         public int DiscountId { get; set; }
 

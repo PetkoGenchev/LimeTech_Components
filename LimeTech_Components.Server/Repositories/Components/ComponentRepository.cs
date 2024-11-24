@@ -27,7 +27,7 @@
             var componentQuery = this._context.Components;
             var totalComponents = await componentQuery.CountAsync();
 
-            var components = await GetComponents(componentQuery
+            var components = await GetComponentsAsync(componentQuery
                 .Skip((currentPage - 1) * componentsPerPage)
                 .Take(componentsPerPage));
 
@@ -85,7 +85,7 @@
                 query = query.Where(c => c.Status == status.Value);
             }
 
-            var components = await GetComponents(query
+            var components = await GetComponentsAsync(query
                 .Skip((currentPage - 1) * componentsPerPage)
                 .Take(componentsPerPage));
 
@@ -131,7 +131,7 @@
         }
 
 
-        private async Task<IEnumerable<ComponentServiceModel>> GetComponents(IQueryable<Component> componentQuery)
+        private async Task<IEnumerable<ComponentServiceModel>> GetComponentsAsync(IQueryable<Component> componentQuery)
             => componentQuery
                 .ProjectTo<ComponentServiceModel>(this.mapper)
                 .ToList();

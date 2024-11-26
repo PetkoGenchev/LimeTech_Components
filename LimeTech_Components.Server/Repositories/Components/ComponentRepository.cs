@@ -6,6 +6,7 @@
     using LimeTech_Components.Server.Data.Models;
     using LimeTech_Components.Server.Services.Components.Models;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Identity.Client;
     using static LimeTech_Components.Server.Constants.DataConstants;
     public class ComponentRepository : IComponentRepository
     {
@@ -22,9 +23,11 @@
 
         public async Task<ComponentQueryServiceModel> GetComponentsAsync(
             int currentPage = 1,
-            int componentsPerPage = ComponentConstants.ComponentsPerPage)
+            int componentsPerPage = ComponentConstants.ComponentsPerPage,
+            bool publicOnly = true)
         {
-            var componentQuery = this._context.Components;
+            var componentQuery = this._context.Components.Where(p => !publicOnly || p.IsPublic);
+
             var totalComponents = await componentQuery.CountAsync();
 
             var components = await GetComponentsAsync(componentQuery
@@ -53,7 +56,6 @@
             int componentsPerPage = ComponentConstants.ComponentsPerPage)
         {
             var query = _context.Components.AsQueryable();
-
 
             if (!string.IsNullOrEmpty(typeOfProduct))
             {
@@ -93,8 +95,10 @@
 
             return new ComponentQueryServiceModel
             {
-                Components = components,
-                TotalComponents = totalComponents
+                CurrentPage = currentPage,
+                TotalComponents = totalComponents,
+                ComponentsPerPage = componentsPerPage,
+                Components = components
             };
         }
 
@@ -132,8 +136,8 @@
 
 
         private async Task<IEnumerable<ComponentServiceModel>> GetComponentsAsync(IQueryable<Component> componentQuery)
-            => componentQuery
+            => await componentQuery
                 .ProjectTo<ComponentServiceModel>(this.mapper)
-                .ToList();
+                .ToListAsync();
     }
 }

@@ -8,7 +8,8 @@ namespace LimeTech_Components.Server.Services.Components
 
         Task<ComponentQueryServiceModel> GetComponentsAsync(
             int currentPage,
-            int componentsPerPage);
+            int componentsPerPage,
+            bool publicOnly);
 
         Task<ComponentQueryServiceModel> GetComponentsAsync(
             string name,

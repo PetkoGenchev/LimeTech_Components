@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LimeTech_Components.Server.Data
 {
-    public class LimeTechDbContext : IdentityDbContext<User>
+    public class LimeTechDbContext : IdentityDbContext<Customer>
     {
         public LimeTechDbContext(DbContextOptions<LimeTechDbContext> options)
             : base(options)
@@ -13,7 +13,7 @@ namespace LimeTech_Components.Server.Data
 
         public DbSet<BuildCompatibility> BuildCompatibilities { get; init; }
         public DbSet<Component> Components { get; init; }
-        public DbSet<User> Users { get; init; }
+        public DbSet<Customer> Customers { get; init; }
         public DbSet<DiscountMonth> DiscountMonths { get; init; }
 
         protected override void OnModelCreating(ModelBuilder builder)

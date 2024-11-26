@@ -4,13 +4,13 @@
     using System.ComponentModel.DataAnnotations;
     using static Constants.DataConstants;
 
-    public class User : IdentityUser
+    public class Customer : IdentityUser
     {
-        public string PublicID { get; init; } = Guid.NewGuid().ToString();
+        public string? PublicID { get; init; } = Guid.NewGuid().ToString();
 
         [Required]
         [MaxLength(UserProfile.FullNameMaxLength)]
-        public string FullName { get; set; }
+        public string? FullName { get; set; }
 
         public IEnumerable<Component> ComponentBasket { get; init; } = new List<Component>();
     }

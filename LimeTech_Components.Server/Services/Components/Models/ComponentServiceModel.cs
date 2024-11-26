@@ -6,9 +6,9 @@ namespace LimeTech_Components.Server.Services.Components.Models
     {
         public int Id { get; init; }
 
-        public string TypeOfProduct { get; init; }
+        public string? TypeOfProduct { get; init; }
 
-        public string ImageUrl { get; init; }
+        public string? ImageUrl { get; init; }
 
         public int Price { get; init; }
 
@@ -19,5 +19,7 @@ namespace LimeTech_Components.Server.Services.Components.Models
         public int PowerUsage { get; init; }
 
         public PartStatus Status { get; init; }
+
+        public bool IsPublic { get; init; }
     }
 }

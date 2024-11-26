@@ -54,6 +54,9 @@ namespace LimeTech_Components.Server.Migrations
                     b.Property<int>("BuildId")
                         .HasColumnType("int");
 
+                    b.Property<string>("CustomerId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("DiscountId")
                         .HasColumnType("int");
 
@@ -92,41 +95,14 @@ namespace LimeTech_Components.Server.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Components");
                 });
 
-            modelBuilder.Entity("LimeTech_Components.Server.Data.Models.DiscountMonth", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("DiscountPercentage")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Month")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TypeOfProduct")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DiscountMonths");
-                });
-
-            modelBuilder.Entity("LimeTech_Components.Server.Data.Models.User", b =>
+            modelBuilder.Entity("LimeTech_Components.Server.Data.Models.Customer", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -174,7 +150,6 @@ namespace LimeTech_Components.Server.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("PublicID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
@@ -198,6 +173,30 @@ namespace LimeTech_Components.Server.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("LimeTech_Components.Server.Data.Models.DiscountMonth", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DiscountPercentage")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Month")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TypeOfProduct")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DiscountMonths");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -335,6 +334,10 @@ namespace LimeTech_Components.Server.Migrations
 
             modelBuilder.Entity("LimeTech_Components.Server.Data.Models.Component", b =>
                 {
+                    b.HasOne("LimeTech_Components.Server.Data.Models.Customer", null)
+                        .WithMany("ComponentBasket")
+                        .HasForeignKey("CustomerId");
+
                     b.HasOne("LimeTech_Components.Server.Data.Models.BuildCompatibility", "BuildCompatibility")
                         .WithMany("Components")
                         .HasForeignKey("Id")
@@ -346,10 +349,6 @@ namespace LimeTech_Components.Server.Migrations
                         .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("LimeTech_Components.Server.Data.Models.User", null)
-                        .WithMany("ComponentBasket")
-                        .HasForeignKey("UserId");
 
                     b.Navigation("BuildCompatibility");
 
@@ -367,7 +366,7 @@ namespace LimeTech_Components.Server.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("LimeTech_Components.Server.Data.Models.User", null)
+                    b.HasOne("LimeTech_Components.Server.Data.Models.Customer", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -376,7 +375,7 @@ namespace LimeTech_Components.Server.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("LimeTech_Components.Server.Data.Models.User", null)
+                    b.HasOne("LimeTech_Components.Server.Data.Models.Customer", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -391,7 +390,7 @@ namespace LimeTech_Components.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LimeTech_Components.Server.Data.Models.User", null)
+                    b.HasOne("LimeTech_Components.Server.Data.Models.Customer", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -400,7 +399,7 @@ namespace LimeTech_Components.Server.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("LimeTech_Components.Server.Data.Models.User", null)
+                    b.HasOne("LimeTech_Components.Server.Data.Models.Customer", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -412,14 +411,14 @@ namespace LimeTech_Components.Server.Migrations
                     b.Navigation("Components");
                 });
 
+            modelBuilder.Entity("LimeTech_Components.Server.Data.Models.Customer", b =>
+                {
+                    b.Navigation("ComponentBasket");
+                });
+
             modelBuilder.Entity("LimeTech_Components.Server.Data.Models.DiscountMonth", b =>
                 {
                     b.Navigation("Components");
-                });
-
-            modelBuilder.Entity("LimeTech_Components.Server.Data.Models.User", b =>
-                {
-                    b.Navigation("ComponentBasket");
                 });
 #pragma warning restore 612, 618
         }

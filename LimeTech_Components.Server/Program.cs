@@ -1,5 +1,6 @@
 using LimeTech_Components.Server.Data;
 using LimeTech_Components.Server.Data.Models;
+using LimeTech_Components.Server.Services.Components;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +16,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<LimeTechDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddIdentity<User, IdentityRole>(options =>
+builder.Services.AddDefaultIdentity<Customer>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<LimeTechDbContext>();
+
+builder.Services.AddIdentity<Customer, IdentityRole>(options =>
 {
     options.Password.RequireDigit = true;
     options.Password.RequireUppercase = false;
@@ -23,6 +26,11 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 })
     .AddEntityFrameworkStores<LimeTechDbContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.AddTransient<IComponentService,ComponentService>();
+
+
+
 
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
@@ -32,7 +40,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Customer>>();
 
     var adminRole = "Admin";
     if (!await roleManager.RoleExistsAsync(adminRole))
@@ -44,7 +52,7 @@ using (var scope = app.Services.CreateScope())
     var adminPassword = "Admin123!";
     if (await userManager.FindByEmailAsync(adminEmail) == null)
     {
-        var adminUser = new User
+        var adminUser = new Customer
         {
             UserName = adminEmail,
             Email = adminEmail,

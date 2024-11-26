@@ -8,7 +8,7 @@
 
         [Required]
         [MaxLength(ComponentConstants.PartNameMaxLength)]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [Required]
         public int StartYear { get; set; }

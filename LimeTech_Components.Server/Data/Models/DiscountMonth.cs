@@ -7,10 +7,10 @@ namespace LimeTech_Components.Server.Data.Models
         public int Id { get; set; }
 
         [Required]
-        public string Month { get; set; }
+        public string? Month { get; set; }
 
         [Required]
-        public string TypeOfProduct { get; set; }
+        public string? TypeOfProduct { get; set; }
 
         [Required]
         public int DiscountPercentage { get; set; }

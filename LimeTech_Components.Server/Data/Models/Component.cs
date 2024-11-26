@@ -9,14 +9,14 @@
 
         [Required]
         [MaxLength(ComponentConstants.PartNameMaxLength)]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [Required]
         [MaxLength(ComponentConstants.PartNameMaxLength)]
-        public string TypeOfProduct { get; set; }
+        public string? TypeOfProduct { get; set; }
 
         [Required]
-        public string ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
 
         [Required]
         public int Price { get; set; }
@@ -38,15 +38,15 @@
 
         public int BuildId { get; set; }
 
-        public BuildCompatibility BuildCompatibility { get; init; }
+        public BuildCompatibility? BuildCompatibility { get; init; }
 
         //public string PublicId { get; set; }
 
-        //public User User { get; init; }
+        //public Customer User { get; init; }
 
         public int DiscountId { get; set; }
 
-        public DiscountMonth DiscountMonth { get; init; }
+        public DiscountMonth? DiscountMonth { get; init; }
 
     }
 }

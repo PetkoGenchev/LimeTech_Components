@@ -49,10 +49,10 @@
             return await _componentRepository.GetTopDiscountedComponentsAsync(top);
         }
 
-        public async Task CreateComponentAsync(Component component)
+        public async Task AddComponentAsync(ComponentServiceModel component)
         {
             // Additional business logic before adding
-            await _componentRepository.CreateComponentAsync(component);
+            await _componentRepository.AddComponentAsync(component);
         }
 
         public async Task EditComponentAsync(Component component)

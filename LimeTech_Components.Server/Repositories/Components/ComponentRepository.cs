@@ -112,7 +112,7 @@
         }
 
 
-        public async Task CreateComponentAsync(Component component)
+        public async Task AddComponentAsync(ComponentServiceModel component)
         {
             await _context.Components.AddAsync(component);
             await _context.SaveChangesAsync();

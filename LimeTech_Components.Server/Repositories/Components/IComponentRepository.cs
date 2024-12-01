@@ -25,7 +25,7 @@ namespace LimeTech_Components.Server.Repositories.Components
 
         Task<IEnumerable<Component>> GetTopDiscountedComponentsAsync(int top);
 
-        Task CreateComponentAsync(Component component);
+        Task AddComponentAsync(ComponentServiceModel component);
 
         Task EditComponentAsync(Component component);
 

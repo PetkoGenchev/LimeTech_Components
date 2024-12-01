@@ -1,12 +1,9 @@
 ﻿using LimeTech_Components.Server.Data.Models;
 
-namespace LimeTech_Components.Server.Services.Components.Models
+namespace LimeTech_Components.Server.DTOs
 {
-    public class ComponentServiceModel
+    public class AddComponentRequest
     {
-
-        public string? Name { get; init; }
-
         public string? TypeOfProduct { get; init; }
 
         public string? ImageUrl { get; init; }
@@ -22,5 +19,7 @@ namespace LimeTech_Components.Server.Services.Components.Models
         public PartStatus Status { get; init; }
 
         public bool IsPublic { get; init; }
+
+
     }
 }

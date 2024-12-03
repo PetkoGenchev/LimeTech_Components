@@ -4,6 +4,7 @@ namespace LimeTech_Components.Server.DTOs
 {
     public class AddComponentRequest
     {
+        public string? Name { get; init; }
         public string? TypeOfProduct { get; init; }
 
         public string? ImageUrl { get; init; }
@@ -18,7 +19,11 @@ namespace LimeTech_Components.Server.DTOs
 
         public PartStatus Status { get; init; }
 
+        public int StockCount { get; init; }
+
         public bool IsPublic { get; init; }
+
+
 
 
     }

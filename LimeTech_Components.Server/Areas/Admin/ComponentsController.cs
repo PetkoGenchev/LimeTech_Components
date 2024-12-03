@@ -29,7 +29,6 @@
         [FromQuery] int currentPage = 1,
         [FromQuery] int componentsPerPage = ComponentConstants.ComponentsPerPage)
         {
-            // Validate input parameters if necessary
             if (currentPage < 1 || componentsPerPage < 1)
             {
                 return BadRequest("Current page and components per page must be greater than zero.");
@@ -46,7 +45,7 @@
             }
             catch (Exception ex)
             {
-                // Log the exception (not shown here)
+                // Log the exception
                 return StatusCode(500, "An error occurred while retrieving components.");
             }
         }
@@ -68,16 +67,25 @@
 
                 var componentServiceModel = new ComponentServiceModel
                 {
-
-                }
+                    Name = request.Name,
+                    TypeOfProduct = request.TypeOfProduct,
+                    ImageUrl = request.ImageUrl,
+                    Price = request.Price,
+                    DiscountedPrice = request.DiscountedPrice,
+                    ProductionYear = request.ProductionYear,
+                    PowerUsage = request.PowerUsage,
+                    Status = request.Status,
+                    StockCount = request.StockCount,
+                    IsPublic = request.IsPublic,
+                };
 
                 await _componentService.AddComponentAsync(componentServiceModel);
 
-                return StatusCode(201, "Component added successfully."); // 201 Created
+                return StatusCode(201, "Component added successfully.");
             }
             catch (Exception ex)
             {
-                // Log the exception (not shown here)
+                // Log the exception
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }

@@ -49,9 +49,23 @@
             return await _componentRepository.GetTopDiscountedComponentsAsync(top);
         }
 
-        public async Task AddComponentAsync(ComponentServiceModel component)
+        public async Task AddComponentAsync(ComponentServiceModel componentServiceModel)
         {
-            // Additional business logic before adding
+            // Add business logic
+            var component = new Component
+            {
+                Name = componentServiceModel.Name,
+                TypeOfProduct = componentServiceModel.TypeOfProduct,
+                ImageUrl = componentServiceModel.ImageUrl,
+                Price = componentServiceModel.Price,
+                DiscountedPrice = componentServiceModel.DiscountedPrice,
+                ProductionYear = componentServiceModel.ProductionYear,
+                PowerUsage = componentServiceModel.PowerUsage,
+                Status = componentServiceModel.Status,
+                StockCount = componentServiceModel.StockCount,
+                IsPublic = componentServiceModel.IsPublic,
+            };
+
             await _componentRepository.AddComponentAsync(component);
         }
 

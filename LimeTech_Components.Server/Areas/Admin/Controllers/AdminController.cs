@@ -1,4 +1,4 @@
-﻿namespace LimeTech_Components.Server.Areas.Admin
+﻿namespace LimeTech_Components.Server.Areas.Admin.Controllers
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;

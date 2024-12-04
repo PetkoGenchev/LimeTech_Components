@@ -1,6 +1,7 @@
-﻿namespace LimeTech_Components.Server.Areas.Admin
+﻿namespace LimeTech_Components.Server.Areas.Admin.Controllers
 {
     using AutoMapper;
+    using Azure.Core;
     using LimeTech_Components.Server.DTOs;
     using LimeTech_Components.Server.Services.Components;
     using LimeTech_Components.Server.Services.Components.Models;
@@ -55,7 +56,7 @@
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> AddComponent([FromBody] AddComponentRequest request)
+        public async Task<IActionResult> AddComponentAsync([FromBody] AddComponentRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -91,8 +92,51 @@
         }
 
 
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 
+        public async Task<IActionResult> EditComponentAsync(int id, [FromBody] EditComponentRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
+            try
+            {
+                var componentServiceModel = new ComponentServiceModel
+                {
+                    Id = id,
+                    Name = request.Name,
+                    TypeOfProduct = request.TypeOfProduct,
+                    ImageUrl = request.ImageUrl,
+                    Price = request.Price,
+                    DiscountedPrice = request.DiscountedPrice,
+                    ProductionYear = request.ProductionYear,
+                    PowerUsage = request.PowerUsage,
+                    Status = request.Status,
+                    StockCount = request.StockCount,
+                    IsPublic = request.IsPublic,
+                };
+
+                var result = await _componentService.EditComponentAsync(componentServiceModel);
+
+                if (!result)
+                {
+                    return NotFound($"Component with ID {id} not found.");
+                }
+
+                return Ok("Component updated successfully.");
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
 
 
     }

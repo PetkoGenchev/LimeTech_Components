@@ -26,7 +26,7 @@ namespace LimeTech_Components.Server.Services.Components
 
         Task AddComponentAsync(ComponentServiceModel component);
 
-        Task EditComponentAsync(Component component);
+        Task<bool> EditComponentAsync(ComponentServiceModel component);
 
         Task ChangeComponentVisibilityAsync(int componentId, bool isVisible);
     }

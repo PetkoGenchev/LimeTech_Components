@@ -139,5 +139,17 @@
             => await componentQuery
                 .ProjectTo<ComponentServiceModel>(this.mapper)
                 .ToListAsync();
+
+
+        public async Task<Component> GetComponentByIdAsync(int id)
+        {
+            return await _context.Components.FindAsync(id);
+        }
+
+        public async Task UpdateComponentAsync(Component component)
+        {
+            _context.Components.Update(component);
+            await _context.SaveChangesAsync();
+        }
     }
 }

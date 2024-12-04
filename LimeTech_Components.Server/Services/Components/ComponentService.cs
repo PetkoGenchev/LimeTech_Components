@@ -69,25 +69,29 @@
             await _componentRepository.AddComponentAsync(component);
         }
 
-        public async Task EditComponentAsync(Component component)
+        public async Task<bool> EditComponentAsync(ComponentServiceModel componentServiceModel)
         {
-            // Business validation, e.g., check if component exists
-            var existingComponent = await _componentRepository.GetComponentsAsync(
-                component.Name, 
-                component.TypeOfProduct, 
-                null, 
-                null, 
-                component.ProductionYear, 
-                component.Status,
-                1,
-                ComponentConstants.ComponentsPerPage);
+            var existingComponent = await _componentRepository.GetComponentByIdAsync(componentServiceModel.Id);
 
             if (existingComponent == null)
             {
-                throw new KeyNotFoundException("Component not found.");
+                return false;
             }
 
-            await _componentRepository.EditComponentAsync(component);
+            existingComponent.Name = componentServiceModel.Name;
+            existingComponent.TypeOfProduct = componentServiceModel.TypeOfProduct;
+            existingComponent.ImageUrl = componentServiceModel.ImageUrl;
+            existingComponent.Price = componentServiceModel.Price;
+            existingComponent.DiscountedPrice = componentServiceModel.DiscountedPrice;
+            existingComponent.ProductionYear = componentServiceModel.ProductionYear;
+            existingComponent.PowerUsage = componentServiceModel.PowerUsage;
+            existingComponent.Status = componentServiceModel.Status;
+            existingComponent.StockCount = componentServiceModel.StockCount;
+            existingComponent.IsPublic = componentServiceModel.IsPublic;
+
+            await _componentRepository.UpdateComponentAsync(existingComponent);
+
+            return true;
         }
 
         public async Task ChangeComponentVisibilityAsync(int componentId, bool isVisible)

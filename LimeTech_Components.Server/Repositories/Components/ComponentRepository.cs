@@ -124,17 +124,6 @@
             await _context.SaveChangesAsync();
         }
 
-        public async Task ChangeComponentVisibilityAsync(int componentId, bool isVisible)
-        {
-            var component = await _context.Components.FindAsync(componentId);
-            if (component != null)
-            {
-                component.Status = isVisible ? PartStatus.Available : PartStatus.Sold;
-                await _context.SaveChangesAsync();
-            }
-        }
-
-
         private async Task<IEnumerable<ComponentServiceModel>> GetComponentsAsync(IQueryable<Component> componentQuery)
             => await componentQuery
                 .ProjectTo<ComponentServiceModel>(this.mapper)

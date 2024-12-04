@@ -94,9 +94,19 @@
             return true;
         }
 
-        public async Task ChangeComponentVisibilityAsync(int componentId, bool isVisible)
+        public async Task<bool> ChangeComponentVisibilityAsync(int id, bool isVisible)
         {
-            await _componentRepository.ChangeComponentVisibilityAsync(componentId, isVisible);
+            var component = await _componentRepository.GetByIdAsync(id);
+
+            if (component == null)
+            {
+                return false;
+            }
+            component.IsPublic = isPublic;
+
+            await _componentRepository.UpdateComponentAsync(componentId);
+
+            return true;
         }
     }
 }

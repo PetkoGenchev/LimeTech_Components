@@ -31,8 +31,6 @@ namespace LimeTech_Components.Server.Repositories.Components
 
         Task EditComponentAsync(Component component);
 
-        Task ChangeComponentVisibilityAsync(int componentId, bool isVisible);
-
         Task<Component> GetComponentByIdAsync(int id);
 
         Task UpdateComponentAsync(Component component);

@@ -139,5 +139,31 @@
         }
 
 
+        [HttpPatch("{id}/visibility")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> ChangeComponentVisibility(int id, [FromBody] bool isPublic)
+        {
+            try
+            {
+                var result = await _componentService.ChangeComponentVisibilityAsync(id, isPublic);
+
+                if (!result)
+                {
+                    return NotFound($"Component with ID {id} not found.");
+                }
+
+                return Ok("Component visibility updated successfully.");
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
+
+
+
     }
 }

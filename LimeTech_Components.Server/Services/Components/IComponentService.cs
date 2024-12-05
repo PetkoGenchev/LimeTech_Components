@@ -22,7 +22,7 @@ namespace LimeTech_Components.Server.Services.Components
             int componentsPerPage);
 
 
-        Task<IEnumerable<Component>> GetTopDiscountedComponentsAsync(int top);
+        Task<IEnumerable<Component>> GetTopPurchasedComponentsAsync();
 
         Task AddComponentAsync(ComponentServiceModel component);
 

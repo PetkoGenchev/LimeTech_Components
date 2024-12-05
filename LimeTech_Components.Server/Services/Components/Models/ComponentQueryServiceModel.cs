@@ -8,6 +8,6 @@
 
         public int TotalComponents { get; init; }
 
-        public IEnumerable<ComponentServiceModel>? Components { get; set; }
+        public IEnumerable<ComponentServiceModel> Components { get; set; }
     }
 }

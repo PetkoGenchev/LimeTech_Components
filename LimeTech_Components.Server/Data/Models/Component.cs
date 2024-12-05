@@ -22,7 +22,7 @@
         [Required]
         public int Price { get; set; }
 
-        public int DiscountedPrice { get; set; }
+        public int PurchasedCount { get; set; }
 
         [Required]
         public int ProductionYear { get; set; }
@@ -44,10 +44,5 @@
         //public string PublicId { get; set; }
 
         //public Customer User { get; init; }
-
-        public int DiscountId { get; set; }
-
-        public DiscountMonth? DiscountMonth { get; init; }
-
     }
 }

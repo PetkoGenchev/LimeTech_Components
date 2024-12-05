@@ -44,9 +44,9 @@
                 componentsPerPage);
         }
 
-        public async Task<IEnumerable<Component>> GetTopDiscountedComponentsAsync(int top)
+        public async Task<IEnumerable<Component>> GetTopPurchasedComponentsAsync()
         {
-            return await _componentRepository.GetTopDiscountedComponentsAsync(top);
+            return await _componentRepository.GetTopPurchasedComponentsAsync();
         }
 
         public async Task AddComponentAsync(ComponentServiceModel componentServiceModel)

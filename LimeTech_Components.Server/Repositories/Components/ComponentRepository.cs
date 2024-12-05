@@ -57,15 +57,17 @@
         {
             var query = _context.Components.AsQueryable();
 
+            if (!string.IsNullOrEmpty(name))
+            {
+                query = query.Where(c => c.Name.Contains(name));
+            }
+
+
             if (!string.IsNullOrEmpty(typeOfProduct))
             {
                 query = query.Where(t => t.TypeOfProduct == typeOfProduct);
             }
 
-            if (!string.IsNullOrEmpty(name))
-            {
-                query = query.Where(c => c.Name.Contains(name));
-            }
 
             if (minPrice.HasValue)
             {
@@ -84,7 +86,7 @@
 
             if (status.HasValue)
             {
-                query = query.Where(c => c.Status == status.Value);
+                query = query.Where(c => c.Status == status);
             }
 
             var components = await GetComponentsAsync(query
@@ -103,11 +105,11 @@
         }
 
 
-        public async Task<IEnumerable<Component>> GetTopDiscountedComponentsAsync(int top)
+        public async Task<IEnumerable<Component>> GetTopPurchasedComponentsAsync()
         {
             return await _context.Components
-                .OrderByDescending(c => c.DiscountMonth.DiscountPercentage)
-                .Take(top)
+                .OrderByDescending(c => c.PurchasedCount)
+                .Take(8)
                 .ToListAsync();
         }
 

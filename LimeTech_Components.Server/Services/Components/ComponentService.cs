@@ -58,7 +58,7 @@
                 TypeOfProduct = componentServiceModel.TypeOfProduct,
                 ImageUrl = componentServiceModel.ImageUrl,
                 Price = componentServiceModel.Price,
-                DiscountedPrice = componentServiceModel.DiscountedPrice,
+                PurchasedCount = componentServiceModel.PurchasedCount,
                 ProductionYear = componentServiceModel.ProductionYear,
                 PowerUsage = componentServiceModel.PowerUsage,
                 Status = componentServiceModel.Status,
@@ -82,7 +82,7 @@
             existingComponent.TypeOfProduct = componentServiceModel.TypeOfProduct;
             existingComponent.ImageUrl = componentServiceModel.ImageUrl;
             existingComponent.Price = componentServiceModel.Price;
-            existingComponent.DiscountedPrice = componentServiceModel.DiscountedPrice;
+            existingComponent.PurchasedCount = componentServiceModel.PurchasedCount;
             existingComponent.ProductionYear = componentServiceModel.ProductionYear;
             existingComponent.PowerUsage = componentServiceModel.PowerUsage;
             existingComponent.Status = componentServiceModel.Status;
@@ -96,15 +96,15 @@
 
         public async Task<bool> ChangeComponentVisibilityAsync(int id, bool isVisible)
         {
-            var component = await _componentRepository.GetByIdAsync(id);
+            var component = await _componentRepository.GetComponentByIdAsync(id);
 
             if (component == null)
             {
                 return false;
             }
-            component.IsPublic = isPublic;
+            component.IsPublic = isVisible;
 
-            await _componentRepository.UpdateComponentAsync(componentId);
+            await _componentRepository.UpdateComponentAsync(component);
 
             return true;
         }

@@ -37,12 +37,21 @@
 
         public bool IsPublic { get; set; }
 
+
         public int BuildId { get; set; }
 
-        public BuildCompatibility? BuildCompatibility { get; init; }
 
-        //public string PublicId { get; set; }
+        [Required]
+        public BuildCompatibility BuildCompatibility { get; init; }
 
-        //public Customer User { get; init; }
+
+        public int PurchaseId { get; set; }
+
+        [Required]
+        public PurchaseHistory PurchaseHistory { get; init; }
+
+        public List<BasketItem> BasketItems { get; private set; } = new List<BasketItem>();
     }
+
+
 }

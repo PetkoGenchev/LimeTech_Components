@@ -12,6 +12,8 @@
         [MaxLength(UserProfile.FullNameMaxLength)]
         public string? FullName { get; set; }
 
-        public IEnumerable<Component> ComponentBasket { get; init; } = new List<Component>();
+        public List<PurchaseHistory> PurchaseHistories { get; private set; } = new List<PurchaseHistory>();
+
+        public List<BasketItem> BasketItems { get; private set; } = new List<BasketItem>();
     }
 }

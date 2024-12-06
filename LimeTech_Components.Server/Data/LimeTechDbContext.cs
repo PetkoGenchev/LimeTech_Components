@@ -22,15 +22,35 @@ namespace LimeTech_Components.Server.Data
                 .Entity<Component>()
                 .HasOne(b => b.BuildCompatibility)
                 .WithMany(c => c.Components)
-                .HasForeignKey(b => b.Id)
+                .HasForeignKey(b => b.BuildId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            //builder
-            //    .Entity<Component>()
-            //    .HasOne(u => u.User)
-            //    .WithMany(c => c.ComponentBasket)
-            //    .HasForeignKey(b => b.Id)
-            //    .OnDelete(DeleteBehavior.Restrict);
+            builder
+                .Entity<Component>()
+                .HasOne(b => b.PurchaseHistory)
+                .WithMany(c => c.Components)
+                .HasForeignKey(b => b.PurchaseId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<BasketItem>()
+                .HasOne(b => b.Component)
+                .WithMany(i => i.BasketItems)
+                .HasForeignKey(b => b.ComponentID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<BasketItem>()
+                .HasOne(b => b.Customer)
+                .WithMany(i => i.BasketItems)
+                .HasForeignKey(b => b.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<PurchaseHistory>()
+                .HasOne(b => b.Customer)
+                .WithMany(i => i.PurchaseHistories)
+                .HasForeignKey(b => b.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
 
 
             base.OnModelCreating(builder);

@@ -1,10 +1,24 @@
-﻿using LimeTech_Components.Server.Data.Models;
-using static LimeTech_Components.Server.Constants.DataConstants;
-
-namespace LimeTech_Components.Server.Controllers
+﻿namespace LimeTech_Components.Server.Controllers
 {
+    using AutoMapper;
+    using LimeTech_Components.Server.Data.Models;
+    using LimeTech_Components.Server.Services.Components;
+    using Microsoft.AspNetCore.Mvc;
+    using static LimeTech_Components.Server.Constants.DataConstants;
+
     public class HomeController : Controller
     {
+        private readonly IComponentService _componentService;
+        private readonly IMapper _mapper;
+
+        public HomeController(IComponentService componentService, IMapper mapper)
+        {
+            _componentService = componentService;
+            _mapper = mapper;
+        }
+
+
+
         [HttpGet("components")]
         public async Task<IActionResult> Index(
             [FromQuery] string name,

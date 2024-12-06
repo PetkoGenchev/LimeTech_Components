@@ -28,6 +28,6 @@ namespace LimeTech_Components.Server.Services.Components
 
         Task<bool> EditComponentAsync(ComponentServiceModel component);
 
-        Task ChangeComponentVisibilityAsync(int id, bool isVisible);
+        Task<bool> ChangeComponentVisibilityAsync(int id, bool isVisible);
     }
 }

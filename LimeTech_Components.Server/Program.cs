@@ -1,7 +1,11 @@
 using LimeTech_Components.Server.Data;
 using LimeTech_Components.Server.Data.Models;
 using LimeTech_Components.Server.Repositories.Components;
+using LimeTech_Components.Server.Repositories.Customers;
 using LimeTech_Components.Server.Services.Components;
+using LimeTech_Components.Server.Services.Customers;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,7 +32,8 @@ builder.Services.AddIdentity<Customer, IdentityRole>(options =>
 
 builder.Services.AddTransient<IComponentService,ComponentService>();
 builder.Services.AddTransient<IComponentRepository,ComponentRepository>();
-
+builder.Services.AddTransient<ICustomerRepository,CustomerRepository>();
+builder.Services.AddTransient<ICustomerService,CustomerService>();
 
 
 builder.Services.AddAuthentication();

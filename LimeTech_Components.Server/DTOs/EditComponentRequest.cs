@@ -2,7 +2,7 @@
 
 namespace LimeTech_Components.Server.DTOs
 {
-    public class EditComponentRequest
+    public class EditComponentRequest : IComponentDTO
     {
         public string Id { get; init; }
         public string? Name { get; init; }

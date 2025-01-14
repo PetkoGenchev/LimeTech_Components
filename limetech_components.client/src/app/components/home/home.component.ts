@@ -28,7 +28,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private componentService: ComponentService,
     private basketService: BasketService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadComponents();

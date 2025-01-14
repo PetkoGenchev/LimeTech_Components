@@ -7,6 +7,9 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
+          "path": "src/app/components",
+          "style": "css",
+          "skipTests": false,
           "standalone": false
         },
         "@schematics/angular:directive": {
@@ -14,6 +17,13 @@
         },
         "@schematics/angular:pipe": {
           "standalone": false
+        },
+        "@schematics/angular:service": {
+          "path": "src/app/services"
+        },
+        "@schematics/angular:class": {
+          "path": "src/app/models",
+          "skipTests": true
         }
       },
       "root": "",

@@ -1,0 +1,24 @@
+<h2>Manage Components</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Price</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let component of components">
+      <td>{{ component.name }}</td>
+      <td>{{ component.typeOfProduct }}</td>
+      <td>{{ component.price | currency }}</td>
+      <td>
+        <button (click)="editComponent(component.id)">Edit</button>
+        <button (click)="changeVisibility(component.id, component.isPublic)">
+          {{ component.isPublic ? 'Hide' : 'Show' }}
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>

@@ -85,4 +85,10 @@ export class ComponentService {
         })
       );
   }
+
+  getComponentById(id: number): Observable<ComponentDTO> {
+    return this.http.get<ComponentDTO>(`${this.apiUrl}/${id}`);
+  }
+
+
 }

@@ -9,13 +9,17 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BasketComponent } from './components/basket/basket.component';
 import { HomeComponent } from './components/home/home.component';
 import { AddComponentComponent } from './components/add-component/add-component.component';
+import { EditComponentComponent } from './components/edit-component/edit-component.component';
+import { ManageComponentsComponent } from './components/manage-components/manage-components.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     BasketComponent,
     HomeComponent,
-    AddComponentComponent
+    AddComponentComponent,
+    EditComponentComponent,
+    ManageComponentsComponent
   ],
   imports: [
     BrowserModule,

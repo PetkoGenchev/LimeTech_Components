@@ -1,0 +1,48 @@
+<h2>Edit Component</h2>
+<form (ngSubmit)="saveChanges()">
+  <div>
+    <label for="name">Name:</label>
+    <input id="name" [(ngModel)]="componentData.name" name="name" required/>
+  </div>
+  <div>
+    <label for="type">Type:</label>
+    <input id="type" [(ngModel)]="componentData.typeOfProduct" name="type" required />
+  </div>
+  <div>
+    <label for="imageUrl">Image URL:</label>
+    <input id="imageUrl" [(ngModel)]="componentData.imageUrl" name="imageUrl" />
+  </div>
+  <div>
+    <label for="price">Price:</label>
+    <input id="price" [(ngModel)]="componentData.price" name="price" type="number" required />
+  </div>
+  <div>
+    <label for="productionYear">Production Year:</label>
+    <input id="productionYear" [(ngModel)]="componentData.productionYear" name="productionYear" type="number" />
+  </div>
+  <div>
+    <label for="powerUsage">Power Usage:</label>
+    <input id="powerUsage" [(ngModel)]="componentData.powerUsage" name="powerUsage" type="number" />
+  </div>
+  <div>
+    <label for="status">Status:</label>
+    <select id="status" [(ngModel)]="componentData.status" name="status">
+      <option value="Available">Available</option>
+      <option value="Sold">Sold</option>
+      <option value="Discounted">Discounted</option>
+      <option value="WaitingStock">Waiting Stock</option>
+    </select>
+  </div>
+  <div>
+    <label for="stockCount">Stock Count:</label>
+    <input id="stockCount" [(ngModel)]="componentData.stockCount" name="stockCount" type="number" />
+  </div>
+  <div>
+    <label for="isPublic">Is Public:</label>
+    <input id="isPublic" [(ngModel)]="componentData.isPublic" name="isPublic" type="checkbox" />
+  </div>
+  <div>
+    <button type="submit">Save</button>
+    <button type="button" (click)="cancel()">Cancel</button>
+  </div>
+</form>

@@ -8,7 +8,7 @@
         public MappingProfile() 
         {
             this.CreateMap<Component, ComponentServiceModel>();
-            this.CreateMap<Component,TopPurchasedComponentServiceModel>();
+ //           this.CreateMap<Component,TopPurchasedComponentServiceModel>();
         }
     }
 }

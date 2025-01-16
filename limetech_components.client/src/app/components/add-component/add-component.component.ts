@@ -9,7 +9,7 @@ import { PartStatus } from '../../models/status.dto';
   styleUrl: './add-component.component.css'
 })
 export class AddComponentComponent {
-  newComponent: ComponentDTO = {
+  newComponent: Partial<ComponentDTO> = {
     name: null,
     typeOfProduct: null,
     imageUrl: null,
@@ -24,8 +24,8 @@ export class AddComponentComponent {
 
   constructor(private componentService: ComponentService) { }
 
-  addComponenet() {
-    this.componentService.addComponent(this.newComponent).subscribe(
+  addComponent() {
+    this.componentService.addComponent(this.newComponent as ComponentDTO).subscribe(
       (response) => {
         console.log('Componenet added:', response);
         alert('Component successfully added!');

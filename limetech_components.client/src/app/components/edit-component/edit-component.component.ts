@@ -34,8 +34,8 @@ export class EditComponentComponent implements OnInit {
 
 
   saveChanges() {
-    this.componentService.editComponent(this.componentId, this.componentData).subscribe(() => {
-      this.router.navigate(['/admin/manage-components']);
+    this.componentService.editComponent(this.componentId, this.componentData)
+      .subscribe(() => {this.router.navigate(['/admin/manage-components']);
     });
   }
 

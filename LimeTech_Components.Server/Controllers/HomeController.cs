@@ -6,6 +6,8 @@
     using Microsoft.AspNetCore.Mvc;
     using static LimeTech_Components.Server.Constants.DataConstants;
 
+    [ApiController]
+    [Route("api/home")]
     public class HomeController : Controller
     {
         private readonly IComponentService _componentService;
@@ -21,40 +23,47 @@
 
         [HttpGet("components")]
         public async Task<IActionResult> Index(
-            [FromQuery] string name,
-            [FromQuery] string typeOfProduct,
-            [FromQuery] int? minPrice,
-            [FromQuery] int? maxPrice,
-            [FromQuery] int? productionYear,
-            [FromQuery] PartStatus? status,
+            [FromQuery] string name = null,
+            [FromQuery] string typeOfProduct = null,
+            [FromQuery] int? minPrice = null,
+            [FromQuery] int? maxPrice = null,
+            [FromQuery] int? productionYear = null,
+            [FromQuery] PartStatus? status = null,
             [FromQuery] int currentPage = 1,
             [FromQuery] int componentsPerPage = ComponentConstants.ComponentsPerPage)
         {
             try
             {
-                var filteredComponents = await _componentService.GetComponentsAsync(
-                    name, 
-                    typeOfProduct, 
-                    minPrice, 
-                    maxPrice, 
-                    productionYear, 
-                    status, 
-                    currentPage, 
-                    componentsPerPage);
+                var hasFilters = !string.IsNullOrEmpty(name) ||
+                 !string.IsNullOrEmpty(typeOfProduct) ||
+                 minPrice.HasValue ||
+                 maxPrice.HasValue ||
+                 productionYear.HasValue ||
+                 status.HasValue;
 
-                var topPurchasedComponents = await _componentService.GetTopPurchasedComponentsAsync();
-
-                var response = new
+                if (hasFilters)
                 {
-                    FilteredComponents = filteredComponents,
-                    TopPurchasedComponents = topPurchasedComponents
-                };
 
-                return Ok(response);
+                    var filteredComponents = await _componentService.GetComponentsAsync(
+                        name,
+                        typeOfProduct,
+                        minPrice,
+                        maxPrice,
+                        productionYear,
+                        status,
+                        currentPage,
+                        componentsPerPage);
+
+                    return Ok(filteredComponents);
+                }
+                else
+                {
+                    var topPurchasedComponents = await _componentService.GetTopPurchasedComponentsAsync();
+                    return Ok(topPurchasedComponents);
+                }
             }
             catch (Exception ex)
             {
-                // Log the exception
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }

@@ -33,7 +33,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/limetech_components.client",
+            "outputPath": "dist/limetech_components.client", // "Should this be the output or something like  "../Server/wwwroot"
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [

@@ -1,2 +1,16 @@
-<h1>Welcome to {{ title }}</h1>
+
 <router-outlet></router-outlet>
+
+
+<nav>
+  <ul>
+    <li><a routerLink="/">Home</a></li>
+    <h1>Welcome to {{ title }}</h1>
+    <li><a routerLink="/login">Login</a></li>
+    <li><a routerLink="/register">Register</a></li>
+    <li><a routerLink="/logout">Logout</a></li>
+  </ul>
+</nav>
+
+<!-- Placeholder for child components -->
+<router-outlet></router-outlet> 

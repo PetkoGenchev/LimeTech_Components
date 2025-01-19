@@ -1,1 +1,52 @@
-<p>home works!</p>
+<div class="filters">
+  <h2>Search Components</h2>
+  <form (ngSubmit)="loadComponents()">
+    <label>
+      Name:
+      <input type="text" [(ngModel)]="filters.name" name="name" />
+    </label>
+    <label>
+      Type:
+      <input type="text" [(ngModel)]="filters.typeOfProduct" name="typeOfProduct" />
+    </label>
+    <label>
+      Min Price:
+      <input type="number" [(ngModel)]="filters.minPrice" name="minPrice" />
+    </label>
+    <label>
+      Max Price:
+      <input type="number" [(ngModel)]="filters.maxPrice" name="maxPrice" />
+    </label>
+    <label>
+      Production Year:
+      <input type="number" [(ngModel)]="filters.productionYear" name="productionYear" />
+    </label>
+    <label>
+      Status:
+      <select [(ngModel)]="filters.status" name="status">
+        <option value="">All</option>
+        <option value="Available">Available</option>
+        <option value="Sold">Sold</option>
+        <option value="Discounted">Discounted</option>
+        <option value="Waiting Stock">Waiting Stock</option>
+      </select>
+    </label>
+    <button type="submit">Search</button>
+  </form>
+</div>
+
+<div class="top-purchased">
+  <h2>Top 8 Components</h2>
+  <div *ngIf="topPurchased && topPurchased.length > 0; else noComponents">
+    <ul>
+      <li *ngFor="let component of topPurchased">
+        <h3>{{ component.name }}</h3>
+        <p>Type: {{ component.typeOfProduct }}</p>
+        <p>Price: {{ component.price }}</p>
+      </li>
+    </ul>
+  </div>
+  <ng-template #noComponents>
+    <p>No components found.</p>
+  </ng-template>
+</div>

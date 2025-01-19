@@ -15,7 +15,7 @@
       <td>{{ component.price | currency }}</td>
       <td>
         <button (click)="editComponent(component.id)">Edit</button>
-        <button (click)="changeVisibility(component.id, component.isPublic)">
+        <button (click)="toggleVisibility(component.id, component.isPublic)">
           {{ component.isPublic ? 'Hide' : 'Show' }}
         </button>
       </td>

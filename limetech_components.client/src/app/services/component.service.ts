@@ -47,7 +47,7 @@ export class ComponentService {
 
 
   // Change visibility of a component
-  changeVisibility(id: number, isPublic: boolean): Observable<void> {
+  toggleVisibility(id: number, isPublic: boolean): Observable<void> {
     if (!id || id <= 0) {
       throw new Error('Invalid component ID.');
     }

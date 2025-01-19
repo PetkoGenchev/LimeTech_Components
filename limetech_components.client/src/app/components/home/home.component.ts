@@ -36,24 +36,11 @@ export class HomeComponent implements OnInit {
     this.loadBasket();
   }
 
-  //loadComponents(): void {
-  //  this.componentService.getComponents(this.filters).subscribe((data) => {
-  //    this.components = data;
-  //  });
-  //}
-
-  //loadTopPurchased(): void {
-  //  this.componentService.getTopPurchasedComponents().subscribe((data) => {
-  //    this.topPurchased = data;
-  //  });
-  //}
-
-
   // Load all components with filters
   loadComponents(): void {
     this.componentService.getComponents(this.filters).subscribe({
       next: (data) => (this.components = data),
-      error: (err) => console.error('Failed to load components', err),
+      error: (error) => console.error('Failed to load components', error),
     });
   }
 
@@ -61,15 +48,16 @@ export class HomeComponent implements OnInit {
   loadTopPurchased(): void {
     this.componentService.getTopComponents().subscribe({
       next: (data) => (this.topPurchased = data),
-      error: (err) => console.error('Failed to load top purchased components', err),
+      error: (error) => console.error('Failed to load top purchased components', error),
     });
   }
 
 
   loadBasket(): void {
-    this.basketService.getBasket().subscribe((data) => {
-      this.basket = data;
-    });
+    this.basketService.getBasket().subscribe(
+      (data) => (this.basket = data),
+      (error) => console.error('Failed to load basket',error)
+    );
   }
 
   addToBasket(componentId: number): void {
@@ -87,39 +75,6 @@ export class HomeComponent implements OnInit {
   clearBasket(): void {
     this.basketService.clearBasket().subscribe(() => {
       this.loadBasket();
-    });
-  }
-
-  // Add a new component
-  addComponent(newComponent: ComponentDTO): void {
-    this.componentService.addComponent(newComponent).subscribe({
-      next: (component) => {
-        console.log('Component added:', component);
-        this.loadComponents(); // Refresh the list after adding
-      },
-      error: (err) => console.error('Failed to add component', err),
-    });
-  }
-
-  // Edit an existing component
-  editComponent(id: number, updatedComponent: ComponentDTO): void {
-    this.componentService.editComponent(id, updatedComponent).subscribe({
-      next: (component) => {
-        console.log('Component updated:', component);
-        this.loadComponents(); // Refresh the list after editing
-      },
-      error: (err) => console.error('Failed to edit component', err),
-    });
-  }
-
-  // Change visibility of a component
-  toggleVisibility(id: number, isPublic: boolean): void {
-    this.componentService.changeVisibility(id, isPublic).subscribe({
-      next: () => {
-        console.log('Visibility updated');
-        this.loadComponents(); // Refresh the list after updating
-      },
-      error: (err) => console.error('Failed to update visibility', err),
     });
   }
 }

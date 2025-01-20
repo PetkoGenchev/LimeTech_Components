@@ -13,6 +13,9 @@ const routes: Routes = [
   { path: 'admin/add-component', component: AddComponentComponent },
   { path: 'admin/edit-component/:id', component: EditComponentComponent },
   { path: 'admin/manage-components', component: ManageComponentsComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'logout', component: LogoutComponent },
 ];
 
 @NgModule({

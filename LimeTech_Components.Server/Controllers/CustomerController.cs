@@ -5,7 +5,7 @@
     using LimeTech_Components.Server.Services.Customers;
     using Microsoft.AspNetCore.Mvc;
 
-    public class CustomerController : Controller
+    public class CustomerController : ControllerBase
     {
         private readonly ICustomerService _customerService;
         private readonly IMapper _mapper;

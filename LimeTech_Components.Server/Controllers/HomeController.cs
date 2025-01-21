@@ -8,7 +8,7 @@
 
     [ApiController]
     [Route("api/home")]
-    public class HomeController : Controller
+    public class HomeController : ControllerBase
     {
         private readonly IComponentService _componentService;
         private readonly IMapper _mapper;

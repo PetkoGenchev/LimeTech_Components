@@ -39,7 +39,7 @@ builder.Services.AddTransient<IComponentRepository,ComponentRepository>();
 builder.Services.AddTransient<ICustomerRepository,CustomerRepository>();
 builder.Services.AddTransient<ICustomerService,CustomerService>();
 
-
+builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
@@ -90,6 +90,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

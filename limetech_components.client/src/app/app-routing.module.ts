@@ -5,6 +5,9 @@ import { HomeComponent } from './components/home/home.component';
 import { AddComponentComponent } from './components/add-component/add-component.component';
 import { EditComponentComponent } from './components/edit-component/edit-component.component';
 import { ManageComponentsComponent } from './components/manage-components/manage-components.component';
+import { RegisterComponent } from './components/auth/register/register.component';
+import { LoginComponent } from './components/auth/login/login.component';
+import { LogoutComponent } from './components/auth/logout/logout.component';
 
 
 const routes: Routes = [

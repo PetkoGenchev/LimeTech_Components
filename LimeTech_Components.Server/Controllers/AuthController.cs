@@ -1,4 +1,5 @@
-﻿using LimeTech_Components.Server.DTOs;
+﻿using LimeTech_Components.Server.Data.Models;
+using LimeTech_Components.Server.DTOs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,10 +9,10 @@ namespace LimeTech_Components.Server.Controllers
     [Route("api/auth")]
     public class AuthController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<Customer> _userManager;
+        private readonly SignInManager<Customer> _signInManager;
 
-        public AuthController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public AuthController(UserManager<Customer> userManager, SignInManager<Customer> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -26,7 +27,7 @@ namespace LimeTech_Components.Server.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new IdentityUser { UserName = registerDTO.Username, Email = registerDTO.Email };
+            var user = new Customer { UserName = registerDTO.Username, Email = registerDTO.Email };
             var result = await _userManager.CreateAsync(user, registerDTO.Password);
 
             if (result.Succeeded)

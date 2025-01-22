@@ -68,21 +68,6 @@ namespace LimeTech_Components.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DiscountMonths",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Month = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TypeOfProduct = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DiscountPercentage = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DiscountMonths", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -189,42 +174,84 @@ namespace LimeTech_Components.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PurchaseHistory",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DateOfPurchase = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CustomerId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PurchaseHistory", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PurchaseHistory_AspNetUsers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Components",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     TypeOfProduct = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<int>(type: "int", nullable: false),
-                    DiscountedPrice = table.Column<int>(type: "int", nullable: false),
+                    PurchasedCount = table.Column<int>(type: "int", nullable: false),
                     ProductionYear = table.Column<int>(type: "int", nullable: false),
                     PowerUsage = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     StockCount = table.Column<int>(type: "int", nullable: false),
                     IsPublic = table.Column<bool>(type: "bit", nullable: false),
                     BuildId = table.Column<int>(type: "int", nullable: false),
-                    DiscountId = table.Column<int>(type: "int", nullable: false),
-                    CustomerId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    PurchaseId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Components", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Components_AspNetUsers_CustomerId",
-                        column: x => x.CustomerId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Components_BuildCompatibilities_Id",
-                        column: x => x.Id,
+                        name: "FK_Components_BuildCompatibilities_BuildId",
+                        column: x => x.BuildId,
                         principalTable: "BuildCompatibilities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Components_DiscountMonths_Id",
-                        column: x => x.Id,
-                        principalTable: "DiscountMonths",
+                        name: "FK_Components_PurchaseHistory_PurchaseId",
+                        column: x => x.PurchaseId,
+                        principalTable: "PurchaseHistory",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BasketItem",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ComponentID = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    CustomerId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BasketItem", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BasketItem_AspNetUsers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_BasketItem_Components_ComponentID",
+                        column: x => x.ComponentID,
+                        principalTable: "Components",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -269,8 +296,28 @@ namespace LimeTech_Components.Server.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Components_CustomerId",
+                name: "IX_BasketItem_ComponentID",
+                table: "BasketItem",
+                column: "ComponentID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BasketItem_CustomerId",
+                table: "BasketItem",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Components_BuildId",
                 table: "Components",
+                column: "BuildId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Components_PurchaseId",
+                table: "Components",
+                column: "PurchaseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PurchaseHistory_CustomerId",
+                table: "PurchaseHistory",
                 column: "CustomerId");
         }
 
@@ -293,19 +340,22 @@ namespace LimeTech_Components.Server.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Components");
+                name: "BasketItem");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Components");
 
             migrationBuilder.DropTable(
                 name: "BuildCompatibilities");
 
             migrationBuilder.DropTable(
-                name: "DiscountMonths");
+                name: "PurchaseHistory");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }

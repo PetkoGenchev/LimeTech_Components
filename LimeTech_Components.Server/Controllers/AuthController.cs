@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using LimeTech_Components.Server.DTOs;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LimeTech_Components.Server.Controllers
@@ -26,7 +27,7 @@ namespace LimeTech_Components.Server.Controllers
             }
 
             var user = new IdentityUser { UserName = registerDTO.Username, Email = registerDTO.Email };
-            var result = await _userManager.CreateAsync(user, registerDTO.Pasword);
+            var result = await _userManager.CreateAsync(user, registerDTO.Password);
 
             if (result.Succeeded)
             {
@@ -52,7 +53,7 @@ namespace LimeTech_Components.Server.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = await _signInManager.PasswordSignInAsync(loginDTO.UserName, loginDTO.Password, false, false);
+            var result = await _signInManager.PasswordSignInAsync(loginDTO.Username, loginDTO.Password, false, false);
 
             if (result.Succeeded)
             {

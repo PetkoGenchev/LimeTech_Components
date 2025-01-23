@@ -2,35 +2,22 @@
 <router-outlet></router-outlet>
 
 <nav>
-  <ul>
-    <li><a routerLink="/">Home</a></li>
-    <h1>Welcome to {{ title }}</h1>
-    <li><a routerLink="/basket">Basket</a></li>
-    <li><a routerLink="/register">Register</a></li>
-    <li><a routerLink="/login">Login</a></li>
-    <li><a routerLink="/logout">Logout</a></li>
-  </ul>
-</nav>
+  <div class="nav-bar">
+    <a routerLink="/" class="home-link">
+      <img src="assets/home-icon.png" alt="Home" class="home-icon" />
+    </a>
 
-<!--<nav>
-  <div>
-    <div>-->
-      <!--logo image and Name-->
-    <!--</div>
-    <div>-->
-      <!--Search Box-->
-    <!--</div>
-    <div>-->
-      <!--Tools (Login,Logout,Register)-->
-    <!--</div>
+    <ul>
+      <li *ngIf="!isSignedIn"><a routerLink="/login">Login</a></li>
+      <li *ngIf="!isSignedIn"><a routerLink="/register">Register</a></li>
+
+      <li *ngIf="isSignedIn"><a routerLink="/basket">Basket</a></li>
+      <li *ngIf="isSignedIn"><a (click)="logout()">Logout</a></li>
+
+      <li *ngIf="isAdmin"><a routerLink="/add-car">Add New Car</a></li>
+    </ul>
   </div>
-</nav>-->
-
-
-
-
-
-
+</nav>
 
 
 <!-- Placeholder for child components -->

@@ -27,7 +27,7 @@ namespace LimeTech_Components.Server.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new Customer { UserName = registerDTO.Username, Email = registerDTO.Email };
+            var user = new Customer { UserName = registerDTO.Username, Email = registerDTO.Email, FullName = registerDTO.FullName };
             var result = await _userManager.CreateAsync(user, registerDTO.Password);
 
             if (result.Succeeded)

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from './services/auth.service';
 
 
 @Component({
@@ -6,6 +7,36 @@ import { Component } from '@angular/core';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'LimeTech Components';
+
+  isSignedIn = false;
+  isAdmin = false;
+
+  constructor(private authService: AuthService) { }
+
+  ngOnInit(): void {
+    // Subscribe to the authentication status changes
+    this.authService.authStatus$.subscribe((authStatus) => {
+      this.isSignedIn = authStatus.isSignedIn;
+      this.isAdmin = authStatus.isAdmin; // Update based on admin status
+    });
+  }
+
+  logout(): void {
+    // Call the AuthService logout method
+    this.authService.logout().subscribe({
+      next: () => {
+        console.log('Logged out successfully');
+        this.isSignedIn = false;
+        this.isAdmin = false; // Reset admin status
+      },
+      error: (err) => {
+        console.error('Logout failed', err);
+      },
+    });
+  }
+
+
+
 }

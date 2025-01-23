@@ -15,5 +15,9 @@ namespace LimeTech_Components.Server.DTOs
         [Required]
         [MinLength(UserProfile.PasswordMinLength)]
         public string Password { get; set; }
+
+        [Required]
+        [MaxLength(UserProfile.FullNameMaxLength)]
+        public string? FullName { get; set; }
     }
 }

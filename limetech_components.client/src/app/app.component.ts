@@ -16,20 +16,18 @@ export class AppComponent implements OnInit {
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    // Subscribe to the authentication status changes
     this.authService.authStatus$.subscribe((authStatus) => {
       this.isSignedIn = authStatus.isSignedIn;
-      this.isAdmin = authStatus.isAdmin; // Update based on admin status
+      this.isAdmin = authStatus.isAdmin;
     });
   }
 
   logout(): void {
-    // Call the AuthService logout method
     this.authService.logout().subscribe({
       next: () => {
         console.log('Logged out successfully');
         this.isSignedIn = false;
-        this.isAdmin = false; // Reset admin status
+        this.isAdmin = false;
       },
       error: (err) => {
         console.error('Logout failed', err);

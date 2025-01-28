@@ -14,7 +14,11 @@
       <li *ngIf="isSignedIn"><a routerLink="/basket">Basket</a></li>
       <li *ngIf="isSignedIn"><a (click)="logout()">Logout</a></li>
 
-      <li *ngIf="isAdmin"><a routerLink="/add-car">Add New Car</a></li>
+      <li *ngIf="isAdmin"><a routerLink="/admin/add-component">Add New Component</a></li>
+      <li *ngIf="isAdmin"><a routerLink="/admin/manage-components">Manage Components</a></li>
+
+
+
     </ul>
   </div>
 </nav>

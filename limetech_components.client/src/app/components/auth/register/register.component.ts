@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, switchMap, catchError, of } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -14,7 +15,10 @@ export class RegisterComponent {
   emailMessage: string = '';
 
 
-  constructor(private authService: AuthService, private fb: FormBuilder) {
+  constructor(
+    private authService: AuthService,
+    private fb: FormBuilder,
+    private router: Router) {
     this.registerForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],

@@ -27,7 +27,29 @@ namespace LimeTech_Components.Server.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new Customer { UserName = registerDTO.Username, Email = registerDTO.Email, FullName = registerDTO.FullName };
+
+            var existingEmail = await _userManager.FindByEmailAsync(registerDTO.Email);
+
+            if (existingEmail != null) 
+            {
+                return BadRequest(new { message = "Email is already in use." });
+            }
+
+
+            var existingUsername = await _userManager.FindByNameAsync(registerDTO.Username);
+
+            if (existingUsername != null)
+            {
+                return BadRequest(new { message = "Username is already taken." });
+            }
+
+            var user = new Customer 
+            { 
+                UserName = registerDTO.Username, 
+                Email = registerDTO.Email,
+                FullName = registerDTO.FullName 
+            };
+
             var result = await _userManager.CreateAsync(user, registerDTO.Password);
 
             if (result.Succeeded)
@@ -72,6 +94,13 @@ namespace LimeTech_Components.Server.Controllers
             await _signInManager.SignOutAsync();
             return Ok(new { message = "Logged out successfully" });
         }
+
+
+
+
+
+
+
 
 
 

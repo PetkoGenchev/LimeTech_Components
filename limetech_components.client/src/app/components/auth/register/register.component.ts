@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-register',
@@ -7,22 +8,32 @@ import { AuthService } from '../../../services/auth.service';
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {
-  constructor(private authService: AuthService) { }
+  registerForm: FormGroup;
+
+  constructor(private authService: AuthService, private fb: FormBuilder) {
+    this.registerForm = this.fb.group({
+      username: ['', [Validators.required, Validators.minLength(2)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+    });
+
+  }
 
   onRegister(): void {
-    const user = {
-      username: 'LimeUsername',
-      email: 'lime@lime.com',
-      password: 'lime123',
-    };
-
-    this.authService.register(user).subscribe({
-      next: (response) => {
-        console.log('Registration successful', response);
-      },
-      error: (err) => {
-        console.error('Registration failed', err);
-      },
-    });
+    if (this.registerForm.valid) {
+      this.authService.register(this.registerForm.value).subscribe({
+        next: (response) => {
+          console.log('Registration successful', response);
+          this.router.navigate(['/login']);
+        },
+        error: (err) => {
+          console.error('Registration failed', err);
+        },
+      });
+    }
+    else
+    {
+      console.error('Form is invalid');
+    }
   }
 }

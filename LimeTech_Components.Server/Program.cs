@@ -4,8 +4,6 @@ using LimeTech_Components.Server.Repositories.Components;
 using LimeTech_Components.Server.Repositories.Customers;
 using LimeTech_Components.Server.Services.Components;
 using LimeTech_Components.Server.Services.Customers;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 
 var builder = WebApplication.CreateBuilder(args);

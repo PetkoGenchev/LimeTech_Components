@@ -97,9 +97,29 @@ namespace LimeTech_Components.Server.Controllers
 
 
 
+        [HttpGet("check-email")]
+        public async Task<IActionResult> CheckEmail(string email)
+        {
+            var existingEmail = await _userManager.FindByEmailAsync(email);
+            if (existingEmail != null)
+            {
+                return BadRequest(new { message = "Email is already in use" });
+            }
+            return Ok();
+        }
 
 
 
+        [HttpGet("check-username")]
+        public async Task<IActionResult> CheckUsername(string username)
+        {
+            var existingUsername = await _userManager.FindByNameAsync(username);
+            if (existingUsername != null)
+            {
+                return BadRequest(new { message = "Username is already taken" });
+            }
+            return Ok();
+        }
 
 
 

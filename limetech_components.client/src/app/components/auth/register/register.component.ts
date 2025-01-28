@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { debounceTime, switchMap, catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -9,6 +10,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class RegisterComponent {
   registerForm: FormGroup;
+  usernameMessage: string = '';
+  emailMessage: string = '';
+
 
   constructor(private authService: AuthService, private fb: FormBuilder) {
     this.registerForm = this.fb.group({
@@ -17,6 +21,29 @@ export class RegisterComponent {
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
 
+    //Set up real-time validation for username
+    this.registerForm.get('username')?.valueChanges
+      .pipe(
+        debounceTime(300),  // 300ms wait time after customer stops writing
+        switchMap(username => this.authService.checkUsername(username)),
+        catchError(() => of({ message: "Username validation failed." }))
+      )
+      .subscribe({
+        next: () => this.usernameMessage = '',
+        error: (err) => this.usernameMessage = err.error?.message || 'Error checking username.'
+      });
+
+    // Set up real-time validation for email
+    this.registerForm.get('email')?.valueChanges
+      .pipe(
+        debounceTime(300),
+        switchMap(email => this.authService.checkEmail(email)),
+        catchError(() => of({ message: "Email validation failed." }))
+      )
+      .subscribe({
+        next: () => this.emailMessage = '',
+        error: (err) => this.emailMessage = err.error?.message || 'Error checking email.'
+      });
   }
 
   onRegister(): void {
@@ -31,8 +58,7 @@ export class RegisterComponent {
         },
       });
     }
-    else
-    {
+    else {
       console.error('Form is invalid');
     }
   }

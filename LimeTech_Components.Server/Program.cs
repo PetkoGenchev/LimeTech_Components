@@ -30,6 +30,17 @@ builder.Services.AddIdentity<Customer, IdentityRole>(options =>
     .AddEntityFrameworkStores<LimeTechDbContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular", policy =>
+    {
+        policy.WithOrigins("\"https://localhost:4200")
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+    });
+});
+
+
 builder.Services.AddAutoMapper(typeof(LimeTechDbContext));
 
 builder.Services.AddTransient<IComponentService,ComponentService>();
@@ -85,6 +96,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("AllowAngular");
 
 app.UseHttpsRedirection();
 

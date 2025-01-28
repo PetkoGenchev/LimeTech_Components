@@ -22,6 +22,19 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/register`, user);
   }
 
+  checkUsername(username: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/check-username`, {
+      params: { username },
+    });
+  }
+
+
+  checkEmail(email: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/check-email`, {
+      params: { email },
+    });
+  }
+
   login(credentials: any): Observable<any> {
     return new Observable((observer) => {
       this.http.post(`${this.apiUrl}/login`, credentials).subscribe({
@@ -52,20 +65,4 @@ export class AuthService {
       });
     });
   }
-
-  //private apiUrl = '/api/auth';
-
-  //constructor(private http: HttpClient) { }
-
-  //register(user: any): Observable<any> {
-  //  return this.http.post(`${this.apiUrl}/register`, user);
-  //}
-
-  //login(credentials: any): Observable<any> {
-  //  return this.http.post(`${this.apiUrl}/login`, credentials);
-  //}
-
-  //logout(): Observable<any> {
-  //  return this.http.post(`${this.apiUrl}/logout`, {});
-  //}
 }

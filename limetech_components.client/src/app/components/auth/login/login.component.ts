@@ -15,30 +15,33 @@ export class LoginComponent {
   constructor(
     private authService: AuthService,
     private fb: FormBuilder,
-    private router: Router) {
+    private router: Router
+  ) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.required]],
     });
   }
 
+  onLogin(): void {
+    if (this.loginForm.valid) {
+      const credentials = this.loginForm.value;
 
-
-
-
-  //onLogin(): void {
-  //  const credentials = {
-  //    username: 'LimeUsername',
-  //    password: 'lime123',
-  //  };
-
-  //  this.authService.login(credentials).subscribe({
-  //    next: (response) => {
-  //      console.log('Login successful', response);
-  //    },
-  //    error: (err) => {
-  //      console.error('Login failed', err);
-  //    },
-  //  });
-  //}
+      this.authService.login(credentials).subscribe({
+        next: (response) => {
+          console.log('Login successful', response);
+          // Redirect to the home page after login
+          this.router.navigate(['/']);
+        },
+        error: (err) => {
+          console.error('Login failed', err);
+          this.loginError = 'Invalid username or password. Please try again.';
+        },
+      });
+    }
+    else
+    {
+      this.loginError = 'Please fill out all fields.';
+    }
+  }
 }

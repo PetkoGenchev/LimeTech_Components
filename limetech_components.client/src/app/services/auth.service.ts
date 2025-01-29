@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -28,27 +29,24 @@ export class AuthService {
     });
   }
 
-
   checkEmail(email: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/check-email`, {
       params: { email },
     });
   }
 
-  login(credentials: any): Observable<any> {
-    return new Observable((observer) => {
-      this.http.post(`${this.apiUrl}/login`, credentials).subscribe({
-        next: (response: any) => {
-          const isAdmin = response.role === 'Admin';
-          this.authStatusSubject.next({ isSignedIn: true, isAdmin });
-          observer.next(response);
-          observer.complete();
-        },
-        error: (err) => {
-          observer.error(err);
-        },
-      });
-    });
+
+  login(credentials: { suername: string, password: string }): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
+      tap((response) => {
+        const isAdmin = response.role === 'Admin';
+        this.authStatusSubject.next({ isSignedIn: true, isAdmin });
+      }),
+      catchError((error) => {
+        console.error('Login failed', error);
+        return throwError(() => error)
+      })
+    );
   }
 
   logout(): Observable<any> {

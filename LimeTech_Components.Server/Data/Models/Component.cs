@@ -28,7 +28,7 @@
         public int ProductionYear { get; set; }
 
         [Required]
-        public int PowerUsage { get; set; }
+        public int? PowerUsage { get; set; }
 
         public PartStatus Status { get; set; }
 
@@ -50,7 +50,7 @@
         [Required]
         public PurchaseHistory PurchaseHistory { get; init; }
 
-        public List<BasketItem> BasketItems { get; private set; } = new List<BasketItem>();
+ //       public List<BasketItem> BasketItems { get; private set; } = new List<BasketItem>();
     }
 
 

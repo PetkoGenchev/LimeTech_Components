@@ -11,10 +11,10 @@
         public string? Name { get; set; }
 
         [Required]
-        public int StartYear { get; set; }
+        public int? StartYear { get; set; }
 
         [Required]
-        public int EndYear { get; set; }
+        public int? EndYear { get; set; }
 
         public IEnumerable<Component> Components { get; init; } = new List<Component>();
     }

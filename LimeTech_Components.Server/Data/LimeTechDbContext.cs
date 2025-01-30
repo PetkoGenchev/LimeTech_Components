@@ -32,11 +32,11 @@ namespace LimeTech_Components.Server.Data
                 .HasForeignKey(b => b.PurchaseId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<BasketItem>()
-                .HasOne(b => b.Component)
-                .WithMany(i => i.BasketItems)
-                .HasForeignKey(b => b.ComponentID)
-                .OnDelete(DeleteBehavior.Restrict);
+            //builder.Entity<BasketItem>()
+            //    .HasOne(b => b.Component)
+            //    .WithMany(i => i.BasketItems)
+            //    .HasForeignKey(b => b.ComponentID)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<BasketItem>()
                 .HasOne(b => b.Customer)

@@ -1,9 +1,12 @@
 using LimeTech_Components.Server.Data;
 using LimeTech_Components.Server.Data.Models;
+using LimeTech_Components.Server.Infrastructure;
 using LimeTech_Components.Server.Repositories.Components;
 using LimeTech_Components.Server.Repositories.Customers;
 using LimeTech_Components.Server.Services.Components;
 using LimeTech_Components.Server.Services.Customers;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -55,7 +58,11 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
+    var services = scope.ServiceProvider;
+
     await InitializeRolesAndAdminAsync(scope.ServiceProvider);
+
+    await DatabaseSeeder.SeedAsync(services);
 }
 
 async Task InitializeRolesAndAdminAsync(IServiceProvider serviceProvider)

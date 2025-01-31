@@ -253,7 +253,7 @@ namespace LimeTech_Components.Server.Migrations
                         column: x => x.ComponentID,
                         principalTable: "Components",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

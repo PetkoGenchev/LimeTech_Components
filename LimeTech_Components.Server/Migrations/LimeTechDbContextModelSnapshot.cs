@@ -362,9 +362,9 @@ namespace LimeTech_Components.Server.Migrations
             modelBuilder.Entity("LimeTech_Components.Server.Data.Models.BasketItem", b =>
                 {
                     b.HasOne("LimeTech_Components.Server.Data.Models.Component", "Component")
-                        .WithMany("BasketItems")
+                        .WithMany()
                         .HasForeignKey("ComponentID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("LimeTech_Components.Server.Data.Models.Customer", "Customer")
@@ -462,11 +462,6 @@ namespace LimeTech_Components.Server.Migrations
             modelBuilder.Entity("LimeTech_Components.Server.Data.Models.BuildCompatibility", b =>
                 {
                     b.Navigation("Components");
-                });
-
-            modelBuilder.Entity("LimeTech_Components.Server.Data.Models.Component", b =>
-                {
-                    b.Navigation("BasketItems");
                 });
 
             modelBuilder.Entity("LimeTech_Components.Server.Data.Models.Customer", b =>

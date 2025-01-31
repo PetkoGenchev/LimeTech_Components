@@ -1,1 +1,26 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+  background-color: #f7f7f7;
+}
+
+.navbar {
+  padding: 10px 0;
+}
+
+.navbar-brand img {
+  height: 40px;
+}
+
+/* Adjust spacing for navigation items */
+.navbar-nav .nav-item {
+  margin-left: 15px;
+}
+
+/* Change hover effect */
+.navbar-nav .nav-link:hover {
+  color: #007bff !important;
+}
+
+/* Logout button red */
+.navbar-nav .nav-link.text-danger:hover {
+  color: red !important;
+}

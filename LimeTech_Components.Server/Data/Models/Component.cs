@@ -40,17 +40,13 @@
 
         public int BuildId { get; set; }
 
-
         [Required]
         public BuildCompatibility BuildCompatibility { get; init; }
 
+        public ICollection<BasketItem> BasketItems { get; set; } = new List<BasketItem>();
 
-        public int PurchaseId { get; set; }
+        public ICollection<PurchaseHistory> PurchaseHistories { get; private set; } = new List<PurchaseHistory>();
 
-        [Required]
-        public PurchaseHistory PurchaseHistory { get; init; }
-
- //       public List<BasketItem> BasketItems { get; private set; } = new List<BasketItem>();
     }
 
 

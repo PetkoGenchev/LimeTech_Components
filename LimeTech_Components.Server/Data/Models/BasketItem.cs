@@ -5,17 +5,20 @@
     {
         public int Id { get; set; }
 
-        public int ComponentID { get; set; }
+
+        public int ComponentId { get; set; }
 
         [Required]
         public Component Component { get; set; } = null!;
 
-        [Range(1, int.MaxValue)]
-        public int Quantity { get; set; } = 1;
-
         public string CustomerId { get; set; }
 
         [Required]
-        public Customer Customer { get; set; }
+        public Customer Customer { get; set; } = null!;
+
+
+        [Range(1, int.MaxValue)]
+        public int Quantity { get; set; } = 1;
+
     }
 }

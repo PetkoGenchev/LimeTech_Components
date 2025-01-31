@@ -16,6 +16,6 @@
         [Required]
         public int? EndYear { get; set; }
 
-        public IEnumerable<Component> Components { get; init; } = new List<Component>();
+        public ICollection<Component> Components { get; init; } = new List<Component>();
     }
 }

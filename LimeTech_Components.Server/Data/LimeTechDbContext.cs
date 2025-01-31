@@ -1,6 +1,7 @@
 ﻿using LimeTech_Components.Server.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace LimeTech_Components.Server.Data
 {
@@ -14,43 +15,42 @@ namespace LimeTech_Components.Server.Data
         public DbSet<BuildCompatibility> BuildCompatibilities { get; init; }
         public DbSet<Component> Components { get; init; }
         public DbSet<Customer> Customers { get; init; }
+        public DbSet<BasketItem> BasketItems { get; init; }
+        public DbSet<PurchaseHistory> PurchaseHistories { get; init; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
             builder
                 .Entity<Component>()
-                .HasOne(b => b.BuildCompatibility)
-                .WithMany(c => c.Components)
-                .HasForeignKey(b => b.BuildId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder
-                .Entity<Component>()
-                .HasOne(b => b.PurchaseHistory)
-                .WithMany(c => c.Components)
-                .HasForeignKey(b => b.PurchaseId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            //builder.Entity<BasketItem>()
-            //    .HasOne(b => b.Component)
-            //    .WithMany(i => i.BasketItems)
-            //    .HasForeignKey(b => b.ComponentID)
-            //    .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<BasketItem>()
-                .HasOne(b => b.Customer)
-                .WithMany(i => i.BasketItems)
-                .HasForeignKey(b => b.CustomerId)
+                .HasOne(c => c.BuildCompatibility)
+                .WithMany(b => b.Components)
+                .HasForeignKey(c => c.BuildId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<PurchaseHistory>()
-                .HasOne(b => b.Customer)
-                .WithMany(i => i.PurchaseHistories)
-                .HasForeignKey(b => b.CustomerId)
+                .HasOne(ph => ph.Component)
+                .WithMany(c => c.PurchaseHistories)
+                .HasForeignKey(ph => ph.ComponentId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<PurchaseHistory>()
+                .HasOne(ph => ph.Customer)
+                .WithMany(c => c.PurchaseHistories)
+                .HasForeignKey(ph => ph.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<BasketItem>()
+                .HasOne(bi => bi.Component)
+                .WithMany(c => c.BasketItems)
+                .HasForeignKey(bi => bi.ComponentId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<BasketItem>()
+                .HasOne(bi => bi.Customer)
+                .WithMany(c => c.BasketItems)
+                .HasForeignKey(bi => bi.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
 
 
             base.OnModelCreating(builder);

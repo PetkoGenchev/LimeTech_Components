@@ -6,14 +6,15 @@
 
     public class Customer : IdentityUser
     {
-        public string? PublicID { get; init; } = Guid.NewGuid().ToString();
+        public string PublicID { get; init; } = Guid.NewGuid().ToString();
 
         [Required]
         [MaxLength(UserProfile.FullNameMaxLength)]
-        public string? FullName { get; set; }
+        public string FullName { get; set; }
 
-        public List<PurchaseHistory> PurchaseHistories { get; private set; } = new List<PurchaseHistory>();
+        public ICollection<BasketItem> BasketItems { get; private set; } = new List<BasketItem>();
 
-        public List<BasketItem> BasketItems { get; private set; } = new List<BasketItem>();
+        public ICollection<PurchaseHistory> PurchaseHistories { get; private set; } = new List<PurchaseHistory>();
+
     }
 }

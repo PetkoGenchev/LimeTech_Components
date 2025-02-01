@@ -1,33 +1,10 @@
 
 <router-outlet></router-outlet>
 
-<!--<nav>
-  <div class="nav-bar">
-    <a routerLink="/" class="home-link">
-      <img src="assets/home-icon.png" alt="Home" class="home-icon" />
-    </a>
-
-    <ul>
-      <li *ngIf="!isSignedIn"><a routerLink="/login">Login</a></li>
-      <li *ngIf="!isSignedIn"><a routerLink="/register">Register</a></li>
-
-      <li *ngIf="isSignedIn"><a routerLink="/basket">Basket</a></li>
-      <li *ngIf="isSignedIn"><a (click)="logout()">Logout</a></li>
-
-      <li *ngIf="isAdmin"><a routerLink="/admin/add-component">Add New Component</a></li>
-      <li *ngIf="isAdmin"><a routerLink="/admin/manage-components">Manage Components</a></li>
-
-
-
-    </ul>
-  </div>
-</nav>-->
-
-
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
   <div class="container">
     <a routerLink="/" class="navbar-brand">
-      <img src="assets/home-icon.png" alt="Home" class="home-icon" width="40" height="40" />
+      <img src="/src/assets/home-icon.jpg" alt="Home" class="home-icon" width="40" height="40" />
     </a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">

@@ -36,7 +36,7 @@ export class AuthService {
   }
 
 
-  login(credentials: { suername: string, password: string }): Observable<any> {
+  login(credentials: { username: string, password: string }): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
       tap((response) => {
         const isAdmin = response.role === 'Admin';

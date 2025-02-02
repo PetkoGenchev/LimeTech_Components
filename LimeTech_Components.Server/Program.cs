@@ -54,6 +54,20 @@ builder.Services.AddTransient<ICustomerService,CustomerService>();
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 
+
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins, policy =>
+        {
+            policy.WithOrigins("https://127.0.0.1:4200")
+                  .AllowAnyMethod()
+                  .AllowAnyHeader()
+                  .AllowCredentials();
+        });
+});
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -104,7 +118,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("AllowAngular");
+app.UseCors("_myAllowSpecificOrigins");
 
 app.UseHttpsRedirection();
 

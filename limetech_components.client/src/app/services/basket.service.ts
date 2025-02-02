@@ -7,7 +7,7 @@ import { BasketDTO } from '../models/basket.dto';
   providedIn: 'root'
 })
 export class BasketService {
-  private apiUrl = '/api/basket';
+  private apiUrl = 'http://localhost:7039/api/basket';
 
   constructor(private http: HttpClient) { }
 

@@ -8,7 +8,7 @@ import { catchError, tap } from 'rxjs/operators';
 })
 export class AuthService {
 
-  private apiUrl = '/api/auth';
+  private apiUrl = 'https://localhost:7039/api/auth';
 
   private authStatusSubject = new BehaviorSubject<{ isSignedIn: boolean; isAdmin: boolean }>({
     isSignedIn: false,

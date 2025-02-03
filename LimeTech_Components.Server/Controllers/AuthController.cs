@@ -76,7 +76,19 @@ namespace LimeTech_Components.Server.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = await _signInManager.PasswordSignInAsync(loginDTO.Username, loginDTO.Password, false, false);
+            var user = await _userManager.FindByNameAsync(loginDTO.Username);
+            if (user == null)
+            {
+                return Unauthorized(new { message = "Invalid login attempt!" });
+            }
+
+
+            var result = await _signInManager.CheckPasswordSignInAsync(user, loginDTO.Password, false);
+
+            //Console.WriteLine($"Login attempt for user: {loginDTO.Username}");
+            //Console.WriteLine($"SignIn Result: Succeeded={result.Succeeded}, IsLockedOut={result.IsLockedOut}, " +
+            //    $"RequiresTwoFactor={result.RequiresTwoFactor}, IsNotAllowed={result.IsNotAllowed}");
+
 
             if (result.Succeeded)
             {

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LimeTech_Components.Server.Migrations
 {
     [DbContext(typeof(LimeTechDbContext))]
-    [Migration("20250131210917_InitialCreate")]
+    [Migration("20250203202953_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

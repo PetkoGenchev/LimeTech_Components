@@ -25,16 +25,8 @@ export class LoginComponent {
 
   onLogin(): void {
 
-
-    console.log('Login button clicked');
-
-
     if (this.loginForm.valid) {
       const credentials = this.loginForm.value;
-
-
-      console.log('Sending login request with:', credentials);
-
 
       this.authService.login(credentials).subscribe({
         next: (response) => {
@@ -50,15 +42,6 @@ export class LoginComponent {
     }
     else
     {
-
-      console.log('Form is not valid:', this.loginForm.value);
-
-      console.log('Form status:', this.loginForm.status);
-      console.log('Form value:', this.loginForm.value);
-      console.log('Username control:', this.loginForm.controls['username'].value);
-      console.log('Password control:', this.loginForm.controls['password'].value);
-
-
       this.loginError = 'Please fill out all fields.';
     }
   }

@@ -13,7 +13,6 @@ import { ComponentDTO } from '../../models/component.dto';
 export class HomeComponent implements OnInit {
   components: ComponentDTO[] = [];
   topPurchased: ComponentDTO[] = [];
-  basket: BasketDTO[] = [];
   filters = {
     name: '',
     typeOfProduct: '',
@@ -33,7 +32,6 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.loadComponents();
     this.loadTopPurchased();
-    this.loadBasket();
   }
 
   // Load all components with filters
@@ -53,28 +51,11 @@ export class HomeComponent implements OnInit {
   }
 
 
-  loadBasket(): void {
-    this.basketService.getBasket().subscribe(
-      (data) => (this.basket = data),
-      (error) => console.error('Failed to load basket',error)
-    );
-  }
+
 
   addToBasket(componentId: number): void {
     this.basketService.addToBasket(componentId).subscribe(() => {
-      this.loadBasket();
-    });
-  }
-
-  removeFromBasket(componentId: number): void {
-    this.basketService.removeFromBasket(componentId).subscribe(() => {
-      this.loadBasket();
-    });
-  }
-
-  clearBasket(): void {
-    this.basketService.clearBasket().subscribe(() => {
-      this.loadBasket();
+      console.log(`Component ${componentId} added to basket.`);
     });
   }
 }

@@ -1,1 +1,19 @@
-<p>basket works!</p>
+<h2>Your Basket</h2>
+
+<form [formGroup]="basketForm">
+  <div *ngIf="basket.length > 0; else emptyBasket">
+    <ul>
+      <li *ngFor="let item of basket; let i = index">
+        <input type="checkbox" [formControlName]="i" />
+        {{ item.componentName }} - {{ item.quantity }} x ${{ item.pricePerUnit }} = ${{ item.totalPrice }}
+        <button type="button" (click)="removeFromBasket(i, item.componentId)">Remove</button>
+      </li>
+    </ul>
+    <button type="button" (click)="purchaseSelected()">Purchase Selected</button>
+    <button type="button" (click)="clearBasket()">Clear Basket</button>
+  </div>
+</form>
+
+<ng-template #emptyBasket>
+  <p>Your basket is empty.</p>
+</ng-template>

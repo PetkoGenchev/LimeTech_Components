@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BasketService } from '../../services/basket.service';
-import { BasketDTO } from '../../models/basket.dto';
 import { ComponentService } from '../../services/component.service';
 import { ComponentDTO } from '../../models/component.dto';
-
 
 @Component({
   selector: 'app-home',
@@ -14,6 +12,7 @@ export class HomeComponent implements OnInit {
   components: ComponentDTO[] = [];
   topPurchased: ComponentDTO[] = [];
   filters = {
+    keyword: '', // New keyword filter
     name: '',
     typeOfProduct: '',
     minPrice: null,
@@ -30,32 +29,38 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.loadComponents();
     this.loadTopPurchased();
   }
 
-  // Load all components with filters
+  onFilterChange(): void {
+    if (this.filtersApplied()) {
+      this.loadComponents();
+    } else {
+      this.components = [];
+    }
+  }
+
   loadComponents(): void {
     this.componentService.getComponents(this.filters).subscribe({
-      next: (data) => (this.components = data),
+      next: (data) => this.components = data,
       error: (error) => console.error('Failed to load components', error),
     });
   }
 
-  // Load the top 8 purchased components
   loadTopPurchased(): void {
     this.componentService.getTopComponents().subscribe({
-      next: (data) => (this.topPurchased = data),
+      next: (data) => this.topPurchased = data,
       error: (error) => console.error('Failed to load top purchased components', error),
     });
   }
-
-
-
 
   addToBasket(componentId: number): void {
     this.basketService.addToBasket(componentId).subscribe(() => {
       console.log(`Component ${componentId} added to basket.`);
     });
+  }
+
+  filtersApplied(): boolean {
+    return Object.values(this.filters).some(value => value !== '' && value !== null);
   }
 }

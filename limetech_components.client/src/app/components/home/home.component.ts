@@ -12,7 +12,7 @@ export class HomeComponent implements OnInit {
   components: ComponentDTO[] = [];
   topPurchased: ComponentDTO[] = [];
   filters = {
-    keyword: '', // New keyword filter
+    keyword: '',
     name: '',
     typeOfProduct: '',
     minPrice: null,
@@ -29,14 +29,14 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.loadTopPurchased();
+    this.loadComponents();
   }
 
   onFilterChange(): void {
     if (this.filtersApplied()) {
       this.loadComponents();
     } else {
-      this.components = [];
+      this.loadTopPurchased();
     }
   }
 
@@ -61,6 +61,7 @@ export class HomeComponent implements OnInit {
   }
 
   filtersApplied(): boolean {
-    return Object.values(this.filters).some(value => value !== '' && value !== null);
+    const { currentPage, componentsPerPage, ...rest } = this.filters;
+    return Object.values(rest).some(value => value !== '' && value !== null);
   }
 }

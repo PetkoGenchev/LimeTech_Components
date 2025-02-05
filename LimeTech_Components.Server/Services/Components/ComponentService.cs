@@ -24,6 +24,7 @@
         }
 
         public async Task<ComponentQueryServiceModel> GetComponentsAsync(
+            string keyword,
             string name,
             string typeOfProduct,
             int? minPrice,
@@ -34,6 +35,7 @@
             int componentsPerPage = ComponentConstants.ComponentsPerPage)
         {
             return await _componentRepository.GetComponentsAsync(
+                keyword,
                 name, 
                 typeOfProduct, 
                 minPrice, 

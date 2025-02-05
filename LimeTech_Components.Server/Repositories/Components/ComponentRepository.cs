@@ -46,6 +46,7 @@
 
 
         public async Task<ComponentQueryServiceModel> GetComponentsAsync(
+            string keyword,
             string name,
             string typeOfProduct,
             int? minPrice,
@@ -56,6 +57,15 @@
             int componentsPerPage = ComponentConstants.ComponentsPerPage)
         {
             var query = _context.Components.AsQueryable();
+
+
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                query = query.Where(c =>
+                    c.Name.Contains(keyword) ||
+                    c.TypeOfProduct.Contains(keyword) ||
+                    c.ProductionYear.ToString().Contains(keyword));
+            }
 
             if (!string.IsNullOrEmpty(name))
             {
@@ -93,7 +103,7 @@
                 .Skip((currentPage - 1) * componentsPerPage)
                 .Take(componentsPerPage));
 
-            var totalComponents = components.Count();
+            var totalComponents = await components.CountAsync();
 
             return new ComponentQueryServiceModel
             {

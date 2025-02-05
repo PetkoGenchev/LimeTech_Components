@@ -23,6 +23,7 @@
 
         [HttpGet("components")]
         public async Task<IActionResult> Index(
+            [FromQuery] string keyword = null,
             [FromQuery] string name = null,
             [FromQuery] string typeOfProduct = null,
             [FromQuery] int? minPrice = null,
@@ -34,17 +35,19 @@
         {
             try
             {
-                var hasFilters = !string.IsNullOrEmpty(name) ||
-                 !string.IsNullOrEmpty(typeOfProduct) ||
-                 minPrice.HasValue ||
-                 maxPrice.HasValue ||
-                 productionYear.HasValue ||
-                 status.HasValue;
+                var hasFilters = !string.IsNullOrEmpty(keyword) ||
+                    !string.IsNullOrEmpty(name) ||
+                    !string.IsNullOrEmpty(typeOfProduct) ||
+                    minPrice.HasValue ||
+                    maxPrice.HasValue ||
+                    productionYear.HasValue ||
+                    status.HasValue;
 
                 if (hasFilters)
                 {
 
                     var filteredComponents = await _componentService.GetComponentsAsync(
+                        keyword,
                         name,
                         typeOfProduct,
                         minPrice,

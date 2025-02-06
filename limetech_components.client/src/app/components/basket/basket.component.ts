@@ -64,12 +64,9 @@ export class BasketComponent implements OnInit {
   }
 
 
-  toggleSelection(componentId: number): void {
-    if (this.selectedItems.has(componentId)) {
-      this.selectedItems.delete(componentId);
-    } else {
-      this.selectedItems.add(componentId);
-    }
+  toggleSelection(index: number): void {
+    const control = this.selectedItems.at(index);
+    control.setValue(!control.value);
   }
 
 
@@ -80,6 +77,9 @@ export class BasketComponent implements OnInit {
 
     if (selectedComponents.length > 0) {
       console.log('Purchasing:', selectedComponents);
+
+      // Move selected items to purchase history (MAKE PURCHASE HISTORY)
+      // For now, it just removes them from the basket
       selectedComponents.forEach(componentId => {
         const index = this.basket.findIndex(item => item.componentId === componentId);
         if (index !== -1) {

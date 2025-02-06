@@ -2,7 +2,7 @@
 
 <form [formGroup]="basketForm">
   <div *ngIf="basket.length > 0; else emptyBasket">
-    <ul>
+    <ul formArrayName="selectedItems">
       <li *ngFor="let item of basket; let i = index">
         <input type="checkbox" [formControlName]="i" />
         {{ item.componentName }} - {{ item.quantity }} x ${{ item.pricePerUnit }} = ${{ item.totalPrice }}

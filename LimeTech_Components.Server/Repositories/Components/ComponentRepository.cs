@@ -103,7 +103,7 @@
                 .Skip((currentPage - 1) * componentsPerPage)
                 .Take(componentsPerPage));
 
-            var totalComponents = await components.CountAsync();
+            var totalComponents = components.Count();
 
             return new ComponentQueryServiceModel
             {

@@ -12,6 +12,7 @@ namespace LimeTech_Components.Server.Services.Components
             bool publicOnly);
 
         Task<ComponentQueryServiceModel> GetComponentsAsync(
+            string keyword,
             string name,
             string typeOfProduct,
             int? minPrice,

@@ -24,7 +24,7 @@
           <a class="nav-link" routerLink="/basket">Basket</a>
         </li>
         <li class="nav-item" *ngIf="isSignedIn">
-          <a class="nav-link text-danger" (click)="logout()">Logout</a>
+          <a class="nav-link text-danger" href="#" role="button" (click)="logout()">Logout</a>
         </li>
 
         <li class="nav-item" *ngIf="isAdmin">

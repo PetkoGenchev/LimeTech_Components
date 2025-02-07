@@ -28,13 +28,12 @@ export class AppComponent implements OnInit {
         console.log('Logged out successfully');
         this.isSignedIn = false;
         this.isAdmin = false;
+        window.location.href = '/';
       },
       error: (err) => {
         console.error('Logout failed', err);
       },
     });
   }
-
-
 
 }

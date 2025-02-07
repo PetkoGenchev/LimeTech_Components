@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+//import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
@@ -13,7 +13,6 @@ import { EditComponentComponent } from './components/edit-component/edit-compone
 import { ManageComponentsComponent } from './components/manage-components/manage-components.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { LoginComponent } from './components/auth/login/login.component';
-import { LogoutComponent } from './components/auth/logout/logout.component';
 
 @NgModule({
   declarations: [
@@ -24,12 +23,11 @@ import { LogoutComponent } from './components/auth/logout/logout.component';
     EditComponentComponent,
     ManageComponentsComponent,
     RegisterComponent,
-    LoginComponent,
-    LogoutComponent
+    LoginComponent
   ],
   imports: [
     BrowserModule,
-    HttpClientModule,
+    //HttpClientModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule

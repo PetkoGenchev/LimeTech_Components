@@ -59,18 +59,11 @@ export class AuthService {
     );
   }
 
-  logout(): Observable<any> {
-    return new Observable((observer) => {
-      this.http.post(`${this.apiUrl}/logout`, {}).subscribe({
-        next: (response: any) => {
-          this.authStatusSubject.next({ isSignedIn: false, isAdmin: false });
-          observer.next(response);
-          observer.complete();
-        },
-        error: (err) => {
-          observer.error(err);
-        },
-      });
-    });
+  logout(): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/logout`, {}).pipe(
+      tap(() => this.authStatusSubject.next({ isSignedIn: false, isAdmin: false }))
+    );
   }
+
+
 }

@@ -7,7 +7,6 @@ import { EditComponentComponent } from './components/edit-component/edit-compone
 import { ManageComponentsComponent } from './components/manage-components/manage-components.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { LoginComponent } from './components/auth/login/login.component';
-import { LogoutComponent } from './components/auth/logout/logout.component';
 
 
 const routes: Routes = [
@@ -18,7 +17,7 @@ const routes: Routes = [
   { path: 'admin/manage-components', component: ManageComponentsComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'logout', component: LogoutComponent },
+  { path: 'logout', redirectTo: '/', pathMatch: 'full' },
 ];
 
 @NgModule({

@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormArray, FormGroup } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BasketDTO } from '../../models/basket.dto';
 import { BasketService } from '../../services/basket.service';
 
 @Component({
   selector: 'app-basket',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './basket.component.html',
   styleUrl: './basket.component.css'
 })

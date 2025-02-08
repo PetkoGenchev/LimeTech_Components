@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ComponentService } from '../../services/component.service';
 import { ComponentDTO } from '../../models/component.dto';
 import { PartStatus } from '../../models/status.dto';
 
 @Component({
   selector: 'app-add-component',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './add-component.component.html',
   styleUrl: './add-component.component.css'
 })

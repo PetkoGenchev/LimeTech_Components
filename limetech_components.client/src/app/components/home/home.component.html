@@ -1,41 +1,43 @@
-<div class="filters">
-  <h2>Search Components</h2>
-  <label>
-    Search:
-    <input type="text" [(ngModel)]="filters.keyword" (input)="loadComponents()" placeholder="Search by name, type, year..." />
-  </label>
-  <label>
-    Name:
-    <input type="text" [(ngModel)]="filters.name" (input)="loadComponents()" />
-  </label>
-  <label>
-    Type:
-    <input type="text" [(ngModel)]="filters.typeOfProduct" (input)="loadComponents()" />
-  </label>
-  <label>
-    Min Price:
-    <input type="number" [(ngModel)]="filters.minPrice" (input)="loadComponents()" />
-  </label>
-  <label>
-    Max Price:
-    <input type="number" [(ngModel)]="filters.maxPrice" (input)="loadComponents()" />
-  </label>
-  <label>
-    Production Year:
-    <input type="number" [(ngModel)]="filters.productionYear" (input)="loadComponents()" />
-  </label>
-  <label>
-    Status:
-    <select [(ngModel)]="filters.status" (change)="loadComponents()">
-      <option value="">All</option>
-      <option value="Available">Available</option>
-      <option value="Sold">Sold</option>
-      <option value="WaitingStock">Waiting Stock</option>
-    </select>
-  </label>
-</div>
+<form [formGroup]="filterForm" (ngSubmit)="onFilterChange()">
+  <div class="filters">
+    <h2>Search Components</h2>
+    <label>
+      Search:
+      <input type="text" formControlName="keyword" (input)="onFilterChange()" placeholder="Search by name, type, year..." />
+    </label>
+    <label>
+      Name:
+      <input type="text" formControlName="name" (input)="onFilterChange()" />
+    </label>
+    <label>
+      Type:
+      <input type="text" formControlName="typeOfProduct" (input)="onFilterChange()" />
+    </label>
+    <label>
+      Min Price:
+      <input type="number" formControlName="minPrice" (input)="onFilterChange()" />
+    </label>
+    <label>
+      Max Price:
+      <input type="number" formControlName="maxPrice" (input)="onFilterChange()" />
+    </label>
+    <label>
+      Production Year:
+      <input type="number" formControlName="productionYear" (input)="onFilterChange()" />
+    </label>
+    <label>
+      Status:
+      <select formControlName="status" (change)="onFilterChange()">
+        <option value="">All</option>
+        <option value="Available">Available</option>
+        <option value="Sold">Sold</option>
+        <option value="WaitingStock">Waiting Stock</option>
+      </select>
+    </label>
+  </div>
+</form>
 
-<div class="top-purchased" *ngIf="!filtersApplied()">
+<div class="top-purchased" *ngIf="!filterForm.dirty">
   <h2>Top 8 Components</h2>
   <ul>
     <li *ngFor="let component of topPurchased">
@@ -47,7 +49,7 @@
   </ul>
 </div>
 
-<div class="search-results" *ngIf="filtersApplied()">
+<div class="search-results" *ngIf="filterForm.dirty">
   <h2>Search Results</h2>
   <ul>
     <li *ngFor="let component of components">
@@ -58,4 +60,3 @@
     </li>
   </ul>
 </div>
-

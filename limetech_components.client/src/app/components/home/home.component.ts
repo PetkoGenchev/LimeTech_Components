@@ -1,47 +1,58 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { BasketService } from '../../services/basket.service';
 import { ComponentService } from '../../services/component.service';
 import { ComponentDTO } from '../../models/component.dto';
 
+
 @Component({
   selector: 'app-home',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
   components: ComponentDTO[] = [];
   topPurchased: ComponentDTO[] = [];
-  filters = {
-    keyword: '',
-    name: '',
-    typeOfProduct: '',
-    minPrice: null,
-    maxPrice: null,
-    productionYear: null,
-    status: null,
-    currentPage: 1,
-    componentsPerPage: 10,
-  };
+
+  filterForm: FormGroup;
 
   constructor(
+    private fb: FormBuilder,
     private componentService: ComponentService,
     private basketService: BasketService
-  ) { }
+  ) {
+    this.filterForm = this.fb.group({
+      keyword: [''],
+      name: [''],
+      typeOfProduct: [''],
+      minPrice: [null],
+      maxPrice: [null],
+      productionYear: [null],
+      status: [null],
+      //currentPage: 1,
+      //componentsPerPage: 10,
+    })
+  }
 
   ngOnInit(): void {
     this.loadComponents();
   }
 
   onFilterChange(): void {
-    if (this.filtersApplied()) {
-      this.loadComponents();
-    } else {
-      this.loadTopPurchased();
-    }
+
+    this.loadComponents();
+    //if (this.filtersApplied()) {
+    //  this.loadComponents();
+    //} else {
+    //  this.loadTopPurchased();
+    //}
   }
 
   loadComponents(): void {
-    this.componentService.getComponents(this.filters).subscribe({
+    this.componentService.getComponents(this.filterForm.value).subscribe({
       next: (data) => this.components = data,
       error: (error) => console.error('Failed to load components', error),
     });
@@ -60,8 +71,8 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  filtersApplied(): boolean {
-    const { currentPage, componentsPerPage, ...rest } = this.filters;
-    return Object.values(rest).some(value => value !== '' && value !== null);
-  }
+  //filtersApplied(): boolean {
+  //  const { currentPage, componentsPerPage, ...rest } = this.filters;
+  //  return Object.values(rest).some(value => value !== '' && value !== null);
+  //}
 }

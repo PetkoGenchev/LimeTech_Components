@@ -2,9 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ComponentService } from '../../services/component.service';
 import { ComponentDTO } from '../../models/component.dto';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-manage-components',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './manage-components.component.html',
   styleUrl: './manage-components.component.css'
 })

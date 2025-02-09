@@ -3,9 +3,12 @@ import { AuthService } from '../../../services/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, switchMap, catchError, of } from 'rxjs';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-register',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })

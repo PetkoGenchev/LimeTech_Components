@@ -28,10 +28,10 @@ export class RegisterComponent {
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
 
-    //Set up real-time validation for username
+    // Username Validation
     this.registerForm.get('username')?.valueChanges
       .pipe(
-        debounceTime(300),  // 300ms wait time after customer stops writing
+        debounceTime(300),
         switchMap(username => this.authService.checkUsername(username)),
         catchError(() => of({ message: "Username validation failed." }))
       )
@@ -40,7 +40,7 @@ export class RegisterComponent {
         error: (err) => this.usernameMessage = err.error?.message || 'Error checking username.'
       });
 
-    // Set up real-time validation for email
+    // Email Validation
     this.registerForm.get('email')?.valueChanges
       .pipe(
         debounceTime(300),

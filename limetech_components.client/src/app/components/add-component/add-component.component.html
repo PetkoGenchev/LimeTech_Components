@@ -1,47 +1,62 @@
 <div class="add-component-form">
   <h2>Add New Component</h2>
-  <form (ngSubmit)="addComponent()">
+  <form [formGroup]="addComponentForm" (ngSubmit)="addComponent()">
     <div>
       <label for="name">Name:</label>
-      <input id="name" [(ngModel)]="newComponent.name" name="name" required />
+      <input id="name" formControlName="name" required />
+      <span *ngIf="addComponentForm.get('name')?.invalid && addComponentForm.get('name')?.touched">Required</span>
     </div>
+
     <div>
       <label for="type">Type:</label>
-      <input id="type" [(ngModel)]="newComponent.typeOfProduct" name="type" required />
+      <input id="type" formControlName="typeOfProduct" required />
+      <span *ngIf="addComponentForm.get('typeOfProduct')?.invalid && addComponentForm.get('typeOfProduct')?.touched">Required</span>
     </div>
+
     <div>
       <label for="imageUrl">Image URL:</label>
-      <input id="imageUrl" [(ngModel)]="newComponent.imageUrl" name="imageUrl" />
+      <input id="imageUrl" formControlName="imageUrl" />
     </div>
+
     <div>
       <label for="price">Price:</label>
-      <input id="price" [(ngModel)]="newComponent.price" name="price" type="number" required />
+      <input id="price" formControlName="price" type="number" required />
+      <span *ngIf="addComponentForm.get('price')?.invalid && addComponentForm.get('price')?.touched">Must be a positive number</span>
     </div>
+
     <div>
       <label for="productionYear">Production Year:</label>
-      <input id="productionYear" [(ngModel)]="newComponent.productionYear" name="productionYear" type="number" />
+      <input id="productionYear" formControlName="productionYear" type="number" />
+      <span *ngIf="addComponentForm.get('productionYear')?.invalid && addComponentForm.get('productionYear')?.touched">Must be between 2000 and current year</span>
     </div>
+
     <div>
       <label for="powerUsage">Power Usage:</label>
-      <input id="powerUsage" [(ngModel)]="newComponent.powerUsage" name="powerUsage" type="number" />
+      <input id="powerUsage" formControlName="powerUsage" type="number" />
+      <span *ngIf="addComponentForm.get('powerUsage')?.invalid && addComponentForm.get('powerUsage')?.touched">Must be positive</span>
     </div>
+
     <div>
       <label for="status">Status:</label>
-      <select id="status" [(ngModel)]="newComponent.status" name="status">
+      <select id="status" formControlName="status">
         <option value="Available">Available</option>
         <option value="Sold">Sold</option>
         <option value="Discounted">Discounted</option>
         <option value="WaitingStock">Waiting Stock</option>
       </select>
     </div>
+
     <div>
       <label for="stockCount">Stock Count:</label>
-      <input id="stockCount" [(ngModel)]="newComponent.stockCount" name="stockCount" type="number" />
+      <input id="stockCount" formControlName="stockCount" type="number" />
+      <span *ngIf="addComponentForm.get('stockCount')?.invalid && addComponentForm.get('stockCount')?.touched">Must be positive</span>
     </div>
+
     <div>
       <label for="isPublic">Is Public:</label>
-      <input id="isPublic" [(ngModel)]="newComponent.isPublic" name="isPublic" type="checkbox" />
+      <input id="isPublic" formControlName="isPublic" type="checkbox" />
     </div>
-    <button type="submit">Add Component</button>
+
+    <button type="submit" [disabled]="addComponentForm.invalid">Add Component</button>
   </form>
 </div>

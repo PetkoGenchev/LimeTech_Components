@@ -16,6 +16,8 @@ export class RegisterComponent {
   registerForm: FormGroup;
   usernameMessage: string = '';
   emailMessage: string = '';
+  passwordMessage: string = '';
+  generalErrorMessage: string = '';
 
 
   constructor(
@@ -26,6 +28,7 @@ export class RegisterComponent {
       username: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
+      fullName: ['', [Validators.required, Validators.minLength(2)]],
     });
 
     // Username Validation
@@ -62,11 +65,29 @@ export class RegisterComponent {
         },
         error: (err) => {
           console.error('Registration failed', err);
+          if (err.error && typeof err.error === 'object') {
+            this.handleValidationErrors(err.error);
+          } else {
+            this.generalErrorMessage = 'An error occurred. Please try again.';
+          }
         },
       });
-    }
-    else {
+    } else {
       console.error('Form is invalid');
+    }
+  }
+
+  handleValidationErrors(errors: any) {
+    this.passwordMessage = '';
+    this.usernameMessage = '';
+    this.emailMessage = '';
+
+    if (errors['']) {
+      errors[''].forEach((msg: string) => {
+        if (msg.toLowerCase().includes('password')) {
+          this.passwordMessage = msg;
+        }
+      });
     }
   }
 }

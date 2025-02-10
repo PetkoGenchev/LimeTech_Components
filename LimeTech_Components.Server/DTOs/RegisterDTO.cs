@@ -18,6 +18,6 @@ namespace LimeTech_Components.Server.DTOs
 
         [Required]
         [MaxLength(UserProfile.FullNameMaxLength)]
-        public string? FullName { get; set; }
+        public string FullName { get; set; }
     }
 }

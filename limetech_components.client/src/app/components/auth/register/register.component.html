@@ -7,14 +7,27 @@
   </div>
 
   <div>
+    <label for="fullName">Full Name</label>
+    <input id="fullName" formControlName="fullName" />
+    <small *ngIf="registerForm.get('fullName')?.invalid && registerForm.get('fullName')?.touched" class="error">
+      Full name is required.
+    </small>
+  </div>
+
+  <div>
     <label for="email">Email</label>
     <input id="email" formControlName="email" />
     <small *ngIf="emailMessage" class="error">{{ emailMessage }}</small>
   </div>
 
+  <div *ngIf="generalErrorMessage" class="error">
+    {{ generalErrorMessage }}
+  </div>
+
   <div>
     <label for="password">Password</label>
     <input id="password" formControlName="password" type="password" />
+    <small *ngIf="passwordMessage" class="error">{{ passwordMessage }}</small>
   </div>
 
   <button type="submit" [disabled]="registerForm.invalid">Register</button>

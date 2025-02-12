@@ -1,4 +1,4 @@
-@LimeTech_Components.Server_HostAddress = http://localhost:5157
+@LimeTech_Components.Server_HostAddress = https://localhost:7039
 
 GET {{LimeTech_Components.Server_HostAddress}}/LimeTech_Components/
 Accept: application/json

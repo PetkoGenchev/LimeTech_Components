@@ -9,17 +9,17 @@
     }
   },
   "profiles": {
-    "http": {
-      "commandName": "Project",
-      "dotnetRunMessages": true,
-      "launchBrowser": true,
-      "launchUrl": "home",
-      "applicationUrl": "http://localhost:5157",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy"
-      }
-    },
+    //"http": {
+    //  "commandName": "Project",
+    //  "dotnetRunMessages": true,
+    //  "launchBrowser": true,
+    //  "launchUrl": "home",
+    //  "applicationUrl": "http://localhost:5157",
+    //  "environmentVariables": {
+    //    "ASPNETCORE_ENVIRONMENT": "Development",
+    //    "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy"
+    //  }
+    //},
     "https": {
       "commandName": "Project",
       "dotnetRunMessages": true,

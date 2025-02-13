@@ -17,6 +17,8 @@ export class AppComponent implements OnInit {
   isSignedIn = false;
   isAdmin = false;
 
+  searchKeyword: string = '';
+
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
@@ -38,6 +40,11 @@ export class AppComponent implements OnInit {
         console.error('Logout failed', err);
       },
     });
+  }
+
+  onSearchChange(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    this.searchKeyword = target.value;
   }
 
 }

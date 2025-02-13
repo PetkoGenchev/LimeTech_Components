@@ -14,9 +14,10 @@ import { ComponentDTO } from '../../models/component.dto';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  @Input() searchKeyword: string = '';
+
   components: ComponentDTO[] = [];
   topPurchased: ComponentDTO[] = [];
-
   filterForm: FormGroup;
 
   constructor(
@@ -25,7 +26,6 @@ export class HomeComponent implements OnInit {
     private basketService: BasketService
   ) {
     this.filterForm = this.fb.group({
-      keyword: [''],
       name: [''],
       typeOfProduct: [''],
       minPrice: [null],
@@ -41,18 +41,30 @@ export class HomeComponent implements OnInit {
     this.loadComponents();
   }
 
-  onFilterChange(): void {
 
-    this.loadComponents();
-    //if (this.filtersApplied()) {
-    //  this.loadComponents();
-    //} else {
-    //  this.loadTopPurchased();
-    //}
+  ngOnChanges(): void {
+    this.loadComponents(); // Reload components whenever searchKeyword changes
   }
 
+  //onFilterChange(): void {
+
+  //  this.loadComponents();
+  //  if (this.filtersApplied()) {
+  //    this.loadComponents();
+  //  } else {
+  //    this.loadTopPurchased();
+  //  }
+  //}
+
   loadComponents(): void {
-    this.componentService.getComponents(this.filterForm.value).subscribe({
+
+    const filters = {
+      ...this.filterForm.value,
+      keyword: this.searchKeyword  // Use searchKeyword from navbar
+    };
+
+
+    this.componentService.getComponents(filters).subscribe({
       next: (data) => this.components = data,
       error: (error) => console.error('Failed to load components', error),
     });

@@ -3,13 +3,24 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
   <div class="container">
-    <a routerLink="/" class="navbar-brand">LIME Components
-     <!--<img src="assets/home-icon.jpg" alt="Home" class="home-icon" width="40" height="40" />-->
+    <a routerLink="/" class="navbar-brand">
+      LIME Components
+      <!--<img src="assets/home-icon.jpg" alt="Home" class="home-icon" width="40" height="40" />-->
     </a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
+
+    <!-- SEARCH BAR -->
+    <input type="text"
+           class="form-control me-2"
+           placeholder="Search components..."
+           (input)="onSearchChange($event)"
+           [value]="searchKeyword"
+           style="width: 250px;" />
+
+
 
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
@@ -38,6 +49,8 @@
   </div>
 </nav>
 
+<!-- Pass searchKeyword to HomeComponent -->
+<app-home [searchKeyword]="searchKeyword"></app-home>
 
 <!-- Placeholder for child components -->
 <router-outlet></router-outlet>

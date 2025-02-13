@@ -36,3 +36,8 @@ body {
 .navbar .navbar-brand:hover {
   color: #32CD32;
 }
+
+
+.navbar .form-control {
+  width: 250px;
+}

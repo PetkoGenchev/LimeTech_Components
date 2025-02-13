@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { BasketService } from '../../services/basket.service';
 import { ComponentService } from '../../services/component.service';
 import { ComponentDTO } from '../../models/component.dto';
-
+//import { ActivatedRoute } from '@angular/router';
+import { SearchService } from '../../services/search.service';
 
 @Component({
   selector: 'app-home',
@@ -14,16 +15,19 @@ import { ComponentDTO } from '../../models/component.dto';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  @Input() searchKeyword: string = '';
-
   components: ComponentDTO[] = [];
   topPurchased: ComponentDTO[] = [];
   filterForm: FormGroup;
 
+  /*  @Input() searchKeyword: string = '';*/
+  searchKeyword = '';
+
   constructor(
     private fb: FormBuilder,
     private componentService: ComponentService,
-    private basketService: BasketService
+    private basketService: BasketService,
+    private searchService: SearchService,
+    //private route: ActivatedRoute
   ) {
     this.filterForm = this.fb.group({
       name: [''],
@@ -39,12 +43,43 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadComponents();
+
+    this.searchService.searchKeyword$.subscribe((keyword) => {
+      this.searchKeyword = keyword;
+      this.filterComponents();
+    });
+
+    // Listen for search query from the URL params (if needed)
+    //this.route.queryParams.subscribe(params => {
+    //  if (params['search']) {
+    //    this.searchKeyword = params['search'];
+    //    this.filterForm.patchValue({ name: this.searchKeyword });
+    //    this.loadComponents();
+    //  }
+    //});
   }
 
 
-  ngOnChanges(): void {
-    this.loadComponents(); // Reload components whenever searchKeyword changes
+  filterComponents(): void {
+    console.log('Filtering components with:', this.searchKeyword);
+    // Add filtering logic here
   }
+
+
+  //ngOnChanges(): void {
+  //  // Automatically filter components when searchKeyword changes
+  //  if (this.searchKeyword) {
+  //    this.filterForm.patchValue({ name: this.searchKeyword });
+  //  }
+  //  this.loadComponents();
+  //}
+
+
+
+
+  //ngOnChanges(): void {
+  //  this.loadComponents(); // Reload components whenever searchKeyword changes
+  //}
 
   //onFilterChange(): void {
 
@@ -57,14 +92,7 @@ export class HomeComponent implements OnInit {
   //}
 
   loadComponents(): void {
-
-    const filters = {
-      ...this.filterForm.value,
-      keyword: this.searchKeyword  // Use searchKeyword from navbar
-    };
-
-
-    this.componentService.getComponents(filters).subscribe({
+    this.componentService.getComponents(this.filterForm.value).subscribe({
       next: (data) => this.components = data,
       error: (error) => console.error('Failed to load components', error),
     });

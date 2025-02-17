@@ -20,8 +20,6 @@ export class AppComponent implements OnInit {
   isAdmin = false;
   searchKeyword: string = '';
 
-/*  @Output() searchChanged = new EventEmitter<string>(); // Emits search updates*/
-
   constructor(private authService: AuthService, private searchService: SearchService) { }
 
   ngOnInit(): void {

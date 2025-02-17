@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ComponentDTO } from '../models/component.dto';
@@ -9,7 +9,7 @@ import { ComponentDTO } from '../models/component.dto';
   providedIn: 'root'
 })
 export class ComponentService {
-  private apiUrl = 'http://localhost:7039/api/component';
+  private apiUrl = 'http://localhost:7039/api/home';
 
   constructor(private http: HttpClient) { }
 
@@ -62,7 +62,7 @@ export class ComponentService {
 
   // Get the top 8 components based on purchasedCount
   getTopComponents(): Observable<ComponentDTO[]> {
-    return this.http.get<ComponentDTO[]>(`${this.apiUrl}/top?count=8`)
+    return this.http.get<ComponentDTO[]>(`${this.apiUrl}/components`)
       .pipe(
         catchError(error => {
           console.error('Error fetching top components:', error);
@@ -72,18 +72,22 @@ export class ComponentService {
   }
 
 
+
   // Get all components with filters
   getComponents(filters: any): Observable<ComponentDTO[]> {
-    if (!filters) {
-      console.warn('No filters provided. Fetching all componenets.');
-    }
-    return this.http.get<ComponentDTO[]>(`${this.apiUrl}`, { params: filters })
-      .pipe(
-        catchError(error => {
-          console.error('Error fetching components', error);
-          return throwError(() => new Error('Failed to fetch componenets'));
-        })
-      );
+    let params = new HttpParams();
+    Object.keys(filters).forEach(key => {
+      if (filters[key] !== null && filters[key] !== '') {
+        params = params.set(key, filters[key]);
+      }
+    });
+
+    return this.http.get<ComponentDTO[]>(`${this.apiUrl}/components`, { params }).pipe(
+      catchError(error => {
+        console.error('Error fetching components', error);
+        return throwError(() => new Error('Failed to fetch components'));
+      })
+    );
   }
 
   getComponentById(id: number): Observable<ComponentDTO> {

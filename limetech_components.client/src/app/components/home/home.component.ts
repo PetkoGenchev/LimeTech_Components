@@ -4,7 +4,6 @@ import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { BasketService } from '../../services/basket.service';
 import { ComponentService } from '../../services/component.service';
 import { ComponentDTO } from '../../models/component.dto';
-//import { ActivatedRoute } from '@angular/router';
 import { SearchService } from '../../services/search.service';
 
 @Component({
@@ -19,7 +18,6 @@ export class HomeComponent implements OnInit {
   topPurchased: ComponentDTO[] = [];
   filterForm: FormGroup;
 
-  /*  @Input() searchKeyword: string = '';*/
   searchKeyword = '';
 
   constructor(
@@ -27,7 +25,6 @@ export class HomeComponent implements OnInit {
     private componentService: ComponentService,
     private basketService: BasketService,
     private searchService: SearchService,
-    //private route: ActivatedRoute
   ) {
     this.filterForm = this.fb.group({
       name: [''],
@@ -42,54 +39,27 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadComponents();
+    this.filterForm.valueChanges.subscribe(() => {
+      this.loadComponents();
+    });
+
+    if (this.isFilterEmpty()) {
+      this.loadTopPurchased();
+    } else {
+      this.loadComponents();
+    }
 
     this.searchService.searchKeyword$.subscribe((keyword) => {
       this.searchKeyword = keyword;
       this.filterComponents();
     });
-
-    // Listen for search query from the URL params (if needed)
-    //this.route.queryParams.subscribe(params => {
-    //  if (params['search']) {
-    //    this.searchKeyword = params['search'];
-    //    this.filterForm.patchValue({ name: this.searchKeyword });
-    //    this.loadComponents();
-    //  }
-    //});
   }
 
 
   filterComponents(): void {
     console.log('Filtering components with:', this.searchKeyword);
-    // Add filtering logic here
   }
 
-
-  //ngOnChanges(): void {
-  //  // Automatically filter components when searchKeyword changes
-  //  if (this.searchKeyword) {
-  //    this.filterForm.patchValue({ name: this.searchKeyword });
-  //  }
-  //  this.loadComponents();
-  //}
-
-
-
-
-  //ngOnChanges(): void {
-  //  this.loadComponents(); // Reload components whenever searchKeyword changes
-  //}
-
-  //onFilterChange(): void {
-
-  //  this.loadComponents();
-  //  if (this.filtersApplied()) {
-  //    this.loadComponents();
-  //  } else {
-  //    this.loadTopPurchased();
-  //  }
-  //}
 
   loadComponents(): void {
     this.componentService.getComponents(this.filterForm.value).subscribe({
@@ -111,8 +81,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  //filtersApplied(): boolean {
-  //  const { currentPage, componentsPerPage, ...rest } = this.filters;
-  //  return Object.values(rest).some(value => value !== '' && value !== null);
-  //}
+  private isFilterEmpty(): boolean {
+    return Object.values(this.filterForm.value).every(value => value === null || value === '');
+  }
 }

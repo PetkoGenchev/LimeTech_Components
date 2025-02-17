@@ -6,7 +6,6 @@
     using LimeTech_Components.Server.Data.Models;
     using LimeTech_Components.Server.Services.Components.Models;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.Identity.Client;
     using static LimeTech_Components.Server.Constants.DataConstants;
     public class ComponentRepository : IComponentRepository
     {

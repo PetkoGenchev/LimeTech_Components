@@ -9,7 +9,7 @@ import { ComponentDTO } from '../models/component.dto';
   providedIn: 'root'
 })
 export class ComponentService {
-  private apiUrl = 'http://localhost:7039/api/home';
+  private apiUrl = 'https://localhost:7039/api/home';
 
   constructor(private http: HttpClient) { }
 

@@ -44,7 +44,6 @@
   font-weight: bold;
   width: 100%;
   text-align: center;
-
 }
 
 
@@ -119,7 +118,7 @@
     background: #007bff;
     color: white;
     border: none;
-    padding: 8px 12px;
+    padding: 8px;
     border-radius: 12px;
     cursor: pointer;
     transition: background 0.2s, transform 0.2s;
@@ -132,7 +131,18 @@
 
   .card-bottom .price {
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     color: #333;
-    margin-top: 10px;
+    margin-top: 15px;
   }
+
+.currency {
+  font-weight: bold;
+  font-size: 1.2rem;
+  font-weight: normal;
+  color: #333;
+}
+
+.closer {
+  margin-bottom: 10px;
+}

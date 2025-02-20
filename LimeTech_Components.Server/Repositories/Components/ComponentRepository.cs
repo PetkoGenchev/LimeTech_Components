@@ -47,6 +47,7 @@
         public async Task<ComponentQueryServiceModel> GetComponentsAsync(
             string keyword,
             string name,
+            string producer,
             string typeOfProduct,
             int? minPrice,
             int? maxPrice,
@@ -69,6 +70,11 @@
             if (!string.IsNullOrEmpty(name))
             {
                 query = query.Where(c => c.Name.Contains(name));
+            }
+
+            if (!string.IsNullOrEmpty(producer))
+            {
+                query = query.Where(c => c.Producer.Contains(producer));
             }
 
 

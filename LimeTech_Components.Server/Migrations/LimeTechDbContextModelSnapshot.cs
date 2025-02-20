@@ -102,6 +102,11 @@ namespace LimeTech_Components.Server.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("int");
 
+                    b.Property<string>("Producer")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<int>("ProductionYear")
                         .HasColumnType("int");
 

@@ -22,14 +22,7 @@ table {
 }
 
 
-
-
-
-
-
-
-
-.nav-bar {
+/*.nav-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -81,3 +74,4 @@ table {
       gap: 0.5rem;
     }
 }
+*/

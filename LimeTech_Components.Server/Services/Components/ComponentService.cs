@@ -26,6 +26,7 @@
         public async Task<ComponentQueryServiceModel> GetComponentsAsync(
             string keyword,
             string name,
+            string producer,
             string typeOfProduct,
             int? minPrice,
             int? maxPrice,
@@ -37,6 +38,7 @@
             return await _componentRepository.GetComponentsAsync(
                 keyword,
                 name, 
+                producer,
                 typeOfProduct, 
                 minPrice, 
                 maxPrice, 
@@ -59,6 +61,7 @@
             var component = new Component
             {
                 Name = componentServiceModel.Name,
+                Producer = componentServiceModel.Producer,
                 TypeOfProduct = componentServiceModel.TypeOfProduct,
                 ImageUrl = componentServiceModel.ImageUrl,
                 Price = componentServiceModel.Price,
@@ -83,6 +86,7 @@
             }
 
             existingComponent.Name = componentServiceModel.Name;
+            existingComponent.Producer = componentServiceModel.Producer;
             existingComponent.TypeOfProduct = componentServiceModel.TypeOfProduct;
             existingComponent.ImageUrl = componentServiceModel.ImageUrl;
             existingComponent.Price = componentServiceModel.Price;

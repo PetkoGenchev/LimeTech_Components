@@ -2,18 +2,18 @@ body {
   background-color: #f7f7f7;
 }
 
-.navbar {
+/*.navbar {
   padding: 10px 0;
 }
 
 .navbar-brand img {
   height: 40px;
-}
+}*/
 
 /* Adjust spacing for navigation items */
-.navbar-nav .nav-item {
+/*.navbar-nav .nav-item {
   margin-left: 15px;
-}
+}*/
 
 /* Change hover effect */
 .navbar-nav .nav-link:hover {
@@ -21,7 +21,7 @@ body {
 }
 
 /* Logout button red */
-.navbar-nav .nav-link.text-danger:hover {
+.nav-link.text-danger:hover {
   color: red;
 }
 
@@ -30,14 +30,14 @@ body {
   font-size: 1.5rem;
   font-weight: bold;
   color: limegreen;
-  text-decoration: none;
 }
-
-.navbar .navbar-brand:hover {
+/*
+.navbar-brand:hover {
   color: #32CD32;
 }
-
-
+*/
+/*
 .navbar .form-control {
   width: 250px;
 }
+*/

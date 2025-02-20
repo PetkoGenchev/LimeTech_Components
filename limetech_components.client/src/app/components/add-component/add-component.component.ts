@@ -21,6 +21,7 @@ export class AddComponentComponent {
   ) {
     this.addComponentForm = this.fb.group({
       name: ['', Validators.required],
+      producer: ['', Validators.required],
       typeOfProduct: ['', Validators.required],
       imageUrl: [''],
       price: [0, [Validators.required, Validators.min(0)]],
@@ -48,6 +49,7 @@ export class AddComponentComponent {
         alert('Component successfully added!');
         this.addComponentForm.reset({
           name: '',
+          producer: '',
           typeOfProduct: '',
           imageUrl: '',
           price: 0,

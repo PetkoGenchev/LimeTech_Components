@@ -6,6 +6,7 @@ namespace LimeTech_Components.Server.Services.Components.Models
     {
         public int Id { get; init; }
         public string? Name { get; init; }
+        public string? Producer { get; init; }
         public string? TypeOfProduct { get; init; }
 
         public string? ImageUrl { get; init; }

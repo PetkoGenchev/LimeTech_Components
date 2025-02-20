@@ -4,6 +4,7 @@ export interface ComponentDTO {
 
   id: number;
   name: string | null;
+  producer: string | null;
   typeOfProduct: string | null;
   imageUrl: string | null;
   price: number;

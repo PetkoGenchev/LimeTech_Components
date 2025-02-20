@@ -25,6 +25,7 @@
         public async Task<IActionResult> Index(
             [FromQuery] string keyword = null,
             [FromQuery] string name = null,
+            [FromQuery] string producer = null,
             [FromQuery] string typeOfProduct = null,
             [FromQuery] int? minPrice = null,
             [FromQuery] int? maxPrice = null,
@@ -37,6 +38,7 @@
             {
                 var hasFilters = !string.IsNullOrEmpty(keyword) ||
                     !string.IsNullOrEmpty(name) ||
+                    !string.IsNullOrEmpty(producer) ||
                     !string.IsNullOrEmpty(typeOfProduct) ||
                     minPrice.HasValue ||
                     maxPrice.HasValue ||
@@ -49,6 +51,7 @@
                     var filteredComponents = await _componentService.GetComponentsAsync(
                         keyword,
                         name,
+                        producer,
                         typeOfProduct,
                         minPrice,
                         maxPrice,

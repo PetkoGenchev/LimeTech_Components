@@ -5,6 +5,7 @@ namespace LimeTech_Components.Server.DTOs
     public class AddComponentRequest : IComponentDTO
     {
         public string? Name { get; init; }
+        public string? Producer { get; init; }
         public string? TypeOfProduct { get; init; }
 
         public string? ImageUrl { get; init; }

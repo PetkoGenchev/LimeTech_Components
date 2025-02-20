@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LimeTech_Components.Server.Migrations
 {
     [DbContext(typeof(LimeTechDbContext))]
-    [Migration("20250220120544_InitialCreate")]
+    [Migration("20250220202104_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -104,6 +104,11 @@ namespace LimeTech_Components.Server.Migrations
 
                     b.Property<int>("Price")
                         .HasColumnType("int");
+
+                    b.Property<string>("Producer")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("ProductionYear")
                         .HasColumnType("int");

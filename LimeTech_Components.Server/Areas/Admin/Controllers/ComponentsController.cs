@@ -69,6 +69,7 @@
                 var componentServiceModel = new ComponentServiceModel
                 {
                     Name = request.Name,
+                    Producer = request.Producer,
                     TypeOfProduct = request.TypeOfProduct,
                     ImageUrl = request.ImageUrl,
                     Price = request.Price,

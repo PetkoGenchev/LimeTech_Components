@@ -13,6 +13,11 @@
 
         [Required]
         [MaxLength(ComponentConstants.PartNameMaxLength)]
+        public string? Producer { get; set; }
+
+
+        [Required]
+        [MaxLength(ComponentConstants.PartNameMaxLength)]
         public string? TypeOfProduct { get; set; }
 
         [Required]

@@ -14,6 +14,7 @@ namespace LimeTech_Components.Server.Services.Components
         Task<ComponentQueryServiceModel> GetComponentsAsync(
             string keyword,
             string name,
+            string producer,
             string typeOfProduct,
             int? minPrice,
             int? maxPrice,

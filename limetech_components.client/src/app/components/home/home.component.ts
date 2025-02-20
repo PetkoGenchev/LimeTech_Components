@@ -28,6 +28,7 @@ export class HomeComponent implements OnInit {
   ) {
     this.filterForm = this.fb.group({
       name: [''],
+      producer: [''],
       typeOfProduct: [''],
       minPrice: [null],
       maxPrice: [null],

@@ -36,6 +36,7 @@ export class EditComponentComponent implements OnInit {
       next: (data) => {
         this.editComponentForm = this.fb.group({
           name: [data.name, Validators.required],
+          producer: [data.producer, Validators.required],
           typeOfProduct: [data.typeOfProduct, Validators.required],
           imageUrl: [data.imageUrl],
           price: [data.price, [Validators.required, Validators.min(0)]],

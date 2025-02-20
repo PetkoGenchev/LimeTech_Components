@@ -2,8 +2,12 @@
   <div class="filters">
     <h2>Filter Components</h2>
     <label>
-      Type:
+      Category:
       <input type="text" formControlName="typeOfProduct" (input)="loadComponents()" />
+    </label>
+    <label>
+      Producer:
+      <input type="text" formControlName="producer" (input)="loadComponents()" />
     </label>
     <label>
       Min Price:
@@ -44,9 +48,15 @@
       <div class="image-container">
         <img [src]="component.imageUrl" [alt]="component.name" />
         <div class="hover-info">
-          <p>Category: {{ component.typeOfProduct }}</p>
-          <p>First Available: {{ component.productionYear }}</p>
-          <p>Power Consumption: {{ component.powerUsage }}W</p>
+          <p class="closer">Category: {{ component.typeOfProduct }}</p>
+          <p class="closer">Producer: {{ component.producer }}</p>
+          <p class="closer">Year First Available: {{ component.productionYear }}</p>
+          <p class="closer" *ngIf="component.typeOfProduct === 'Power Supply'">
+            Power Supply: {{ component.powerUsage }} W
+          </p>
+          <p class="closer" *ngIf="component.typeOfProduct !== 'Power Supply'">
+            Power Consumption: {{ component.powerUsage }} W
+          </p>
         </div>
       </div>
 
@@ -54,7 +64,7 @@
 
       <div class="card-bottom">
         <button (click)="addToBasket(component.id)">Add to Basket</button>
-        <p class="price">{{ component.price }} лв.</p>
+        <p class="price">{{ component.price }} <span class="currency">BGN</span></p>
       </div>
     </div>
   </div>
@@ -75,9 +85,15 @@
       <div class="image-container">
         <img [src]="component.imageUrl" [alt]="component.name" />
         <div class="hover-info">
-          <p>Type: {{ component.typeOfProduct }}</p>
-          <p>Year: {{ component.productionYear }}</p>
-          <p>Power: {{ component.powerUsage }}W</p>
+          <p class="closer">Category: {{ component.typeOfProduct }}</p>
+          <p class="closer">Producer: {{ component.producer }}</p>
+          <p class="closer">Year First Available: {{ component.productionYear }}</p>
+          <p class="closer" *ngIf="component.typeOfProduct === 'Power Supply'">
+            Power Supply: {{ component.powerUsage }} W
+          </p>
+          <p class="closer" *ngIf="component.typeOfProduct !== 'Power Supply'">
+            Power Consumption: {{ component.powerUsage }} W
+          </p>
         </div>
       </div>
 
@@ -85,7 +101,7 @@
 
       <div class="card-bottom">
         <button (click)="addToBasket(component.id)">Add to Basket</button>
-        <p class="price">{{ component.price | currency }}</p>
+        <p class="price">{{ component.price }} <span class="currency">BGN</span></p>
       </div>
     </div>
   </div>

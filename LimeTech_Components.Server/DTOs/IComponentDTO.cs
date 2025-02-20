@@ -4,6 +4,7 @@
     public interface IComponentDTO
     {
         string? Name { get; }
+        string? Producer { get; }
         string? TypeOfProduct { get; }
         string? ImageUrl { get; }
         int Price { get; }

@@ -118,7 +118,7 @@
         {
             return await _context.Components
                 .OrderByDescending(c => c.PurchasedCount)
-                .Take(8)
+                .Take(10)
                 .ToListAsync();
         }
 

@@ -33,14 +33,20 @@
   <h2>Top 8 Components</h2>
   <div class="components-grid">
     <div class="component-card" *ngFor="let component of topPurchased">
-      <div class="status">{{ component.status }}</div>
+      <div class="status" [ngClass]="{
+        'status-available': component.status === 'Available',
+        'status-waiting': component.status === 'WaitingStock',
+        'status-sold': component.status === 'Sold'
+      }">
+        {{ component.status }}
+      </div>
 
       <div class="image-container">
         <img [src]="component.imageUrl" [alt]="component.name" />
         <div class="hover-info">
-          <p>Type: {{ component.typeOfProduct }}</p>
-          <p>Year: {{ component.productionYear }}</p>
-          <p>Power: {{ component.powerUsage }}W</p>
+          <p>Category: {{ component.typeOfProduct }}</p>
+          <p>First Available: {{ component.productionYear }}</p>
+          <p>Power Consumption: {{ component.powerUsage }}W</p>
         </div>
       </div>
 
@@ -48,7 +54,7 @@
 
       <div class="card-bottom">
         <button (click)="addToBasket(component.id)">Add to Basket</button>
-        <p class="price">{{ component.price | currency }}</p>
+        <p class="price">{{ component.price }} лв.</p>
       </div>
     </div>
   </div>
@@ -58,7 +64,13 @@
   <h2>Search Results</h2>
   <div class="components-grid">
     <div class="component-card" *ngFor="let component of components">
-      <div class="status">{{ component.status }}</div>
+      <div class="status" [ngClass]="{
+        'status-available': component.status === 'Available',
+        'status-waiting': component.status === 'WaitingStock',
+        'status-sold': component.status === 'Sold'
+      }">
+        {{ component.status }}
+      </div>
 
       <div class="image-container">
         <img [src]="component.imageUrl" [alt]="component.name" />

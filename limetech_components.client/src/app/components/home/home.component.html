@@ -1,124 +1,127 @@
-<form [formGroup]="filterForm">
-  <div class="filters">
-    <h2>Filter Components</h2>
-    <label>
-      Category:
-      <select formControlName="typeOfProduct" (change)="loadComponents()">
-        <option value="">All</option>
-        <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
-      </select>
-    </label>
-    <label>
-      Producer:
-      <select formControlName="producer" (change)="loadComponents()">
-        <option value="">All</option>
-        <option *ngFor="let producer of producers" [value]="producer">{{ producer }}</option>
-      </select>
-    </label>
-    <label>
-      Min Price:
-      <input type="number" formControlName="minPrice" (input)="loadComponents()" />
-    </label>
-    <label>
-      Max Price:
-      <input type="number" formControlName="maxPrice" (input)="loadComponents()" />
-    </label>
-    <label>
-      Production Year:
-      <input type="number" formControlName="productionYear" (input)="loadComponents()" />
-    </label>
-    <label>
-      Status:
-      <select formControlName="status" (change)="loadComponents()">
-        <option value="">All</option>
-        <option value="Available">Available</option>
-        <option value="Sold">Sold</option>
-        <option value="WaitingStock">Waiting Stock</option>
-      </select>
-    </label>
-    <label>
-      Sort By:
-      <select formControlName="sortBy" (change)="loadComponents()">
-        <option value="">None</option>
-        <option value="productionYear">Production Year</option>
-        <option value="price">Price</option>
-        <option value="producer">Producer</option>
-        <option value="purchasedCount">Purchased Count</option>
-      </select>
-    </label>
+<div class="page-layout">
+  <form [formGroup]="filterForm" class="filters">
+    <!--<h2>Filter Components</h2>-->
+    <div class="filters-container">
+      <label>
+        Category:
+        <select class="form-input-small" formControlName="typeOfProduct" (change)="loadComponents()">
+          <option value="">All</option>
+          <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+        </select>
+      </label>
+      <label>
+        Producer:
+        <select class="form-input-small" formControlName="producer" (change)="loadComponents()">
+          <option value="">All</option>
+          <option *ngFor="let producer of producers" [value]="producer">{{ producer }}</option>
+        </select>
+      </label>
+      <label>
+        Min Price:
+        <input class="form-input-small" type="number" formControlName="minPrice" (input)="loadComponents()" />
+      </label>
+      <label>
+        Max Price:
+        <input class="form-input-small" type="number" formControlName="maxPrice" (input)="loadComponents()" />
+      </label>
+      <label>
+        Production Year:
+        <input class="form-input-small" type="number" formControlName="productionYear" (input)="loadComponents()" />
+      </label>
+      <label>
+        Status:
+        <select class="form-input-small" formControlName="status" (change)="loadComponents()">
+          <option value="">All</option>
+          <option value="Available">Available</option>
+          <option value="Sold">Sold</option>
+          <option value="WaitingStock">Waiting Stock</option>
+        </select>
+      </label>
+      <label>
+        Sort By:
+        <select class="form-input-small" formControlName="sortBy" (change)="loadComponents()">
+          <option value="">None</option>
+          <option value="productionYear">Production Year</option>
+          <option value="price">Price</option>
+          <option value="producer">Producer</option>
+          <option value="purchasedCount">Purchased Count</option>
+        </select>
+      </label>
+    </div>
+  </form>
 
-  </div>
-</form>
+  <div class="content">
+    <div class="top-purchased" *ngIf="!filterForm.dirty">
+      <h2>Top 8 Components</h2>
+      <div class="components-grid">
+        <div class="component-card" *ngFor="let component of topPurchased">
+          <div class="status" [ngClass]="{
+            'status-available': component.status === 'Available',
+            'status-waiting': component.status === 'WaitingStock',
+            'status-sold': component.status === 'Sold'
+          }">
+            {{ component.status }}
+          </div>
 
-<div class="top-purchased" *ngIf="!filterForm.dirty">
-  <h2>Top 8 Components</h2>
-  <div class="components-grid">
-    <div class="component-card" *ngFor="let component of topPurchased">
-      <div class="status" [ngClass]="{
-        'status-available': component.status === 'Available',
-        'status-waiting': component.status === 'WaitingStock',
-        'status-sold': component.status === 'Sold'
-      }">
-        {{ component.status }}
-      </div>
+          <div class="image-container">
+            <img [src]="component.imageUrl" [alt]="component.name" />
+            <div class="hover-info">
+              <p class="closer">Category: {{ component.typeOfProduct }}</p>
+              <p class="closer">Producer: {{ component.producer }}</p>
+              <p class="closer">Year First Available: {{ component.productionYear }}</p>
+              <p class="closer" *ngIf="component.typeOfProduct === 'Power Supply'">
+                Power Supply: {{ component.powerUsage }} W
+              </p>
+              <p class="closer" *ngIf="component.typeOfProduct !== 'Power Supply'">
+                Power Consumption: {{ component.powerUsage }} W
+              </p>
+            </div>
+          </div>
 
-      <div class="image-container">
-        <img [src]="component.imageUrl" [alt]="component.name" />
-        <div class="hover-info">
-          <p class="closer">Category: {{ component.typeOfProduct }}</p>
-          <p class="closer">Producer: {{ component.producer }}</p>
-          <p class="closer">Year First Available: {{ component.productionYear }}</p>
-          <p class="closer" *ngIf="component.typeOfProduct === 'Power Supply'">
-            Power Supply: {{ component.powerUsage }} W
-          </p>
-          <p class="closer" *ngIf="component.typeOfProduct !== 'Power Supply'">
-            Power Consumption: {{ component.powerUsage }} W
-          </p>
+          <h3 class="component-name">{{ component.name }}</h3>
+
+          <div class="card-bottom">
+            <button (click)="addToBasket(component.id)">Add to Basket</button>
+            <p class="price">{{ component.price }} <span class="currency">BGN</span></p>
+          </div>
         </div>
-      </div>
-
-      <h3 class="component-name">{{ component.name }}</h3>
-
-      <div class="card-bottom">
-        <button (click)="addToBasket(component.id)">Add to Basket</button>
-        <p class="price">{{ component.price }} <span class="currency">BGN</span></p>
       </div>
     </div>
-  </div>
-</div>
 
-<div class="search-results" *ngIf="filterForm.dirty || searchKeyword">
-  <h2>Search Results</h2>
-  <div class="components-grid">
-    <div class="component-card" *ngFor="let component of components">
-      <div class="status" [ngClass]="{
-        'status-available': component.status === 'Available',
-        'status-waiting': component.status === 'WaitingStock',
-        'status-sold': component.status === 'Sold'
-      }">
-        {{ component.status }}
-      </div>
+    <div class="search-results" *ngIf="filterForm.dirty || searchKeyword">
+      <h2>Search Results</h2>
+      <div class="components-grid">
+        <div class="component-card" *ngFor="let component of components">
+          <div class="status" [ngClass]="{
+            'status-available': component.status === 'Available',
+            'status-waiting': component.status === 'WaitingStock',
+            'status-sold': component.status === 'Sold'
+          }">
+            {{ component.status }}
+          </div>
 
-      <div class="image-container">
-        <img [src]="component.imageUrl" [alt]="component.name" />
-        <div class="hover-info">
-          <p class="closer">Category: {{ component.typeOfProduct }}</p>
-          <p class="closer">Producer: {{ component.producer }}</p>
-          <p class="closer">Year First Available: {{ component.productionYear }}</p>
-          <p class="closer" *ngIf="component.typeOfProduct === 'Power Supply'">
-            Power Supply: {{ component.powerUsage }} W
-          </p>
-          <p class="closer" *ngIf="component.typeOfProduct !== 'Power Supply'">
-            Power Consumption: {{ component.powerUsage }} W
-          </p>
+          <div class="image-container">
+            <img [src]="component.imageUrl" [alt]="component.name" />
+            <div class="hover-info">
+              <p class="closer">Category: {{ component.typeOfProduct }}</p>
+              <p class="closer">Producer: {{ component.producer }}</p>
+              <p class="closer">Year First Available: {{ component.productionYear }}</p>
+              <p class="closer" *ngIf="component.typeOfProduct === 'Power Supply'">
+                Power Supply: {{ component.powerUsage }} W
+              </p>
+              <p class="closer" *ngIf="component.typeOfProduct !== 'Power Supply'">
+                Power Consumption: {{ component.powerUsage }} W
+              </p>
+            </div>
+          </div>
+
+          <h3 class="component-name">{{ component.name }}</h3>
+
+          <div class="card-bottom">
+            <button (click)="addToBasket(component.id)">Add to Basket</button>
+            <p class="price">{{ component.price }} <span class="currency">BGN</span></p>
+          </div>
         </div>
-      </div>
-
-      <h3 class="component-name">{{ component.name }}</h3>
-
-      <div class="card-bottom">
-        <button (click)="addToBasket(component.id)">Add to Basket</button>
-        <p class="price">{{ component.price }} <span class="currency">BGN</span></p>
       </div>
     </div>
   </div>

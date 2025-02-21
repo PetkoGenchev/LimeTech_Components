@@ -146,3 +146,48 @@
 .closer {
   margin-bottom: 10px;
 }
+
+.form-input-small {
+    max-width: 100px;
+    border-radius: 5px;
+    border: 1px solid;
+}
+
+
+
+
+
+.page-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.filters {
+  flex: 0 0 150px;
+  background: #f9f9f9; /* Light background for visibility */
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+  .filters h2 {
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+  }
+
+.filters-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+  .filters-container label {
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+  }
+
+.content {
+  flex: 1; /* Takes the remaining space */
+}

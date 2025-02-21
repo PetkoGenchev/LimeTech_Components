@@ -55,6 +55,12 @@
         }
 
 
+        public async Task<IEnumerable<Component>> GetAllComponentsAsync(string sortBy = null)
+        {
+            return await _componentRepository.GetAllComponentsAsync(sortBy);
+        }
+
+
         public async Task AddComponentAsync(ComponentServiceModel componentServiceModel)
         {
             // Add business logic

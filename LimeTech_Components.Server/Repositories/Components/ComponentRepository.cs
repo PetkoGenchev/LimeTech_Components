@@ -157,5 +157,23 @@
             _context.Components.Update(component);
             await _context.SaveChangesAsync();
         }
+
+
+        public async Task<IEnumerable<Component>> GetAllComponentsAsync(string sortBy = null)
+        {
+            var query = _context.Components.AsQueryable();
+
+            // Apply sorting
+            query = sortBy switch
+            {
+                "productionYear" => query.OrderBy(c => c.ProductionYear),
+                "price" => query.OrderBy(c => c.Price),
+                "producer" => query.OrderBy(c => c.Producer),
+                "purchasedCount" => query.OrderByDescending(c => c.PurchasedCount),
+                _ => query // No sorting applied
+            };
+
+            return await query.ToListAsync();
+        }
     }
 }

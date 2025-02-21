@@ -36,5 +36,7 @@ namespace LimeTech_Components.Server.Repositories.Components
         Task<Component> GetComponentByIdAsync(int id);
 
         Task UpdateComponentAsync(Component component);
+
+        Task<IEnumerable<Component>> GetAllComponentsAsync(string sortBy);
     }
 }

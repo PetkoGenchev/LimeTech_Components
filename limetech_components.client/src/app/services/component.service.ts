@@ -95,4 +95,19 @@ export class ComponentService {
   }
 
 
+  getAllComponents(sortBy: string = ''): Observable<ComponentDTO[]> {
+    let params = new HttpParams();
+    if (sortBy) {
+      params = params.set('sortBy', sortBy);
+    }
+
+    return this.http.get<ComponentDTO[]>(`${this.apiUrl}/all-components`, { params }).pipe(
+      catchError(error => {
+        console.error('Error fetching all components:', error);
+        return throwError(() => new Error('Failed to fetch all components.'));
+      })
+    );
+  }
+
+
 }

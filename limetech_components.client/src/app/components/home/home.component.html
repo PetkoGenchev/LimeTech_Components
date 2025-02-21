@@ -3,11 +3,17 @@
     <h2>Filter Components</h2>
     <label>
       Category:
-      <input type="text" formControlName="typeOfProduct" (input)="loadComponents()" />
+      <select formControlName="typeOfProduct" (change)="loadComponents()">
+        <option value="">All</option>
+        <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+      </select>
     </label>
     <label>
       Producer:
-      <input type="text" formControlName="producer" (input)="loadComponents()" />
+      <select formControlName="producer" (change)="loadComponents()">
+        <option value="">All</option>
+        <option *ngFor="let producer of producers" [value]="producer">{{ producer }}</option>
+      </select>
     </label>
     <label>
       Min Price:
@@ -30,6 +36,17 @@
         <option value="WaitingStock">Waiting Stock</option>
       </select>
     </label>
+    <label>
+      Sort By:
+      <select formControlName="sortBy" (change)="loadComponents()">
+        <option value="">None</option>
+        <option value="productionYear">Production Year</option>
+        <option value="price">Price</option>
+        <option value="producer">Producer</option>
+        <option value="purchasedCount">Purchased Count</option>
+      </select>
+    </label>
+
   </div>
 </form>
 

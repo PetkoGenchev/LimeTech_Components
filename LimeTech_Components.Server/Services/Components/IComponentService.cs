@@ -26,6 +26,8 @@ namespace LimeTech_Components.Server.Services.Components
 
         Task<IEnumerable<Component>> GetTopPurchasedComponentsAsync();
 
+        Task<IEnumerable<Component>> GetAllComponentsAsync(string sortBy);
+
         Task AddComponentAsync(ComponentServiceModel component);
 
         Task<bool> EditComponentAsync(ComponentServiceModel component);

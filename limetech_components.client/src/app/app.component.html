@@ -1,10 +1,10 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-  <div class="container">
+  <div class="container custom-container">
     <a routerLink="/" class="navbar-brand">LIME Components</a>
 
     <!-- Search Bar -->
-    <div>
-      <input type="text" placeholder="Search components..." (input)="onSearchInput($event)" />
+    <div class="flex-grow-1 d-flex justify-content-center">
+      <input type="text" class="form-control w-100 custom-search" placeholder="Search components..." (input)="onSearchInput($event)" />
     </div>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">

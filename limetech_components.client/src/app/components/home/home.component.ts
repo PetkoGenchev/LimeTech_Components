@@ -67,12 +67,25 @@ export class HomeComponent implements OnInit {
   }
 
 
+  //loadComponents(): void {
+  //  this.componentService.getComponents(this.filterForm.value).subscribe({
+  //    next: (data) => this.components = data,
+  //    error: (error) => console.error('Failed to load components', error),
+  //  });
+  //}
+
+
   loadComponents(): void {
     this.componentService.getComponents(this.filterForm.value).subscribe({
-      next: (data) => this.components = data,
+      next: (data: any) => { // Use 'any' or create a new interface for paginated response
+        console.log('API Response:', data);
+        this.components = data.components;
+      },
       error: (error) => console.error('Failed to load components', error),
     });
   }
+
+
 
   loadTopPurchased(): void {
     this.componentService.getTopComponents().subscribe({

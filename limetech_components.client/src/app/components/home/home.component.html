@@ -4,16 +4,17 @@
     <div class="filters-container">
       <label>
         Category:
-        <select class="form-input-small" formControlName="typeOfProduct" (change)="loadComponents()">
+        <select class="form-input-small" formControlName="typeOfProduct" (change)="updateAvailableFilters(); loadComponents()">
           <option value="">All</option>
-          <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+          <option *ngFor="let category of filteredCategories" [value]="category">{{ category }}</option>
         </select>
       </label>
+
       <label>
         Producer:
-        <select class="form-input-small" formControlName="producer" (change)="loadComponents()">
+        <select class="form-input-small" formControlName="producer" (change)="updateAvailableFilters(); loadComponents()">
           <option value="">All</option>
-          <option *ngFor="let producer of producers" [value]="producer">{{ producer }}</option>
+          <option *ngFor="let producer of filteredProducers" [value]="producer">{{ producer }}</option>
         </select>
       </label>
       <label>

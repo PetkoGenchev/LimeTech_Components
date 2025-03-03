@@ -51,6 +51,7 @@ export class HomeComponent implements OnInit {
 
     this.filterForm.valueChanges.subscribe(() => {
       this.loadComponents();
+      this.updateAvailableFilters(); // Filters will be updated on every new selection
     });
 
     if (this.isFilterEmpty()) {
@@ -104,30 +105,40 @@ export class HomeComponent implements OnInit {
     const selectedType = this.filterForm.value.typeOfProduct;
 
     if (selectedProducer && !selectedType) {
-      // If a producer is selected, filter the available categories (types of products)
-      const filteredComponents = this.components.filter(c => c.producer === selectedProducer);
-      this.filteredCategories = [...new Set(filteredComponents.map(c => c.typeOfProduct).filter((type): type is string => type !== null))];
+      // If a producer is selected, filter categories based on the full dataset
+      this.filteredCategories = [...new Set(
+        this.categories.filter(category =>
+          this.components.some(c => c.producer === selectedProducer && c.typeOfProduct === category)
+        )
+      )];
     }
     else if (!selectedProducer && selectedType) {
-      // If a category (type) is selected, filter the available producers
-      const filteredComponents = this.components.filter(c => c.typeOfProduct === selectedType);
-      this.filteredProducers = [...new Set(filteredComponents.map(c => c.producer).filter((producer): producer is string => producer !== null))];
+      // If a category (type) is selected, filter producers based on the full dataset
+      this.filteredProducers = [...new Set(
+        this.producers.filter(producer =>
+          this.components.some(c => c.typeOfProduct === selectedType && c.producer === producer)
+        )
+      )];
     }
     else if (selectedProducer && selectedType) {
-      // If both are selected, only show valid producers and categories based on selection
-      const filteredComponents = this.components.filter(c => c.producer === selectedProducer && c.typeOfProduct === selectedType);
-      this.filteredProducers = [...new Set(filteredComponents.map(c => c.producer).filter((producer): producer is string => producer !== null))];
-      this.filteredCategories = [...new Set(filteredComponents.map(c => c.typeOfProduct).filter((type): type is string => type !== null))];
+      // If both are selected, ensure both lists are filtered correctly
+      this.filteredProducers = [...new Set(
+        this.producers.filter(producer =>
+          this.components.some(c => c.producer === producer && c.typeOfProduct === selectedType)
+        )
+      )];
+      this.filteredCategories = [...new Set(
+        this.categories.filter(category =>
+          this.components.some(c => c.typeOfProduct === category && c.producer === selectedProducer)
+        )
+      )];
     }
     else {
-      // If nothing is selected, reset to all available options
-      this.filteredProducers = [...new Set(this.components.map(c => c.producer).filter((producer): producer is string => producer !== null))];
-      this.filteredCategories = [...new Set(this.components.map(c => c.typeOfProduct).filter((type): type is string => type !== null))];
+      // If nothing is selected, show all available options
+      this.filteredProducers = [...this.producers];
+      this.filteredCategories = [...this.categories];
     }
   }
-
-
-
 
 
 

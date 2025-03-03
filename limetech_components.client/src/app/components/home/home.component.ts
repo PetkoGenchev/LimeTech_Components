@@ -47,11 +47,11 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadFilters();
+    this.loadFilters(); // Ensure full data is available first
 
     this.filterForm.valueChanges.subscribe(() => {
       this.loadComponents();
-      this.updateAvailableFilters(); // Filters will be updated on every new selection
+      this.updateAvailableFilters(); // Update filters every time a selection changes
     });
 
     if (this.isFilterEmpty()) {
@@ -67,34 +67,17 @@ export class HomeComponent implements OnInit {
   }
 
 
+
   filterComponents(): void {
     console.log('Filtering components with:', this.searchKeyword);
   }
-
-
-  //loadComponents(): void {
-  //  this.componentService.getComponents(this.filterForm.value).subscribe({
-  //    next: (data) => this.components = data,
-  //    error: (error) => console.error('Failed to load components', error),
-  //  });
-  //}
-
-
-  //loadComponents(): void {
-  //  this.componentService.getComponents(this.filterForm.value).subscribe({
-  //    next: (data: any) => { // I can also create a new interface for paginated response instead of "any"
-  //      console.log('API Response:', data);
-  //      this.components = data.components;
-  //    },
-  //    error: (error) => console.error('Failed to load components', error),
-  //  });
-  //}
 
   loadComponents(): void {
     this.componentService.getComponents(this.filterForm.value).subscribe({
       next: (data: any) => {
         console.log('API Response:', data);
         this.components = data.components;
+        this.updateAvailableFilters(); 
       },
       error: (error) => console.error('Failed to load components', error),
     });
@@ -139,6 +122,8 @@ export class HomeComponent implements OnInit {
       this.filteredCategories = [...this.categories];
     }
   }
+
+
 
 
 

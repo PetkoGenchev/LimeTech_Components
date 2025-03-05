@@ -5,7 +5,6 @@ namespace LimeTech_Components.Server.Data.Models
     public class PurchaseHistory
     {
         public int Id { get; set; }
-        public DateTime DateOfPurchase { get; set; }
 
         public string CustomerId { get; set; }
 
@@ -17,6 +16,12 @@ namespace LimeTech_Components.Server.Data.Models
 
         [Required]
         public Component Component { get; set; } = null!;
+
+        public string ComponentName { get; set; } = null!;
+        public string Producer { get; set; } = null!;
+        public int Quantity { get; set; }
+        public decimal TotalPrice { get; set; }
+        public DateTime PurchaseDate { get; set; }
 
     }
 }

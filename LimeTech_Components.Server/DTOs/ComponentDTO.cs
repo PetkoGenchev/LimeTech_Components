@@ -1,0 +1,11 @@
+﻿namespace LimeTech_Components.Server.DTOs
+{
+    public class ComponentDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = null!;
+        public string Producer { get; set; } = null!;
+        public decimal Price { get; set; }
+    }
+
+}

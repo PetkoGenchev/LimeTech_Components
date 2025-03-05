@@ -41,5 +41,49 @@
 
 
 
+        [HttpGet("{customerId}/basket")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetBasket(string customerId)
+        {
+            var basket = await _customerService.GetBasketAsync(customerId);
+            if (basket == null)
+            {
+                return NotFound("Basket not found.");
+            }
+            return Ok(basket);
+        }
+
+
+
+        [HttpDelete("{customerId}/basket/{componentId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> RemoveFromBasket(string customerId, int componentId)
+        {
+            var success = await _customerService.RemoveFromBasketAsync(customerId, componentId);
+            if (!success)
+            {
+                return NotFound("Item not found in basket.");
+            }
+            return Ok("Item removed successfully.");
+        }
+
+
+
+        [HttpPost("{customerId}/purchase")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> PurchaseBasket(string customerId)
+        {
+            var success = await _customerService.PurchaseBasketAsync(customerId);
+            if (!success)
+            {
+                return NotFound("Basket is empty or customer not found.");
+            }
+            return Ok("Purchase successful.");
+        }
+
+
     }
 }

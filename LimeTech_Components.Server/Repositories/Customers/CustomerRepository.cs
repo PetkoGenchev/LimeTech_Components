@@ -55,5 +55,43 @@
 
             return true;
         }
+
+
+        public async Task<List<BasketItem>> GetBasketAsync(string customerId)
+        {
+            return await _context.BasketItems
+                .Where(b => b.CustomerId == customerId)
+                .Include(b => b.Component)
+                .ToListAsync();
+        }
+
+
+        public async Task<bool> RemoveFromBasketAsync(string customerId, int componentId)
+        {
+            var item = await _context.BasketItems
+                .FirstOrDefaultAsync(b => b.CustomerId == customerId && b.ComponentId == componentId);
+
+            if (item == null) return false;
+
+            _context.BasketItems.Remove(item);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+
+        public async Task AddToPurchaseHistoryAsync(List<PurchaseHistory> purchases)
+        {
+            await _context.PurchaseHistories.AddRangeAsync(purchases);
+            await _context.SaveChangesAsync();
+        }
+
+
+        public async Task ClearBasketAsync(string customerId)
+        {
+            var basketItems = _context.BasketItems.Where(b => b.CustomerId == customerId);
+            _context.BasketItems.RemoveRange(basketItems);
+            await _context.SaveChangesAsync();
+        }
+
     }
 }

@@ -26,4 +26,8 @@ export class BasketService {
   clearBasket(): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/clear`);
   }
+
+  purchaseBasket(): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/purchase`, {}); // Adjust the endpoint accordingly
+  }
 }

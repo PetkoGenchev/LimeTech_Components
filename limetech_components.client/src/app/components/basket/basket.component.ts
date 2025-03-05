@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BasketDTO } from '../../models/basket.dto';
 import { BasketService } from '../../services/basket.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-basket',
@@ -16,7 +17,11 @@ export class BasketComponent implements OnInit {
   basketForm: FormGroup;
 
 
-  constructor(private fb: FormBuilder, private basketService: BasketService) {
+  constructor(
+    private fb: FormBuilder,
+    private basketService: BasketService,
+    private router: Router)
+  {
     this.basketForm = this.fb.group({
       selectedItems: this.fb.array([]),
     });
@@ -46,23 +51,30 @@ export class BasketComponent implements OnInit {
 
   populateForm(): void {
     this.selectedItems.clear();
-    this.basket.forEach(item => {
+    this.basket.forEach(() => {
       this.selectedItems.push(this.fb.control(false));
     });
   }
 
 
   removeFromBasket(index: number, componentId: number): void {
-    this.basketService.removeFromBasket(componentId).subscribe(() => {
-      this.basket.splice(index, 1);
-      this.selectedItems.removeAt(index);
+    this.basketService.removeFromBasket(componentId).subscribe({
+      next: () => {
+        this.basket.splice(index, 1);
+        this.selectedItems.removeAt(index);
+      },
+      error: (error) => console.error('Failed to remove item from basket', error),
     });
   }
 
+
   clearBasket(): void {
-    this.basketService.clearBasket().subscribe(() => {
-      this.basket = [];
-      this.selectedItems.clear();
+    this.basketService.clearBasket().subscribe({
+      next: () => {
+        this.basket = [];
+        this.selectedItems.clear();
+      },
+      error: (error) => console.error('Failed to clear basket', error),
     });
   }
 
@@ -79,15 +91,13 @@ export class BasketComponent implements OnInit {
       .filter(id => id !== null);
 
     if (selectedComponents.length > 0) {
-      console.log('Purchasing:', selectedComponents);
-
-      // Move selected items to purchase history (MAKE PURCHASE HISTORY)
-      // For now, it just removes them from the basket
-      selectedComponents.forEach(componentId => {
-        const index = this.basket.findIndex(item => item.componentId === componentId);
-        if (index !== -1) {
-          this.removeFromBasket(index, componentId);
-        }
+      this.basketService.purchaseBasket().subscribe({
+        next: () => {
+          console.log('Purchase successful!');
+          this.loadBasket(); // Refresh basket
+          this.router.navigate(['/purchase-history']); // Redirect to purchase history
+        },
+        error: (error) => console.error('Purchase failed', error),
       });
     } else {
       console.warn('No items selected for purchase.');

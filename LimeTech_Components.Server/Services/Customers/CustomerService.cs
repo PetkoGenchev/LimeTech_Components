@@ -22,6 +22,7 @@
             return await _customerRepository.AddComponentToBasketAsync(customerId, componentId);
         }
 
+
         public async Task<List<BasketItemDto>> GetBasketAsync(string customerId)
         {
             var basket = await _customerRepository.GetBasketAsync(customerId);

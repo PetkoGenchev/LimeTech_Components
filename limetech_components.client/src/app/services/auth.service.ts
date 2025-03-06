@@ -37,24 +37,19 @@ export class AuthService {
 
 
   login(credentials: { username: string, password: string }): Observable<any> {
-
-    console.log("Login request", credentials);
-
-
     return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
       tap((response) => {
 
-
         console.log("Login successful!", response);
 
-
         const isAdmin = response.role === 'Admin';
-        this.authStatusSubject.next({ isSignedIn: true, isAdmin });
 
+        localStorage.setItem('userId', response.userId);
         if (response.customerId) {
           localStorage.setItem('customerId', response.customerId);
         }
 
+        this.authStatusSubject.next({ isSignedIn: true, isAdmin });
       }),
       catchError((error) => {
         console.error('Login failed', error);

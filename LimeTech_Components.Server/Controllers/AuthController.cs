@@ -85,14 +85,24 @@ namespace LimeTech_Components.Server.Controllers
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDTO.Password, false);
 
-            //Console.WriteLine($"Login attempt for user: {loginDTO.Username}");
-            //Console.WriteLine($"SignIn Result: Succeeded={result.Succeeded}, IsLockedOut={result.IsLockedOut}, " +
-            //    $"RequiresTwoFactor={result.RequiresTwoFactor}, IsNotAllowed={result.IsNotAllowed}");
-
 
             if (result.Succeeded)
             {
-                return Ok(new { message = "Login successful!" });
+                var roles = await _userManager.GetRolesAsync(user);
+                var role = roles.FirstOrDefault() ?? "User";
+
+                string? customerId = null;
+                if (user is Customer customer)
+                {
+                    customerId = customer.PublicID;
+                }
+
+                return Ok(new
+                {
+                    userId = user.Id,
+                    customerId,
+                    role
+                });
             }
 
             return Unauthorized(new { message = "Invalid login attempt!" });

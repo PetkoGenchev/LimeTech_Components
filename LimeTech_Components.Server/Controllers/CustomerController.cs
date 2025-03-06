@@ -85,5 +85,15 @@
         }
 
 
+
+        [HttpGet("{customerId}/purchase-history")]
+        public async Task<IActionResult> GetPurchaseHistory(string customerId)
+        {
+            var history = await _customerService.GetPurchaseHistoryAsync(customerId);
+            return Ok(history);
+        }
+
+
+
     }
 }

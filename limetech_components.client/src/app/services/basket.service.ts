@@ -7,27 +7,28 @@ import { BasketDTO } from '../models/basket.dto';
   providedIn: 'root'
 })
 export class BasketService {
-  private apiUrl = 'https://localhost:7039/api/basket';
+  /*  private apiUrl = 'https://localhost:7039/api/basket';*/
+  private apiUrl = 'https://localhost:7039/api/customer'; 
 
   constructor(private http: HttpClient) { }
 
-  getBasket(): Observable<BasketDTO[]> {
-    return this.http.get<BasketDTO[]>(`${this.apiUrl}`);
+  getBasket(customerId: string): Observable<BasketDTO[]> {
+    return this.http.get<BasketDTO[]>(`${this.apiUrl}/${customerId}/basket`);
   }
 
-  addToBasket(componentId: number): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/add`, { componentId });
+  addToBasket(customerId: string, componentId: number): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/${customerId}/basket`, { componentId });
   }
 
-  removeFromBasket(componentId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/remove/${componentId}`);
+  removeFromBasket(customerId: string, componentId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${customerId}/basket/${componentId}`);
   }
 
-  clearBasket(): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/clear`);
+  clearBasket(customerId: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${customerId}/basket`);
   }
 
-  purchaseBasket(): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/purchase`, {}); // Adjust the endpoint accordingly
+  purchaseBasket(customerId: string): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/${customerId}/purchase`, {});
   }
 }

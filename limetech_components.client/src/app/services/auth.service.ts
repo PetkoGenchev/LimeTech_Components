@@ -38,7 +38,6 @@ export class AuthService {
 
   login(credentials: { username: string, password: string }): Observable<any> {
 
-
     console.log("Login request", credentials);
 
 
@@ -51,6 +50,11 @@ export class AuthService {
 
         const isAdmin = response.role === 'Admin';
         this.authStatusSubject.next({ isSignedIn: true, isAdmin });
+
+        if (response.customerId) {
+          localStorage.setItem('customerId', response.customerId);
+        }
+
       }),
       catchError((error) => {
         console.error('Login failed', error);
@@ -59,11 +63,16 @@ export class AuthService {
     );
   }
 
-  logout(): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/logout`, {}).pipe(
-      tap(() => this.authStatusSubject.next({ isSignedIn: false, isAdmin: false }))
-    );
+  getCustomerId(): string | null {
+    return localStorage.getItem('customerId');
   }
 
-
+  logout(): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/logout`, {}).pipe(
+      tap(() => {
+        localStorage.removeItem('customerId');
+        this.authStatusSubject.next({ isSignedIn: false, isAdmin: false });
+      })
+    );
+  }
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PurchaseHistoryDTO } from '../../models/purchase-history.dto';
 import { PurchaseHistoryService } from '../../services/purchase-history.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-purchase-history',
@@ -12,15 +13,22 @@ import { PurchaseHistoryService } from '../../services/purchase-history.service'
 })
 export class PurchaseHistoryComponent implements OnInit {
   purchaseHistory: PurchaseHistoryDTO[] = [];
+  customerId: string = '';
 
-  constructor(private purchaseHistoryService: PurchaseHistoryService) { }
+  constructor(
+    private purchaseHistoryService: PurchaseHistoryService,
+    private authService: AuthService
+  ) { }
 
   ngOnInit(): void {
-    this.loadPurchaseHistory();
+    this.customerId = this.authService.getCustomerId();
+    if (this.customerId) {
+      this.loadPurchaseHistory();
+    }
   }
 
   loadPurchaseHistory(): void {
-    this.purchaseHistoryService.getPurchaseHistory().subscribe({
+    this.purchaseHistoryService.getPurchaseHistory(this.customerId).subscribe({
       next: (data) => {
         this.purchaseHistory = data;
       },

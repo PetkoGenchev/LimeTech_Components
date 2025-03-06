@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BasketDTO } from '../../models/basket.dto';
 import { BasketService } from '../../services/basket.service';
-import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-basket',
@@ -15,12 +15,14 @@ import { Router } from '@angular/router';
 export class BasketComponent implements OnInit {
   basket: BasketDTO[] = [];
   basketForm: FormGroup;
+  customerId: string = '';
 
 
   constructor(
     private fb: FormBuilder,
     private basketService: BasketService,
-    private router: Router)
+    private authService: AuthService
+  )
   {
     this.basketForm = this.fb.group({
       selectedItems: this.fb.array([]),
@@ -29,7 +31,10 @@ export class BasketComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.loadBasket();
+    this.customerId = this.authService.getCustomerId();
+    if (this.customerId) {
+      this.loadBasket();
+    }
   }
 
 
@@ -39,7 +44,7 @@ export class BasketComponent implements OnInit {
 
 
   loadBasket(): void {
-    this.basketService.getBasket().subscribe({
+    this.basketService.getBasket(this.customerId).subscribe({
       next: (data) => {
         this.basket = data;
         this.populateForm();
@@ -58,7 +63,7 @@ export class BasketComponent implements OnInit {
 
 
   removeFromBasket(index: number, componentId: number): void {
-    this.basketService.removeFromBasket(componentId).subscribe({
+    this.basketService.removeFromBasket(this.customerId, componentId).subscribe({
       next: () => {
         this.basket.splice(index, 1);
         this.selectedItems.removeAt(index);
@@ -69,7 +74,7 @@ export class BasketComponent implements OnInit {
 
 
   clearBasket(): void {
-    this.basketService.clearBasket().subscribe({
+    this.basketService.clearBasket(this.customerId).subscribe({
       next: () => {
         this.basket = [];
         this.selectedItems.clear();
@@ -91,13 +96,9 @@ export class BasketComponent implements OnInit {
       .filter(id => id !== null);
 
     if (selectedComponents.length > 0) {
-      this.basketService.purchaseBasket().subscribe({
-        next: () => {
-          console.log('Purchase successful!');
-          this.loadBasket(); // Refresh basket
-          this.router.navigate(['/purchase-history']); // Redirect to purchase history
-        },
-        error: (error) => console.error('Purchase failed', error),
+      console.log('Purchasing:', selectedComponents);
+      this.basketService.purchaseBasket(this.customerId).subscribe(() => {
+        this.loadBasket();
       });
     } else {
       console.warn('No items selected for purchase.');

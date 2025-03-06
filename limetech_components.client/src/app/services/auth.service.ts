@@ -37,19 +37,18 @@ export class AuthService {
 
 
   login(credentials: { username: string, password: string }): Observable<any> {
-
-
-    console.log("Login request", credentials);
-
-
     return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
       tap((response) => {
 
-
         console.log("Login successful!", response);
 
-
         const isAdmin = response.role === 'Admin';
+
+        localStorage.setItem('userId', response.userId);
+        if (response.customerId) {
+          localStorage.setItem('customerId', response.customerId);
+        }
+
         this.authStatusSubject.next({ isSignedIn: true, isAdmin });
       }),
       catchError((error) => {
@@ -59,11 +58,16 @@ export class AuthService {
     );
   }
 
-  logout(): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/logout`, {}).pipe(
-      tap(() => this.authStatusSubject.next({ isSignedIn: false, isAdmin: false }))
-    );
+  getCustomerId(): string | null {
+    return localStorage.getItem('customerId');
   }
 
-
+  logout(): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/logout`, {}).pipe(
+      tap(() => {
+        localStorage.removeItem('customerId');
+        this.authStatusSubject.next({ isSignedIn: false, isAdmin: false });
+      })
+    );
+  }
 }

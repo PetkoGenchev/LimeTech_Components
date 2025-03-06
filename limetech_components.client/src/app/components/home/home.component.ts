@@ -6,6 +6,7 @@ import { ComponentService } from '../../services/component.service';
 import { ComponentDTO } from '../../models/component.dto';
 import { SearchService } from '../../services/search.service';
 
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -123,10 +124,6 @@ export class HomeComponent implements OnInit {
     }
   }
 
-
-
-
-
   loadTopPurchased(): void {
     this.componentService.getTopComponents().subscribe({
       next: (data) => this.topPurchased = data,
@@ -148,6 +145,8 @@ export class HomeComponent implements OnInit {
       error: (error) => console.error('Failed to load filters', error),
     });
   }
+
+
 
 
   addToBasket(componentId: number): void {

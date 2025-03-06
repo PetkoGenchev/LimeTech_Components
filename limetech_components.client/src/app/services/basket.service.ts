@@ -28,6 +28,6 @@ export class BasketService {
   }
 
   purchaseBasket(): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/purchase`, {}); // Adjust the endpoint accordingly
+    return this.http.post<void>(`${this.apiUrl}/purchase`, {});
   }
 }

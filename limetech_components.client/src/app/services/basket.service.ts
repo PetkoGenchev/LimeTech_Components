@@ -7,7 +7,7 @@ import { BasketDTO } from '../models/basket.dto';
   providedIn: 'root'
 })
 export class BasketService {
-  private apiUrl = 'https://localhost:7039/api/customer'; 
+  private apiUrl = 'https://localhost:7039/api/customer';
 
   constructor(private http: HttpClient) { }
 
@@ -16,7 +16,7 @@ export class BasketService {
   }
 
   addToBasket(customerId: string, componentId: number): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/${customerId}/basket`, { componentId });
+    return this.http.post<void>(`${this.apiUrl}/${customerId}/basket`, componentId);
   }
 
   removeFromBasket(customerId: string, componentId: number): Observable<void> {

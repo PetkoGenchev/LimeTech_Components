@@ -5,6 +5,7 @@ import { BasketService } from '../../services/basket.service';
 import { ComponentService } from '../../services/component.service';
 import { ComponentDTO } from '../../models/component.dto';
 import { SearchService } from '../../services/search.service';
+import { AuthService } from '../../services/auth.service';
 
 
 @Component({
@@ -17,6 +18,7 @@ import { SearchService } from '../../services/search.service';
 export class HomeComponent implements OnInit {
   components: ComponentDTO[] = [];
   topPurchased: ComponentDTO[] = [];
+  customerId: string = '';
   categories: string[] = []; // All available types
   producers: string[] = [];  // All available producers
 
@@ -32,6 +34,7 @@ export class HomeComponent implements OnInit {
     private componentService: ComponentService,
     private basketService: BasketService,
     private searchService: SearchService,
+    private authService: AuthService
   ) {
     this.filterForm = this.fb.group({
       name: [''],
@@ -41,7 +44,7 @@ export class HomeComponent implements OnInit {
       maxPrice: [null],
       productionYear: [null],
       status: [null],
-      sortBy:['']
+      sortBy: ['']
       //currentPage: 1,
       //componentsPerPage: 10,
     })
@@ -49,6 +52,13 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadFilters(); // Ensure full data is available first
+
+    const customerId = this.authService.getCustomerId();
+    if (!customerId) {
+      console.error("Customer ID is missing!");
+      return;
+    }
+
 
     this.filterForm.valueChanges.subscribe(() => {
       this.loadComponents();
@@ -78,7 +88,7 @@ export class HomeComponent implements OnInit {
       next: (data: any) => {
         console.log('API Response:', data);
         this.components = data.components;
-        this.updateAvailableFilters(); 
+        this.updateAvailableFilters();
       },
       error: (error) => console.error('Failed to load components', error),
     });
@@ -147,12 +157,16 @@ export class HomeComponent implements OnInit {
   }
 
 
-
-
   addToBasket(componentId: number): void {
-    this.basketService.addToBasket(componentId).subscribe(() => {
-      console.log(`Component ${componentId} added to basket.`);
-    });
+    if (!this.customerId) {
+      console.error("Customer ID is missing!");
+      return;
+    }
+
+    this.basketService.addToBasket(this.customerId, componentId).subscribe(
+      () => console.log('Component added to basket!'),
+      error => console.error('Error adding to basket:', error)
+    );
   }
 
   private isFilterEmpty(): boolean {

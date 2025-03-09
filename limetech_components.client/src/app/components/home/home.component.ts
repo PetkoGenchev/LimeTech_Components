@@ -163,10 +163,11 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    this.basketService.addToBasket(this.customerId, componentId).subscribe(
-      () => console.log('Component added to basket!'),
-      error => console.error('Error adding to basket:', error)
-    );
+    this.basketService.addToBasket(this.customerId, componentId).subscribe({
+      next: () => console.log('Component added to basket!'),
+      error: (error) => console.error('Error adding to basket:', error)
+    });
+
   }
 
   private isFilterEmpty(): boolean {

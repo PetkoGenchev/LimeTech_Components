@@ -40,10 +40,11 @@ export class BasketComponent implements OnInit {
     //TESTING POSITIONING HERE
     this.loadBasket();
 
-    this.basketService.getBasket(this.customerId).subscribe(
-      (basket) => this.basket = basket,
-      (error) => console.error("Error fetching basket:", error)
-    );
+    this.basketService.getBasket(this.customerId).subscribe({
+      next: (basket) => this.basket = basket,
+      error: (error) => console.error("Error fetching basket:", error)
+    });
+
   }
 
 

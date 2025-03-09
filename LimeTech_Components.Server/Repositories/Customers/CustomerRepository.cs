@@ -93,5 +93,14 @@
             await _context.SaveChangesAsync();
         }
 
+        public async Task<List<PurchaseHistory>> GetPurchaseHistoryAsync(string customerId)
+        {
+            return await _context.PurchaseHistories
+                .Where(p => p.CustomerId == customerId)
+                .Include(p => p.Component)
+                .ToListAsync();
+        }
+
+
     }
 }

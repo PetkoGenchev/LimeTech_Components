@@ -58,5 +58,19 @@
             return true;
         }
 
+        public async Task<List<PurchaseHistoryDTO>> GetPurchaseHistoryAsync(string customerId)
+        {
+            var purchaseHistory = await _customerRepository.GetPurchaseHistoryAsync(customerId);
+            return purchaseHistory.Select(p => new PurchaseHistoryDTO
+            {
+                PurchaseDate = p.PurchaseDate,
+                ComponentName = p.Component.Name,
+                Producer = p.Component.Producer,
+                Quantity = p.Quantity,
+                TotalPrice = p.TotalPrice
+            }).ToList();
+        }
+
+
     }
 }

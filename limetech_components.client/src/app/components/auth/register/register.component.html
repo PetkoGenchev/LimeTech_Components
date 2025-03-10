@@ -2,21 +2,24 @@
 <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
   <div>
     <label for="username">Username</label>
-    <input id="username" formControlName="username" />
+    <input id="username" formControlName="username" (blur)="checkUsername()" />
     <small *ngIf="usernameMessage" class="error">{{ usernameMessage }}</small>
   </div>
 
   <div>
     <label for="fullName">Full Name</label>
     <input id="fullName" formControlName="fullName" />
-    <small *ngIf="registerForm.get('fullName')?.invalid && registerForm.get('fullName')?.touched" class="error">
+    <small *ngIf="registerForm.get('fullName')?.invalid " class="error">
       Full name is required.
     </small>
   </div>
 
   <div>
     <label for="email">Email</label>
-    <input id="email" formControlName="email" />
+    <input id="email" formControlName="email" (blur)="checkEmail()" />
+    <small *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="error">
+      Please enter a valid email.
+    </small>
     <small *ngIf="emailMessage" class="error">{{ emailMessage }}</small>
   </div>
 
@@ -27,8 +30,14 @@
   <div>
     <label for="password">Password</label>
     <input id="password" formControlName="password" type="password" />
+    <small *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="error">
+      Password must be at least 6 characters and contain at least 1 digit.
+    </small>
     <small *ngIf="passwordMessage" class="error">{{ passwordMessage }}</small>
   </div>
 
   <button type="submit" [disabled]="registerForm.invalid">Register</button>
 </form>
+
+
+<!--&& registerForm.get('fullName')?.touched-->

@@ -1,15 +1,15 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './services/auth.service';
 import { RouterModule } from '@angular/router';
-import { HomeComponent } from './components/home/home.component';
+/*import { HomeComponent } from './components/home/home.component';*/
 import { SearchService } from './services/search.service';
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterModule, HomeComponent],
+  imports: [CommonModule, RouterModule /*HomeComponent*/],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

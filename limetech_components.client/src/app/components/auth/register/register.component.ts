@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { debounceTime, switchMap, catchError, of } from 'rxjs';
+/*import { debounceTime, switchMap, catchError, of } from 'rxjs';*/
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -30,31 +30,31 @@ export class RegisterComponent {
       password: ['', [Validators.required, Validators.minLength(6)]],
       fullName: ['', [Validators.required, Validators.minLength(2)]],
     });
+  }
 
-    // Username Validation
-    this.registerForm.get('username')?.valueChanges
-      .pipe(
-        debounceTime(300),
-        switchMap(username => this.authService.checkUsername(username)),
-        catchError(() => of({ message: "Username validation failed." }))
-      )
-      .subscribe({
+  // Check username only when user leaves input field
+  checkUsername() {
+    const username = this.registerForm.get('username')?.value;
+    if (username && username.length >= 2) {
+      this.authService.checkUsername(username).subscribe({
         next: () => this.usernameMessage = '',
         error: (err) => this.usernameMessage = err.error?.message || 'Error checking username.'
       });
+    }
+  }
 
-    // Email Validation
-    this.registerForm.get('email')?.valueChanges
-      .pipe(
-        debounceTime(300),
-        switchMap(email => this.authService.checkEmail(email)),
-        catchError(() => of({ message: "Email validation failed." }))
-      )
-      .subscribe({
+  // Check email only when user leaves input field
+  checkEmail() {
+    const email = this.registerForm.get('email')?.value;
+    if (email && this.registerForm.get('email')?.valid) {
+      this.authService.checkEmail(email).subscribe({
         next: () => this.emailMessage = '',
         error: (err) => this.emailMessage = err.error?.message || 'Error checking email.'
       });
+    }
   }
+
+
 
   onRegister(): void {
     if (this.registerForm.valid) {

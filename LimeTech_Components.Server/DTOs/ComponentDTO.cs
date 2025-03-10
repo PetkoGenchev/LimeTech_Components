@@ -1,6 +1,6 @@
 ﻿namespace LimeTech_Components.Server.DTOs
 {
-    public class ComponentDto
+    public class ComponentDTO
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;

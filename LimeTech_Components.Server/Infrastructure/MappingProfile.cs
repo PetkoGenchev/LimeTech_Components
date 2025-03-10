@@ -10,14 +10,14 @@
         {
             this.CreateMap<Component, ComponentServiceModel>();
 
-            this.CreateMap<BasketItem, BasketItemDto>()
+            this.CreateMap<BasketItem, BasketItemDTO>()
                 .ForMember(dest => dest.ComponentName, opt => opt.MapFrom(src => src.Component.Name))
                 .ForMember(dest => dest.PricePerUnit, opt => opt.MapFrom(src => src.Component.Price))
                 .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.Quantity * src.Component.Price));
 
-            this.CreateMap<PurchaseHistory, PurchaseHistoryDto>();
+            this.CreateMap<PurchaseHistory, PurchaseHistoryDTO>();
 
-            this.CreateMap<Component, ComponentDto>();
+            this.CreateMap<Component, ComponentDTO>();
 
 
         }

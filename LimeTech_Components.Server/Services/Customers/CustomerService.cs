@@ -23,10 +23,10 @@
         }
 
 
-        public async Task<List<BasketItemDto>> GetBasketAsync(string customerId)
+        public async Task<List<BasketItemDTO>> GetBasketAsync(string customerId)
         {
             var basket = await _customerRepository.GetBasketAsync(customerId);
-            return _mapper.Map<List<BasketItemDto>>(basket);
+            return _mapper.Map<List<BasketItemDTO>>(basket);
         }
 
 

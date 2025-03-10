@@ -53,23 +53,25 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.loadFilters(); // Ensure full data is available first
 
-    const customerId = this.authService.getCustomerId();
-    if (!customerId) {
-      console.error("Customer ID is missing!");
-      return;
-    }
+    //const customerId = this.authService.getCustomerId();
+    //if (!customerId) {
+    //  console.error("Customer ID is missing!");
+    //  return;
+    //}
 
+    this.customerId = this.authService.getCustomerId() || '';
 
-    this.filterForm.valueChanges.subscribe(() => {
-      this.loadComponents();
-      this.updateAvailableFilters(); // Update filters every time a selection changes
-    });
 
     if (this.isFilterEmpty()) {
       this.loadTopPurchased();
     } else {
       this.loadComponents();
     }
+
+    this.filterForm.valueChanges.subscribe(() => {
+      this.loadComponents();
+      this.updateAvailableFilters(); // This way I update filters every time a selection changes
+    });
 
     this.searchService.searchKeyword$.subscribe((keyword) => {
       this.searchKeyword = keyword;
@@ -158,17 +160,24 @@ export class HomeComponent implements OnInit {
 
 
   addToBasket(componentId: number): void {
-    if (!this.customerId) {
+    if (!this.authService.isLoggedIn()) {
+      console.warn("User is not logged in. Redirecting to login page...");
+      window.location.href = '/login';
+      return;
+    }
+
+    const customerId = this.authService.getCustomerId();
+    if (!customerId) {
       console.error("Customer ID is missing!");
       return;
     }
 
-    this.basketService.addToBasket(this.customerId, componentId).subscribe({
+    this.basketService.addToBasket(customerId, componentId).subscribe({
       next: () => console.log('Component added to basket!'),
       error: (error) => console.error('Error adding to basket:', error)
     });
-
   }
+
 
   private isFilterEmpty(): boolean {
     return Object.values(this.filterForm.value).every(value => value === null || value === '');

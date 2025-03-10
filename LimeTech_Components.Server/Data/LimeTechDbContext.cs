@@ -20,6 +20,7 @@ namespace LimeTech_Components.Server.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            base.OnModelCreating(builder);
 
             builder
                 .Entity<Component>()
@@ -52,8 +53,12 @@ namespace LimeTech_Components.Server.Data
                 .HasForeignKey(bi => bi.CustomerId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<PurchaseHistory>()
+                .Property(p => p.TotalPrice)
+                .HasPrecision(18, 2);
 
-            base.OnModelCreating(builder);
+
+
         }
 
     }

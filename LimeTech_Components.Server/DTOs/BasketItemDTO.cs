@@ -1,6 +1,6 @@
 ﻿namespace LimeTech_Components.Server.DTOs
 {
-    public class BasketItemDto
+    public class BasketItemDTO
     {
         public int ComponentId { get; set; }
 

@@ -9,7 +9,7 @@
   <div>
     <label for="fullName">Full Name</label>
     <input id="fullName" formControlName="fullName" />
-    <small *ngIf="registerForm.get('fullName')?.invalid " class="error">
+    <small *ngIf="registerForm.get('fullName')?.invalid && registerForm.get('fullName')?.touched " class="error">
       Full name is required.
     </small>
   </div>
@@ -39,5 +39,3 @@
   <button type="submit" [disabled]="registerForm.invalid">Register</button>
 </form>
 
-
-<!--&& registerForm.get('fullName')?.touched-->

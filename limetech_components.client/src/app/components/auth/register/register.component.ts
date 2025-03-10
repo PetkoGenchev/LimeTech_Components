@@ -27,7 +27,13 @@ export class RegisterComponent {
     this.registerForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      password: ['',
+        [
+          Validators.required,
+          Validators.minLength(6),
+          Validators.pattern(/^(?=.*\d).{6,}$/),
+        ],
+      ],
       fullName: ['', [Validators.required, Validators.minLength(2)]],
     });
   }
@@ -45,6 +51,13 @@ export class RegisterComponent {
 
   // Check email only when user leaves input field
   checkEmail() {
+
+    const emailControl = this.registerForm.get('email');
+    if (emailControl?.invalid && emailControl?.touched) {
+      this.emailMessage = 'Please enter a valid email.';
+      return;
+    }
+
     const email = this.registerForm.get('email')?.value;
     if (email && this.registerForm.get('email')?.valid) {
       this.authService.checkEmail(email).subscribe({

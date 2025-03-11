@@ -1,6 +1,7 @@
 ﻿namespace LimeTech_Components.Server.Controllers
 {
     using AutoMapper;
+    using LimeTech_Components.Server.DTOs;
     using LimeTech_Components.Server.Services.Components;
     using LimeTech_Components.Server.Services.Customers;
     using Microsoft.AspNetCore.Mvc;
@@ -20,11 +21,11 @@
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> AddComponentToBasket(string customerId, [FromBody] int componentId)
+        public async Task<IActionResult> AddComponentToBasket(string customerId, [FromBody] AddToBasketRequest request)
         {
             try
             {
-                var result = await _customerService.AddComponentToBasketAsync(customerId, componentId);
+                var result = await _customerService.AddComponentToBasketAsync(customerId, request.ComponentId);
 
                 if (!result)
                 {

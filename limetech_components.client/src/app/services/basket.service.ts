@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BasketDTO } from '../models/basket.dto';
 
@@ -16,7 +16,11 @@ export class BasketService {
   }
 
   addToBasket(customerId: string, componentId: number): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/${customerId}/basket`, componentId);
+    return this.http.post<void>(
+      `${this.apiUrl}/${customerId}/basket`,
+      { componentId },
+      { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
+    );
   }
 
   removeFromBasket(customerId: string, componentId: number): Observable<void> {

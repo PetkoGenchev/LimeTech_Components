@@ -6,6 +6,7 @@ import { ComponentService } from '../../services/component.service';
 import { ComponentDTO } from '../../models/component.dto';
 import { SearchService } from '../../services/search.service';
 import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -34,7 +35,8 @@ export class HomeComponent implements OnInit {
     private componentService: ComponentService,
     private basketService: BasketService,
     private searchService: SearchService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {
     this.filterForm = this.fb.group({
       name: [''],
@@ -51,7 +53,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadFilters(); // Ensure full data is available first
+    this.loadFilters(); // All data must be available first
 
     //const customerId = this.authService.getCustomerId();
     //if (!customerId) {
@@ -162,7 +164,7 @@ export class HomeComponent implements OnInit {
   addToBasket(componentId: number): void {
     if (!this.authService.isLoggedIn()) {
       console.warn("User is not logged in. Redirecting to login page...");
-      window.location.href = '/login';
+      this.router.navigate(['/login']);
       return;
     }
 

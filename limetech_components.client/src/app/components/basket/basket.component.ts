@@ -54,6 +54,15 @@ export class BasketComponent implements OnInit {
 
 
   loadBasket(): void {
+
+    //CHECKING IF I RECEIVE CUSTOMERID, DELETE IF WORKING
+    console.log('Customer ID:', this.customerId);
+
+    if (!this.customerId) {
+      console.error('Customer ID is missing!');
+      return;
+    }
+
     this.basketService.getBasket(this.customerId).subscribe({
       next: (data) => {
         this.basket = data;

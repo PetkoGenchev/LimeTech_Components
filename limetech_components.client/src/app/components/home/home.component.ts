@@ -160,6 +160,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  showNotification = false;
 
   addToBasket(componentId: number): void {
     if (!this.authService.isLoggedIn()) {
@@ -175,7 +176,10 @@ export class HomeComponent implements OnInit {
     }
 
     this.basketService.addToBasket(customerId, componentId).subscribe({
-      next: () => console.log('Component added to basket!'),
+      next: () => {
+        this.showNotification = true;
+        setTimeout(() => this.showNotification = false, 3000);
+      },
       error: (error) => console.error('Error adding to basket:', error)
     });
   }

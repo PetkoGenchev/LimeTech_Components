@@ -7,6 +7,8 @@
     using LimeTech_Components.Server.Services.Customers;
     using Microsoft.AspNetCore.Mvc;
 
+    [Route("api/customer")]
+    [ApiController]
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerService _customerService;
@@ -33,7 +35,7 @@
                     return NotFound("Customer or component not found.");
                 }
 
-                return Ok("Component added to basket successfully.");
+                return Ok(new { message = "Component added to basket successfully." });
             }
             catch (Exception ex)
             {

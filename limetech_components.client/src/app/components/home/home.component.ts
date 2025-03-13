@@ -169,16 +169,15 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    const customerId = this.authService.getCustomerId();
-    if (!customerId) {
+    if (!this.customerId) {
       console.error("Customer ID is missing!");
       return;
     }
 
-    this.basketService.addToBasket(customerId, componentId).subscribe({
+    this.basketService.addToBasket(this.customerId, componentId).subscribe({
       next: () => {
         this.showNotification = true;
-        setTimeout(() => this.showNotification = false, 3000);
+        setTimeout(() => { this.showNotification = false; }, 2500);
       },
       error: (error) => console.error('Error adding to basket:', error)
     });

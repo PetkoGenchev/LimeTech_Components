@@ -40,12 +40,6 @@ export class BasketComponent implements OnInit {
     }
 
     this.loadBasket();
-
-    //this.basketService.getBasket(this.customerId).subscribe({
-    //  next: (basket) => this.basket = basket,
-    //  error: (error) => console.error("Error fetching basket:", error)
-    //});
-
   }
 
 
@@ -56,7 +50,6 @@ export class BasketComponent implements OnInit {
 
   loadBasket(): void {
 
-    //CHECKING IF I RECEIVE CUSTOMERID, DELETE IF WORKING
     console.log('Customer ID:', this.customerId);
 
     if (!this.customerId) {

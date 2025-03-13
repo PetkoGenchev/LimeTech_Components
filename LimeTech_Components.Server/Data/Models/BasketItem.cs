@@ -11,7 +11,7 @@
         [Required]
         public Component Component { get; set; } = null!;
 
-        public string CustomerId { get; set; }
+        public string CustomerId { get; set; } = null!;
 
         [Required]
         public Customer Customer { get; set; } = null!;

@@ -23,7 +23,7 @@
             var customer = await _context.Customers
                 .Include(c => c.BasketItems)
                 .ThenInclude(b => b.Component)
-                .FirstOrDefaultAsync(c => c.Id == customerId);
+                .FirstOrDefaultAsync(c => c.CustomerId == customerId);
 
             if (customer == null)
             {
@@ -47,6 +47,7 @@
                 customer.BasketItems.Add(new BasketItem
                 {
                     Component = component,
+                    CustomerId = customer.Id,
                     Quantity = 1
                 });
             }
@@ -59,11 +60,20 @@
 
         public async Task<List<BasketItem>> GetBasketAsync(string customerId)
         {
+            var customer = await _context.Customers
+                .FirstOrDefaultAsync(c => c.CustomerId == customerId);
+
+            if (customer == null)
+            {
+                return new List<BasketItem>();
+            }
+
             return await _context.BasketItems
-                .Where(b => b.CustomerId == customerId)
+                .Where(b => b.CustomerId == customer.Id)
                 .Include(b => b.Component)
                 .ToListAsync();
         }
+
 
 
         public async Task<bool> RemoveFromBasketAsync(string customerId, int componentId)

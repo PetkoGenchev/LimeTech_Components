@@ -31,19 +31,20 @@ export class BasketComponent implements OnInit {
 
 
   ngOnInit(): void {
-    const customerId = this.authService.getCustomerId();
-    if (!customerId) {
+    const storedCustomerId = this.authService.getCustomerId();
+    this.customerId = storedCustomerId ?? '';
+
+    if (!this.customerId) {
       console.error("Customer ID is missing!");
       return;
     }
 
-    //TESTING POSITIONING HERE
     this.loadBasket();
 
-    this.basketService.getBasket(this.customerId).subscribe({
-      next: (basket) => this.basket = basket,
-      error: (error) => console.error("Error fetching basket:", error)
-    });
+    //this.basketService.getBasket(this.customerId).subscribe({
+    //  next: (basket) => this.basket = basket,
+    //  error: (error) => console.error("Error fetching basket:", error)
+    //});
 
   }
 

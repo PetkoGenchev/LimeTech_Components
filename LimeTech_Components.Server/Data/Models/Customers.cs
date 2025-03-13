@@ -6,7 +6,7 @@
 
     public class Customer : IdentityUser
     {
-        public string PublicID { get; init; } = Guid.NewGuid().ToString();
+        public string CustomerId { get; init; } = Guid.NewGuid().ToString();
 
         [Required]
         [MaxLength(UserProfile.FullNameMaxLength)]

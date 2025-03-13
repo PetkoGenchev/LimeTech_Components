@@ -1,6 +1,7 @@
 ﻿namespace LimeTech_Components.Server.Controllers
 {
     using AutoMapper;
+    using LimeTech_Components.Server.Data.Models;
     using LimeTech_Components.Server.DTOs;
     using LimeTech_Components.Server.Services.Components;
     using LimeTech_Components.Server.Services.Customers;
@@ -41,19 +42,24 @@
         }
 
 
-
         [HttpGet("{customerId}/basket")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetBasket(string customerId)
         {
+            Console.WriteLine($"Fetching basket for customerId: {customerId}");
+
             var basket = await _customerService.GetBasketAsync(customerId);
-            if (basket == null)
+
+            if (basket == null || !basket.Any())
             {
-                return NotFound("Basket not found.");
+                Console.WriteLine("Basket is empty, returning []");
+                return Ok(new List<BasketItemDTO>());
             }
+
+            Console.WriteLine($"Returning basket with {basket.Count} items");
             return Ok(basket);
         }
+
+
 
 
 

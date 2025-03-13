@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LimeTech_Components.Server.Migrations
 {
     [DbContext(typeof(LimeTechDbContext))]
-    [Migration("20250310100511_InitialCreate")]
+    [Migration("20250313084520_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -146,6 +146,10 @@ namespace LimeTech_Components.Server.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CustomerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -180,10 +184,6 @@ namespace LimeTech_Components.Server.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("PublicID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");

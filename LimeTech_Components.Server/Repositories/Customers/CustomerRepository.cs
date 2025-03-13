@@ -23,7 +23,7 @@
             var customer = await _context.Customers
                 .Include(c => c.BasketItems)
                 .ThenInclude(b => b.Component)
-                .FirstOrDefaultAsync(c => c.PublicID == customerId);
+                .FirstOrDefaultAsync(c => c.CustomerId == customerId);
 
             if (customer == null)
             {

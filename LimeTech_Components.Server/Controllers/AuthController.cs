@@ -94,7 +94,7 @@ namespace LimeTech_Components.Server.Controllers
                 string? customerId = null;
                 if (user is Customer customer)
                 {
-                    customerId = customer.PublicID;
+                    customerId = customer.CustomerId;
                 }
 
                 return Ok(new

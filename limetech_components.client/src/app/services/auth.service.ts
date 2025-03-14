@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { catchError, switchMap, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -42,18 +42,43 @@ export class AuthService {
 
         console.log("Login successful!", response);
 
-        const isAdmin = response.role === 'Admin';
-
+        localStorage.setItem('accessToken', response.accessToken);
+        localStorage.setItem('refreshToken', response.refreshToken);
         localStorage.setItem('userId', response.userId);
+
         if (response.customerId) {
           localStorage.setItem('customerId', response.customerId);
         }
+
+        const isAdmin = response.role === 'Admin';
 
         this.authStatusSubject.next({ isSignedIn: true, isAdmin });
       }),
       catchError((error) => {
         console.error('Login failed', error);
         return throwError(() => error)
+      })
+    );
+  }
+
+
+  refreshToken(): Observable<any> {
+    const refreshToken = localStorage.getItem('refreshToken');
+    const accessToken = localStorage.getItem('accessToken');
+
+    if (!refreshToken || !accessToken) {
+      return throwError(() => new Error('No refresh token available'));
+    }
+
+    return this.http.post<any>(`${this.apiUrl}/auth/refresh`, { accessToken, refreshToken }).pipe(
+      tap(response => {
+        localStorage.setItem('accessToken', response.accessToken);
+        localStorage.setItem('refreshToken', response.refreshToken);
+      }),
+      catchError(error => {
+        console.error('Refresh token failed', error);
+        this.logout(); // Log out if refresh fails
+        return throwError(() => error);
       })
     );
   }
@@ -76,13 +101,33 @@ export class AuthService {
     return !!localStorage.getItem('customerId') && !!localStorage.getItem('userId');
   }
 
+
   validateSession(): Observable<boolean> {
-    return this.http.get<boolean>(`${this.apiUrl}/validate-session`).pipe(
-      catchError(() => {
+    const accessToken = localStorage.getItem('accessToken');
+    if (!accessToken) {
+      this.logout();
+      return of(false);
+    }
+
+    return this.http.get<boolean>(`${this.apiUrl}/validate-session`, {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    }).pipe(
+      catchError(error => {
+        if (error.status === 401) {
+          // If Unauthorized (token expired), try refreshing the token
+          return this.refreshToken().pipe(
+            switchMap(() => this.validateSession()), // Retry session validation
+            catchError(() => {
+              this.logout();
+              return of(false);
+            })
+          );
+        }
         this.logout();
-        return throwError(() => new Error('Session expired'));
+        return of(false);
       })
     );
   }
+
 
 }

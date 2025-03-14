@@ -39,7 +39,19 @@ export class BasketComponent implements OnInit {
       return;
     }
 
-    this.loadBasket();
+    this.authService.validateSession().subscribe({
+      next: (isValid) => {
+        if (!isValid) {
+          console.warn("Session is invalid, logging out...");
+          this.authService.logout().subscribe(() => {
+            location.reload();
+          });
+          return;
+        }
+        this.loadBasket();
+      },
+      error: (err) => console.error("Error validating session:", err),
+    });
   }
 
 
@@ -49,9 +61,6 @@ export class BasketComponent implements OnInit {
 
 
   loadBasket(): void {
-
-    console.log('Customer ID:', this.customerId);
-
     if (!this.customerId) {
       console.error('Customer ID is missing!');
       return;

@@ -66,13 +66,23 @@ export class AuthService {
     return this.http.post<void>(`${this.apiUrl}/logout`, {}).pipe(
       tap(() => {
         localStorage.removeItem('customerId');
+        localStorage.removeItem('userId');
         this.authStatusSubject.next({ isSignedIn: false, isAdmin: false });
       })
     );
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('customerId') || !!localStorage.getItem('userId');
+    return !!localStorage.getItem('customerId') && !!localStorage.getItem('userId');
+  }
+
+  validateSession(): Observable<boolean> {
+    return this.http.get<boolean>(`${this.apiUrl}/validate-session`).pipe(
+      catchError(() => {
+        this.logout();
+        return throwError(() => new Error('Session expired'));
+      })
+    );
   }
 
 }

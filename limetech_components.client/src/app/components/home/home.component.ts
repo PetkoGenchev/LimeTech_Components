@@ -169,19 +169,28 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    if (!this.customerId) {
-      console.error("Customer ID is missing!");
-      return;
-    }
+    this.authService.validateSession().subscribe({
+      next: (isValid) => {
+        if (!isValid) {
+          console.warn("Session is invalid, logging out...");
+          this.authService.logout().subscribe(() => {
+            this.router.navigate(['/login']);
+          });
+          return;
+        }
 
-    this.basketService.addToBasket(this.customerId, componentId).subscribe({
-      next: () => {
-        this.showNotification = true;
-        setTimeout(() => { this.showNotification = false; }, 2500);
+        this.basketService.addToBasket(this.customerId, componentId).subscribe({
+          next: () => {
+            this.showNotification = true;
+            setTimeout(() => (this.showNotification = false), 3000);
+          },
+          error: (error) => console.error("Error adding to basket:", error),
+        });
       },
-      error: (error) => console.error('Error adding to basket:', error)
+      error: (err) => console.error("Error validating session:", err),
     });
   }
+
 
 
   private isFilterEmpty(): boolean {

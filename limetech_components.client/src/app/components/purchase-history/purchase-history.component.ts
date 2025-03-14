@@ -21,10 +21,28 @@ export class PurchaseHistoryComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.customerId = this.authService.getCustomerId();
-    if (this.customerId) {
-      this.loadPurchaseHistory();
+    const storedCustomerId = this.authService.getCustomerId();
+    this.customerId = storedCustomerId ?? '';
+
+
+    if (!this.customerId) {
+      console.warn("User not logged in!");
+      return;
     }
+
+    this.authService.validateSession().subscribe({
+      next: (isValid) => {
+        if (!isValid) {
+          console.warn("Sessin is invalid, logging out...");
+          this.authService.logout().subscribe(() => {
+            location.reload();
+          });
+          return;
+        }
+        this.loadPurchaseHistory();
+      },
+      error: (err) => console.error("Error validating session:", err),
+    });
   }
 
   loadPurchaseHistory(): void {

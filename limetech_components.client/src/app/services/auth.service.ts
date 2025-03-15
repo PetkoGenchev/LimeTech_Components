@@ -45,6 +45,7 @@ export class AuthService {
         localStorage.setItem('accessToken', response.accessToken);
         localStorage.setItem('refreshToken', response.refreshToken);
         localStorage.setItem('userId', response.userId);
+        localStorage.setItem('role', response.role);
 
         if (response.customerId) {
           localStorage.setItem('customerId', response.customerId);
@@ -92,6 +93,8 @@ export class AuthService {
       tap(() => {
         localStorage.removeItem('customerId');
         localStorage.removeItem('userId');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('role');
         this.authStatusSubject.next({ isSignedIn: false, isAdmin: false });
       })
     );
@@ -128,6 +131,16 @@ export class AuthService {
       })
     );
   }
+
+  isAuthenticated(): boolean {
+    const token = localStorage.getItem('accessToken');
+    return !!token; // Returns true if token exists, false otherwise
+  }
+
+  getUserRole(): string | null {
+    return localStorage.getItem('role'); // 'Admin' or 'Customer'
+  }
+
 
 
 }

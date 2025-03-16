@@ -1,5 +1,6 @@
 ﻿using LimeTech_Components.Server.Data.Models;
 using LimeTech_Components.Server.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -64,7 +65,7 @@ namespace LimeTech_Components.Server.Controllers
 
 
 
-        //POST: api/auth/login
+        // POST: api/auth/login
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO)
         {
@@ -76,44 +77,27 @@ namespace LimeTech_Components.Server.Controllers
                 return Unauthorized(new { message = "Invalid login attempt!" });
             }
 
+            var roles = await _userManager.GetRolesAsync(user);
+            var role = roles.FirstOrDefault() ?? "User";
+
+            string? customerId = null;
+            if (user is Customer customer)
+            {
+                customerId = customer.CustomerId;
+            }
+
             var accessToken = GenerateJwtToken(user);
             var refreshToken = GenerateRefreshToken();
             _refreshTokens[user.Id] = refreshToken;
 
-            return Ok(new { accessToken, refreshToken });
-
-            //var user = await _userManager.FindByNameAsync(loginDTO.Username);
-
-
-            //if (user == null)
-            //{
-            //    return Unauthorized(new { message = "Invalid login attempt!" });
-            //}
-
-
-            //var result = await _signInManager.CheckPasswordSignInAsync(user, loginDTO.Password, false);
-
-
-            //if (result.Succeeded)
-            //{
-            //    var roles = await _userManager.GetRolesAsync(user);
-            //    var role = roles.FirstOrDefault() ?? "User";
-
-            //    string? customerId = null;
-            //    if (user is Customer customer)
-            //    {
-            //        customerId = customer.CustomerId;
-            //    }
-
-            //    return Ok(new
-            //    {
-            //        userId = user.Id,
-            //        customerId,
-            //        role
-            //    });
-            //}
-
-            //return Unauthorized(new { message = "Invalid login attempt!" });
+            return Ok(new
+            {
+                userId = user.Id,
+                customerId,
+                role,
+                accessToken,
+                refreshToken
+            });
         }
 
 
@@ -124,20 +108,33 @@ namespace LimeTech_Components.Server.Controllers
             if (principal == null) return Unauthorized(new { message = "Invalid token." });
 
             var userId = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userId == null || !_refreshTokens.TryGetValue(userId, out var savedRefreshToken) || savedRefreshToken != tokenDTO.RefreshToken)
+            if (userId == null) return Unauthorized(new { message = "Invalid refresh token." });
+
+            // Fetch refresh token from database
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null || user.RefreshToken != tokenDTO.RefreshToken)
             {
                 return Unauthorized(new { message = "Invalid refresh token." });
             }
 
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null) return Unauthorized();
+            // Check expiration
+            if (user.RefreshTokenExpiryTime <= DateTime.UtcNow)
+            {
+                return Unauthorized(new { message = "Refresh token expired." });
+            }
 
+            // Generate new tokens
             var newAccessToken = GenerateJwtToken(user);
             var newRefreshToken = GenerateRefreshToken();
-            _refreshTokens[user.Id] = newRefreshToken;
+
+            // Save new refresh token in database
+            user.RefreshToken = newRefreshToken;
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7); // Example expiry
+            await _userManager.UpdateAsync(user);
 
             return Ok(new { accessToken = newAccessToken, refreshToken = newRefreshToken });
         }
+
 
         // POST: api/auth/logout
         [HttpPost("logout")]
@@ -240,5 +237,22 @@ namespace LimeTech_Components.Server.Controllers
             }
             return Ok();
         }
+
+
+        // GET: api/auth/validate-session
+        [HttpGet("validate-session")]
+        [Authorize]
+        public IActionResult ValidateSession()
+        {
+            var user = HttpContext.User;
+            if (user?.Identity?.IsAuthenticated == true)
+            {
+                return Ok(true);
+            }
+            return Unauthorized();
+        }
+
+
+
     }
 }

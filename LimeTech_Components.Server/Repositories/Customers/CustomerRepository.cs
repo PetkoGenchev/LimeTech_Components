@@ -3,6 +3,7 @@
     using AutoMapper;
     using LimeTech_Components.Server.Data;
     using LimeTech_Components.Server.Data.Models;
+    using LimeTech_Components.Server.DTOs;
     using Microsoft.EntityFrameworkCore;
     using IConfigurationProvider = AutoMapper.IConfigurationProvider;
     public class CustomerRepository : ICustomerRepository
@@ -58,21 +59,21 @@
         }
 
 
-        public async Task<List<BasketItem>> GetBasketAsync(string customerId)
+        public async Task<List<BasketItemDTO>> GetBasketAsync(string customerId)
         {
-            var customer = await _context.Customers
-                .FirstOrDefaultAsync(c => c.CustomerId == customerId);
-
-            if (customer == null)
-            {
-                return new List<BasketItem>();
-            }
-
             return await _context.BasketItems
-                .Where(b => b.CustomerId == customer.Id)
+                .Where(b => b.CustomerId == customerId)
                 .Include(b => b.Component)
+                .Select(b => new BasketItemDTO
+                {
+                    ComponentId = b.Component.Id,
+                    ComponentName = b.Component.Name,
+                    Quantity = b.Quantity,
+                    PricePerUnit = b.Component.Price
+                })
                 .ToListAsync();
         }
+
 
 
 

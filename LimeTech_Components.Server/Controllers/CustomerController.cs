@@ -44,18 +44,20 @@
         }
 
 
-        [HttpGet("{customerId}/basket")]
-        public async Task<IActionResult> GetBasket(string customerId)
+        [HttpGet("basket")]
+        public async Task<IActionResult> GetBasket()
         {
+            var customerId = User.FindFirst("sub")?.Value; // Extract customer ID from JWT
+
+            if (string.IsNullOrEmpty(customerId))
+            {
+                Console.WriteLine("Unauthorized: Customer ID missing from token.");
+                return Unauthorized();
+            }
+
             Console.WriteLine($"Fetching basket for customerId: {customerId}");
 
             var basket = await _customerService.GetBasketAsync(customerId);
-
-            if (basket == null || !basket.Any())
-            {
-                Console.WriteLine("Basket is empty, returning []");
-                return Ok(new List<BasketItemDTO>());
-            }
 
             Console.WriteLine($"Returning basket with {basket.Count} items");
             return Ok(basket);

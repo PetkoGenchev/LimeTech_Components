@@ -78,9 +78,10 @@ export class AuthService {
   }
 
 
-  logout(): void {
+  logout(): Observable<void> {
     this.clearTokens();
     this.authStatusSubject.next({ isSignedIn: false, isAdmin: false });
+    return of(void 0); // Return an observable so .subscribe() works
   }
 
 
@@ -131,6 +132,8 @@ export class AuthService {
 
     if (response.customerId) {
       localStorage.setItem('customerId', response.customerId);
+    } else {
+      console.warn("Customer ID is missing in login response!");
     }
   }
 

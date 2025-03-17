@@ -88,7 +88,7 @@ namespace LimeTech_Components.Server.Controllers
 
             return Ok(new
             {
-                userId = user.Id,
+                customerId = user.CustomerId,
                 role = roles.FirstOrDefault() ?? "User",
                 accessToken,
                 refreshToken

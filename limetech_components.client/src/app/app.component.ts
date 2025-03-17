@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
         this.isAdmin = false;
         window.location.href = '/';
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Logout failed', err);
       },
     });

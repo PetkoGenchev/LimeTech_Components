@@ -43,9 +43,8 @@ export class BasketComponent implements OnInit {
       next: (isValid) => {
         if (!isValid) {
           console.warn("Session is invalid, logging out...");
-          this.authService.logout().subscribe(() => {
+          this.authService.logout();
             location.reload();
-          });
           return;
         }
         this.loadBasket();

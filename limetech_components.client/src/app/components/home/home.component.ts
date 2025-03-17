@@ -163,7 +163,7 @@ export class HomeComponent implements OnInit {
   showNotification = false;
 
   addToBasket(componentId: number): void {
-    if (!this.authService.isLoggedIn()) {
+    if (!this.authService.isAuthenticated()) {
       console.warn("User is not logged in. Redirecting to login page...");
       this.router.navigate(['/login']);
       return;
@@ -173,9 +173,8 @@ export class HomeComponent implements OnInit {
       next: (isValid) => {
         if (!isValid) {
           console.warn("Session is invalid, logging out...");
-          this.authService.logout().subscribe(() => {
+          this.authService.logout();
             this.router.navigate(['/login']);
-          });
           return;
         }
 

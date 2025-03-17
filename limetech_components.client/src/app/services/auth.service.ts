@@ -1,7 +1,15 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
+
+interface AuthResponse {
+  accessToken: string;
+  refreshToken: string;
+  userId: string;
+  role: string;
+  customerId?: string;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -11,8 +19,8 @@ export class AuthService {
   private apiUrl = 'https://localhost:7039/api/auth';
 
   private authStatusSubject = new BehaviorSubject<{ isSignedIn: boolean; isAdmin: boolean }>({
-    isSignedIn: false,
-    isAdmin: false,
+    isSignedIn: !!this.getAccessToken(),
+    isAdmin: this.getUserRole() === 'Admin',
   });
 
   authStatus$ = this.authStatusSubject.asObservable();
@@ -36,47 +44,30 @@ export class AuthService {
   }
 
 
-  login(credentials: { username: string, password: string }): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
-      tap((response) => {
-
-        localStorage.setItem('accessToken', response.accessToken);
-        localStorage.setItem('refreshToken', response.refreshToken);
-        localStorage.setItem('userId', response.userId);
-        localStorage.setItem('role', response.role);
-
-        if (response.customerId) {
-          localStorage.setItem('customerId', response.customerId);
-        }
-
-        const isAdmin = response.role === 'Admin';
-
-        this.authStatusSubject.next({ isSignedIn: true, isAdmin });
-      }),
-      catchError((error) => {
+  login(credentials: { username: string; password: string }): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credentials).pipe(
+      tap(response => this.handleAuthResponse(response)),
+      catchError(error => {
         console.error('Login failed', error);
-        return throwError(() => error)
+        return throwError(() => error);
       })
     );
   }
 
 
-  refreshToken(): Observable<any> {
-    const refreshToken = localStorage.getItem('refreshToken');
-    const accessToken = localStorage.getItem('accessToken');
+  refreshToken(): Observable<AuthResponse> {
+    const refreshToken = this.getRefreshToken();
+    const accessToken = this.getAccessToken();
 
     if (!refreshToken || !accessToken) {
       return throwError(() => new Error('No refresh token available'));
     }
 
-    return this.http.post<any>(`${this.apiUrl}/refresh`, { accessToken, refreshToken }).pipe(
-      tap(response => {
-        localStorage.setItem('accessToken', response.accessToken);
-        localStorage.setItem('refreshToken', response.refreshToken);
-      }),
+    return this.http.post<AuthResponse>(`${this.apiUrl}/refresh`, { accessToken, refreshToken }).pipe(
+      tap(response => this.storeTokens(response)),
       catchError(error => {
         console.error('Refresh token failed', error);
-        this.logout(); // Log out if refresh fails
+        this.logout();
         return throwError(() => error);
       })
     );
@@ -86,38 +77,35 @@ export class AuthService {
     return localStorage.getItem('customerId');
   }
 
-  logout(): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/logout`, {}).pipe(
-      tap(() => {
-        localStorage.removeItem('customerId');
-        localStorage.removeItem('userId');
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('role');
-        this.authStatusSubject.next({ isSignedIn: false, isAdmin: false });
-      })
-    );
+
+  logout(): void {
+    this.clearTokens();
+    this.authStatusSubject.next({ isSignedIn: false, isAdmin: false });
   }
 
-  isLoggedIn(): boolean {
-    return !!localStorage.getItem('customerId') && !!localStorage.getItem('userId');
+
+  isAuthenticated(): boolean {
+    return !!this.getAccessToken();
+  }
+
+
+  getUserRole(): string | null {
+    return localStorage.getItem('role');
   }
 
 
   validateSession(): Observable<boolean> {
-    const accessToken = localStorage.getItem('accessToken');
+    const accessToken = this.getAccessToken();
     if (!accessToken) {
       this.logout();
       return of(false);
     }
 
-    return this.http.get<boolean>(`${this.apiUrl}/validate-session`, {
-      headers: { Authorization: `Bearer ${accessToken}` }
-    }).pipe(
+    return this.http.get<boolean>(`${this.apiUrl}/validate-session`, { headers: this.getAuthHeaders() }).pipe(
       catchError(error => {
         if (error.status === 401) {
-          // If Unauthorized (token expired), try refreshing the token
           return this.refreshToken().pipe(
-            switchMap(() => this.validateSession()), // Retry session validation
+            switchMap(() => this.validateSession()),
             catchError(() => {
               this.logout();
               return of(false);
@@ -130,15 +118,41 @@ export class AuthService {
     );
   }
 
-  isAuthenticated(): boolean {
-    const token = localStorage.getItem('accessToken');
-    return !!token; // Returns true if token exists, false otherwise
+  private handleAuthResponse(response: AuthResponse): void {
+    this.storeTokens(response);
+    this.authStatusSubject.next({ isSignedIn: true, isAdmin: response.role === 'Admin' });
   }
 
-  getUserRole(): string | null {
-    return localStorage.getItem('role'); // 'Admin' or 'Customer'
+  private storeTokens(response: AuthResponse): void {
+    localStorage.setItem('accessToken', response.accessToken);
+    localStorage.setItem('refreshToken', response.refreshToken);
+    localStorage.setItem('userId', response.userId);
+    localStorage.setItem('role', response.role);
+
+    if (response.customerId) {
+      localStorage.setItem('customerId', response.customerId);
+    }
   }
 
+  private clearTokens(): void {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('role');
+    localStorage.removeItem('customerId');
+  }
 
+  private getAccessToken(): string | null {
+    return localStorage.getItem('accessToken');
+  }
 
+  private getRefreshToken(): string | null {
+    return localStorage.getItem('refreshToken');
+  }
+
+  private getAuthHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      Authorization: `Bearer ${this.getAccessToken()}`,
+    });
+  }
 }

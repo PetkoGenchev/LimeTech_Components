@@ -10,13 +10,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using LimeTech_Components.Server;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-var key = builder.Configuration["Jwt:Key"];
-var issuer = builder.Configuration["Jwt:Issuer"];
-var audience = builder.Configuration["Jwt:Audience"];
+// Read JWT settings securely
+var jwtKey = builder.Configuration.GetValue<string>("Jwt:Key") ?? throw new InvalidOperationException("JWT Key is missing!");
+var jwtIssuer = builder.Configuration.GetValue<string>("Jwt:Issuer") ?? throw new InvalidOperationException("JWT Issuer is missing!");
+var jwtAudience = builder.Configuration.GetValue<string>("Jwt:Audience") ?? throw new InvalidOperationException("JWT Audience is missing!");
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -27,9 +29,11 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Database Configuration
 builder.Services.AddDbContext<LimeTechDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Identity Configuration
 builder.Services.AddIdentity<Customer, IdentityRole>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
@@ -40,6 +44,7 @@ builder.Services.AddIdentity<Customer, IdentityRole>(options =>
     .AddEntityFrameworkStores<LimeTechDbContext>()
     .AddDefaultTokenProviders();
 
+// CORS Policy
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular", policy =>
@@ -51,15 +56,16 @@ builder.Services.AddCors(options =>
     });
 });
 
-
+// AutoMapper
 builder.Services.AddAutoMapper(typeof(LimeTechDbContext));
 
-builder.Services.AddTransient<IComponentService,ComponentService>();
-builder.Services.AddTransient<IComponentRepository,ComponentRepository>();
-builder.Services.AddTransient<ICustomerRepository,CustomerRepository>();
-builder.Services.AddTransient<ICustomerService,CustomerService>();
+// Dependency Injection for Services & Repositories
+builder.Services.AddScoped<IComponentService, ComponentService>();
+builder.Services.AddScoped<IComponentRepository, ComponentRepository>();
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
 
-
+// JWT Authentication Configuration
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -68,17 +74,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = true,
+            RequireExpirationTime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = issuer,
-            ValidAudience = audience,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+            ClockSkew = TimeSpan.Zero, // Prevents delayed expiry
+            ValidIssuer = jwtIssuer,
+            ValidAudience = jwtAudience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
         };
 
         options.Events = new JwtBearerEvents
         {
             OnMessageReceived = context =>
             {
-                // Extract JWT from storage if missing
                 var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
                 if (string.IsNullOrEmpty(token))
                 {
@@ -96,9 +103,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-
 builder.Services.AddAuthorization();
 
+// Custom Middleware for Role & User Initialization
+builder.Services.AddScoped<IRoleAndAdminInitializer, RoleAndAdminInitializer>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -120,43 +128,15 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
 
-    await InitializeRolesAndAdminAsync(scope.ServiceProvider);
+    // Initialize roles & admin user in a cleaner way
+    var roleAndAdminInitializer = services.GetRequiredService<IRoleAndAdminInitializer>();
+    await roleAndAdminInitializer.InitializeRolesAndAdminAsync();
 
     await DatabaseSeeder.SeedAsync(services);
 }
 
-async Task InitializeRolesAndAdminAsync(IServiceProvider serviceProvider)
-{
-    var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    var userManager = serviceProvider.GetRequiredService<UserManager<Customer>>();
-
-    var adminRole = "Admin";
-    if (!await roleManager.RoleExistsAsync(adminRole))
-    {
-        await roleManager.CreateAsync(new IdentityRole(adminRole));
-    }
-
-    var adminEmail = "admin@limetech.com";
-    var adminPassword = "Admin123!";
-    if (await userManager.FindByEmailAsync(adminEmail) == null)
-    {
-        var adminUser = new Customer
-        {
-            UserName = adminEmail,
-            Email = adminEmail,
-            FullName = "Administrator"
-        };
-        var result = await userManager.CreateAsync(adminUser, adminPassword);
-        if (result.Succeeded)
-        {
-            await userManager.AddToRoleAsync(adminUser, adminRole);
-        }
-    }
-}
-
 app.UseDefaultFiles();
 app.UseStaticFiles();
-
 
 if (app.Environment.IsDevelopment())
 {

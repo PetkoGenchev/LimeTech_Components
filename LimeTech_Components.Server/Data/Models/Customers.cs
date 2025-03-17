@@ -15,6 +15,7 @@
         public ICollection<BasketItem> BasketItems { get; private set; } = new List<BasketItem>();
 
         public ICollection<PurchaseHistory> PurchaseHistories { get; private set; } = new List<PurchaseHistory>();
-
+        public string? RefreshToken { get; set; }
+        public DateTime RefreshTokenExpiryTime { get; set; }
     }
 }

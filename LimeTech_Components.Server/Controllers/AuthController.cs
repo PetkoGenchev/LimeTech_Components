@@ -78,27 +78,23 @@ namespace LimeTech_Components.Server.Controllers
             }
 
             var roles = await _userManager.GetRolesAsync(user);
-            var role = roles.FirstOrDefault() ?? "User";
+            string accessToken = GenerateJwtToken(user, roles.ToList());
+            string refreshToken = GenerateRefreshToken();
 
-            string? customerId = null;
-            if (user is Customer customer)
-            {
-                customerId = customer.CustomerId;
-            }
-
-            var accessToken = GenerateJwtToken(user);
-            var refreshToken = GenerateRefreshToken();
-            _refreshTokens[user.Id] = refreshToken;
+            // Store refresh token in database
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7); // Set expiration
+            await _userManager.UpdateAsync(user);
 
             return Ok(new
             {
                 userId = user.Id,
-                customerId,
-                role,
+                role = roles.FirstOrDefault() ?? "User",
                 accessToken,
                 refreshToken
             });
         }
+
 
 
         [HttpPost("refresh")]
@@ -110,30 +106,31 @@ namespace LimeTech_Components.Server.Controllers
             var userId = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null) return Unauthorized(new { message = "Invalid refresh token." });
 
-            // Fetch refresh token from database
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null || user.RefreshToken != tokenDTO.RefreshToken)
             {
                 return Unauthorized(new { message = "Invalid refresh token." });
             }
 
-            // Check expiration
+            // Check if the refresh token is expired
             if (user.RefreshTokenExpiryTime <= DateTime.UtcNow)
             {
                 return Unauthorized(new { message = "Refresh token expired." });
             }
 
-            // Generate new tokens
-            var newAccessToken = GenerateJwtToken(user);
+            var roles = await _userManager.GetRolesAsync(user);
+            var newAccessToken = GenerateJwtToken(user, roles.ToList());
             var newRefreshToken = GenerateRefreshToken();
 
-            // Save new refresh token in database
+            // Store new refresh token in database
             user.RefreshToken = newRefreshToken;
-            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7); // Example expiry
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
             await _userManager.UpdateAsync(user);
 
             return Ok(new { accessToken = newAccessToken, refreshToken = newRefreshToken });
         }
+
+
 
 
         // POST: api/auth/logout
@@ -155,17 +152,22 @@ namespace LimeTech_Components.Server.Controllers
         //}
 
 
-        private string GenerateJwtToken(Customer user)
+        private string GenerateJwtToken(Customer user, List<string> roles)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var claims = new[]
+            var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.NameIdentifier, user.Id),
+        new Claim(ClaimTypes.Name, user.UserName),
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+    };
+
+            foreach (var role in roles)
             {
-            new Claim(ClaimTypes.NameIdentifier, user.Id),
-            new Claim(ClaimTypes.Name, user.UserName),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var token = new JwtSecurityToken(
                 _configuration["Jwt:Issuer"],
@@ -176,6 +178,8 @@ namespace LimeTech_Components.Server.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+
 
         private string GenerateRefreshToken()
         {
@@ -253,6 +257,17 @@ namespace LimeTech_Components.Server.Controllers
         }
 
 
+        private string HashToken(string token)
+        {
+            using var sha256 = SHA256.Create();
+            var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(token));
+            return Convert.ToBase64String(bytes);
+        }
+
+        private bool VerifyToken(string token, string hashedToken)
+        {
+            return HashToken(token) == hashedToken;
+        }
 
     }
 }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LimeTech_Components.Server.Migrations
 {
     [DbContext(typeof(LimeTechDbContext))]
-    [Migration("20250313191400_InitialCreate")]
+    [Migration("20250317223635_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -184,6 +184,12 @@ namespace LimeTech_Components.Server.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RefreshTokenExpiryTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");

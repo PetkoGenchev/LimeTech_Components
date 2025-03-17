@@ -1,4 +1,5 @@
 ﻿using LimeTech_Components.Server.Data.Models;
+using LimeTech_Components.Server.DTOs;
 
 namespace LimeTech_Components.Server.Repositories.Customers
 {
@@ -6,7 +7,7 @@ namespace LimeTech_Components.Server.Repositories.Customers
     {
         Task<bool> AddComponentToBasketAsync(string customerId, int componentId);
 
-        Task<List<BasketItem>> GetBasketAsync(string customerId);
+        Task<List<BasketItemDTO>> GetBasketAsync(string customerId);
 
         Task<bool> RemoveFromBasketAsync(string customerId, int componentId);
 

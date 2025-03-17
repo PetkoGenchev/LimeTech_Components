@@ -6,6 +6,8 @@
 
         public string ComponentName { get; set; } = null!;
 
+        public string ComponentProducer { get; set; } = null!;
+
         public int Quantity { get; set; }
 
         public decimal PricePerUnit { get; set; }

@@ -45,10 +45,10 @@
             {
                 CustomerId = customerId,
                 ComponentId = item.ComponentId,
-                ComponentName = item.Component.Name,
-                Producer = item.Component.Producer,
+                ComponentName = item.ComponentName,
+                Producer = item.ComponentProducer,
                 Quantity = item.Quantity,
-                TotalPrice = item.Quantity * item.Component.Price,
+                TotalPrice = item.Quantity * item.PricePerUnit,
                 PurchaseDate = DateTime.UtcNow
             }).ToList();
 

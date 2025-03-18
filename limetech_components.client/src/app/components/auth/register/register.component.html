@@ -1,41 +1,43 @@
-<h2>Register</h2>
-<form [formGroup]="registerForm" (ngSubmit)="onRegister()">
-  <div>
-    <label for="username">Username</label>
-    <input id="username" formControlName="username" (blur)="checkUsername()" />
-    <small *ngIf="usernameMessage" class="error">{{ usernameMessage }}</small>
+<div class="d-flex justify-content-center align-items-center vh-100">
+  <div class="card p-4 shadow-sm" style="width: 320px;">
+    <h2 class="text-center mb-3">Register</h2>
+    <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+
+      <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input id="username" formControlName="username" (blur)="checkUsername()" class="form-control rounded" placeholder="Enter your username" />
+        <small *ngIf="usernameMessage" class="text-danger d-block mt-1">{{ usernameMessage }}</small>
+      </div>
+
+      <div class="mb-3">
+        <label for="fullName" class="form-label">Full Name</label>
+        <input id="fullName" formControlName="fullName" class="form-control rounded" placeholder="Enter your full name" />
+        <small *ngIf="registerForm.get('fullName')?.invalid && registerForm.get('fullName')?.touched" class="text-danger d-block mt-1">
+          Full name is required.
+        </small>
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input id="email" formControlName="email" (blur)="checkEmail()" class="form-control rounded" placeholder="Enter your email" />
+        <small *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="text-danger d-block mt-1">
+          Please enter a valid email.
+        </small>
+        <small *ngIf="emailMessage" class="text-danger d-block mt-1">{{ emailMessage }}</small>
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input id="password" formControlName="password" type="password" class="form-control rounded" placeholder="Enter your password" />
+        <small *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="text-danger d-block mt-1">
+          Password must be at least 6 characters and contain at least 1 digit.
+        </small>
+        <small *ngIf="passwordMessage" class="text-danger d-block mt-1">{{ passwordMessage }}</small>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100" [disabled]="registerForm.invalid">Register</button>
+    </form>
+
+    <div *ngIf="generalErrorMessage" class="text-danger mt-2 text-center">{{ generalErrorMessage }}</div>
   </div>
-
-  <div>
-    <label for="fullName">Full Name</label>
-    <input id="fullName" formControlName="fullName" />
-    <small *ngIf="registerForm.get('fullName')?.invalid && registerForm.get('fullName')?.touched " class="error">
-      Full name is required.
-    </small>
-  </div>
-
-  <div>
-    <label for="email">Email</label>
-    <input id="email" formControlName="email" (blur)="checkEmail()" />
-    <small *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="error">
-      Please enter a valid email.
-    </small>
-    <small *ngIf="emailMessage" class="error">{{ emailMessage }}</small>
-  </div>
-
-  <div *ngIf="generalErrorMessage" class="error">
-    {{ generalErrorMessage }}
-  </div>
-
-  <div>
-    <label for="password">Password</label>
-    <input id="password" formControlName="password" type="password" />
-    <small *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="error">
-      Password must be at least 6 characters and contain at least 1 digit.
-    </small>
-    <small *ngIf="passwordMessage" class="error">{{ passwordMessage }}</small>
-  </div>
-
-  <button type="submit" [disabled]="registerForm.invalid">Register</button>
-</form>
-
+</div>

@@ -34,7 +34,6 @@ export class LoginComponent {
       this.authService.login(credentials).subscribe({
         next: (response) => {
           console.log('Login successful', response);
-          // Redirect to the home page after login
           this.router.navigate(['/']);
         },
         error: (err) => {
@@ -48,4 +47,9 @@ export class LoginComponent {
       this.loginError = 'Please fill out all fields.';
     }
   }
+
+  redirectToRegister() {
+    this.router.navigate(['/register']);
+  }
+
 }

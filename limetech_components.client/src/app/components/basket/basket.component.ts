@@ -125,4 +125,28 @@ export class BasketComponent implements OnInit {
       console.warn('No items selected for purchase.');
     }
   }
+
+  increaseQuantity(index: number): void {
+    if (this.basket[index].quantity < 10) {
+      this.basket[index].quantity++;
+      this.updateTotalPrice(index);
+    }
+  }
+
+  decreaseQuantity(index: number): void {
+    if (this.basket[index].quantity > 1) {
+      this.basket[index].quantity--;
+      this.updateTotalPrice(index);
+    }
+  }
+
+  updateTotalPrice(index: number): void {
+    this.basket[index].totalPrice = this.basket[index].quantity * this.basket[index].pricePerUnit;
+  }
+
+  get totalSelectedPrice(): number {
+    return this.basket
+      .filter((_, i) => this.selectedItems.at(i).value)
+      .reduce((sum, item) => sum + item.totalPrice, 0);
+  }
 }

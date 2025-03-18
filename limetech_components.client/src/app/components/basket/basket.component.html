@@ -1,19 +1,54 @@
-<h2>Your Basket</h2>
+<div class="container mt-4">
+  <h2 class="text-center mb-4">Your Basket</h2>
 
-<form [formGroup]="basketForm">
-  <div *ngIf="basket.length > 0; else emptyBasket">
-    <ul formArrayName="selectedItems">
-      <li *ngFor="let item of basket; let i = index">
-        <input type="checkbox" [formControlName]="i" />
-        {{ item.componentName }} - {{ item.quantity }} x ${{ item.pricePerUnit }} = ${{ item.totalPrice }}
-        <button type="button" (click)="removeFromBasket(i, item.componentId)">Remove</button>
-      </li>
-    </ul>
-    <button type="button" (click)="purchaseSelected()">Purchase Selected</button>
-    <button type="button" (click)="clearBasket()">Clear Basket</button>
-  </div>
-</form>
+  <form [formGroup]="basketForm">
+    <div *ngIf="basket.length > 0; else emptyBasket">
+      <div class="card p-3 shadow-sm">
+        <div *ngFor="let item of basket; let i = index" class="row align-items-center mb-3">
+          <!-- Checkbox -->
+          <div class="col-auto">
+            <input type="checkbox" [formControlName]="i" class="form-check-input" />
+          </div>
 
-<ng-template #emptyBasket>
-  <p>Your basket is empty.</p>
-</ng-template>
+          <!-- Component Name -->
+          <div class="col">
+            <span>{{ item.componentName }}</span>
+          </div>
+
+          <!-- Quantity Controls -->
+          <div class="col-auto d-flex align-items-center">
+            <button type="button" class="btn btn-outline-secondary btn-sm" (click)="decreaseQuantity(i)">
+              -
+            </button>
+            <span class="mx-2">{{ item.quantity }}</span>
+            <button type="button" class="btn btn-outline-secondary btn-sm" (click)="increaseQuantity(i)">
+              +
+            </button>
+          </div>
+
+          <!-- Total Price for the Row -->
+          <div class="col-auto">
+            <span>${{ item.totalPrice }}</span>
+          </div>
+
+          <!-- Remove Button -->
+          <div class="col-auto">
+            <button type="button" class="btn btn-danger btn-sm" (click)="removeFromBasket(i, item.componentId)">
+              Remove
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Price and Purchase Button -->
+      <div class="d-flex justify-content-between align-items-center mt-4">
+        <h4>Total: ${{ totalSelectedPrice }}</h4>
+        <button type="button" class="btn btn-primary" (click)="purchaseSelected()">Purchase Selected</button>
+      </div>
+    </div>
+  </form>
+
+  <ng-template #emptyBasket>
+    <p class="text-center text-muted">Your basket is empty.</p>
+  </ng-template>
+</div>

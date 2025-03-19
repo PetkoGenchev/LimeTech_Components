@@ -64,7 +64,10 @@ export class AuthService {
     }
 
     return this.http.post<AuthResponse>(`${this.apiUrl}/refresh`, { accessToken, refreshToken }).pipe(
-      tap(response => this.storeTokens(response)),
+      tap(response => {
+        console.log("Refresh Token Response:", response);
+        this.storeTokens(response)
+      }),
       catchError(error => {
         console.error('Refresh token failed', error);
         this.logout();
@@ -106,13 +109,15 @@ export class AuthService {
       catchError(error => {
         if (error.status === 401) {
           return this.refreshToken().pipe(
-            switchMap(() => this.validateSession()),
+            switchMap(() => this.http.get<boolean>(`${this.apiUrl}/validate-session`, { headers: this.getAuthHeaders() })),
             catchError(() => {
+              console.error("Session validation failed after refresh.");
               this.logout();
               return of(false);
             })
           );
         }
+        console.error("Unexpected error in session validation:", error);
         this.logout();
         return of(false);
       })
@@ -125,6 +130,7 @@ export class AuthService {
   }
 
   private storeTokens(response: AuthResponse): void {
+    console.log("Storing Tokens:", response);
     localStorage.setItem('accessToken', response.accessToken);
     localStorage.setItem('refreshToken', response.refreshToken);
     localStorage.setItem('userId', response.userId);
@@ -134,6 +140,7 @@ export class AuthService {
       localStorage.setItem('customerId', response.customerId);
     } else {
       console.warn("Customer ID is missing in login response!");
+      localStorage.removeItem('customerId');
     }
   }
 

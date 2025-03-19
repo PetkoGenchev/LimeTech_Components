@@ -143,15 +143,6 @@ namespace LimeTech_Components.Server.Controllers
             return Ok(new { message = "Logged out successfully" });
         }
 
-        //// POST: api/auth/logout
-        //[HttpPost("logout")]
-        //public async Task<IActionResult> Logout()
-        //{
-        //    await _signInManager.SignOutAsync();
-        //    return Ok(new { message = "Logged out successfully" });
-        //}
-
-
         private string GenerateJwtToken(Customer user, List<string> roles)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));

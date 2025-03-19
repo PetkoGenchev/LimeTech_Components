@@ -41,20 +41,25 @@ export class RegisterComponent {
   // Check username only when user leaves input field
   checkUsername() {
     const username = this.registerForm.get('username')?.value;
-    if (username && username.length >= 2) {
+
+
+    if (!username || username.length < 2) {
+      this.usernameMessage = 'Username must be at least 2 characters long.';
+      return;
+    }
+
       this.authService.checkUsername(username).subscribe({
         next: () => this.usernameMessage = '',
         error: (err) => this.usernameMessage = err.error?.message || 'Error checking username.'
       });
     }
-  }
 
   // Check email only when user leaves input field
   checkEmail() {
 
     const emailControl = this.registerForm.get('email');
-    if (emailControl?.invalid && emailControl?.touched) {
-      this.emailMessage = 'Please enter a valid email.';
+    if (emailControl?.invalid) {
+      this.emailMessage = '';
       return;
     }
 
@@ -66,8 +71,6 @@ export class RegisterComponent {
       });
     }
   }
-
-
 
   onRegister(): void {
     if (this.registerForm.valid) {

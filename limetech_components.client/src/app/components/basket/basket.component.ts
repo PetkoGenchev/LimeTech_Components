@@ -118,7 +118,7 @@ export class BasketComponent implements OnInit {
 
     if (selectedComponents.length > 0) {
       console.log('Purchasing:', selectedComponents);
-      this.basketService.purchaseBasket(this.customerId).subscribe(() => {
+      this.basketService.purchaseBasket(this.customerId, selectedComponents).subscribe(() => {
         this.loadBasket();
       });
     } else {

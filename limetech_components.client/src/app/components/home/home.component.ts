@@ -55,12 +55,6 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.loadFilters(); // All data must be available first
 
-    //const customerId = this.authService.getCustomerId();
-    //if (!customerId) {
-    //  console.error("Customer ID is missing!");
-    //  return;
-    //}
-
     this.customerId = this.authService.getCustomerId() || '';
 
 
@@ -163,6 +157,9 @@ export class HomeComponent implements OnInit {
   showNotification = false;
 
   addToBasket(componentId: number): void {
+
+    this.customerId = this.authService.getCustomerId() || '';
+
     if (!this.authService.isAuthenticated()) {
       console.warn("User is not logged in. Redirecting to login page...");
       this.router.navigate(['/login']);

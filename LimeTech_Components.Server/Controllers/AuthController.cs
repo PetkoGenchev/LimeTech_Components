@@ -127,7 +127,11 @@ namespace LimeTech_Components.Server.Controllers
             user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
             await _userManager.UpdateAsync(user);
 
-            return Ok(new { accessToken = newAccessToken, refreshToken = newRefreshToken });
+            return Ok(new {
+                customerId = user.CustomerId,
+                role = roles.FirstOrDefault() ?? "User",
+                accessToken = newAccessToken, 
+                refreshToken = newRefreshToken });
         }
 
 

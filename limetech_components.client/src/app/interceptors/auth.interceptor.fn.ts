@@ -7,34 +7,34 @@ import { catchError, switchMap, throwError } from 'rxjs';
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const router = inject(Router);
-  const accessToken = localStorage.getItem('accessToken');
+  let accessToken = authService.getLatestAccessToken();
 
   if (accessToken) {
     req = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${accessToken}`
-      }
+      setHeaders: { Authorization: `Bearer ${accessToken}` }
     });
   }
 
   return next(req).pipe(
-    catchError((error) => {
+    catchError(error => {
       if (error.status === 401) {
         console.warn('Access token expired, attempting to refresh token...');
 
         return authService.refreshToken().pipe(
-          switchMap(() => {
-            const newAccessToken = localStorage.getItem('accessToken');
+          switchMap((response) => {
+            // Directly use the new access token from the response
+            const newAccessToken = response.accessToken;
             if (newAccessToken) {
+              authService.updateTokens(response); // Ensure tokens are stored properly
               req = req.clone({
                 setHeaders: { Authorization: `Bearer ${newAccessToken}` }
               });
             }
-            return next(req);
+            return next(req); // Retry the request with the new token
           }),
           catchError(refreshError => {
             console.error('Refresh token failed:', refreshError);
-            authService.logout();
+            authService.logout(); // Clear session properly
             router.navigate(['/login']);
             return throwError(() => refreshError);
           })

@@ -5,6 +5,7 @@
     using LimeTech_Components.Server.DTOs;
     using LimeTech_Components.Server.Services.Components;
     using LimeTech_Components.Server.Services.Customers;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     [Route("api/customer")]
@@ -20,6 +21,7 @@
             _mapper = mapper;
         }
 
+        [Authorize]
         [HttpPost("{customerId}/basket")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -43,7 +45,7 @@
             }
         }
 
-
+        [Authorize]
         [HttpGet("basket")]
         public async Task<IActionResult> GetBasket()
         {
@@ -66,7 +68,7 @@
 
 
 
-
+        [Authorize]
         [HttpDelete("{customerId}/basket/{componentId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -81,7 +83,7 @@
         }
 
 
-
+        [Authorize]
         [HttpPost("{customerId}/purchase")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -96,7 +98,7 @@
         }
 
 
-
+        [Authorize]
         [HttpGet("{customerId}/purchase-history")]
         public async Task<IActionResult> GetPurchaseHistory(string customerId)
         {

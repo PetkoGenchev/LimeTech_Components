@@ -66,7 +66,7 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${this.apiUrl}/refresh`, { accessToken, refreshToken }).pipe(
       tap(response => {
         console.log("Refresh Token Response:", response);
-        this.storeTokens(response)
+        this.updateTokens(response);
       }),
       catchError(error => {
         console.error('Refresh token failed', error);
@@ -98,6 +98,7 @@ export class AuthService {
   }
 
 
+
   validateSession(): Observable<boolean> {
     const accessToken = this.getAccessToken();
     if (!accessToken) {
@@ -105,11 +106,28 @@ export class AuthService {
       return of(false);
     }
 
-    return this.http.get<boolean>(`${this.apiUrl}/validate-session`, { headers: this.getAuthHeaders() }).pipe(
+    return this.http.get<boolean>(`${this.apiUrl}/validate-session`, {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    }).pipe(
       catchError(error => {
         if (error.status === 401) {
+          console.warn("Session expired, attempting token refresh...");
+
           return this.refreshToken().pipe(
-            switchMap(() => this.http.get<boolean>(`${this.apiUrl}/validate-session`, { headers: this.getAuthHeaders() })),
+            switchMap(() => {
+              const newAccessToken = this.getAccessToken(); // Fetch latest token AFTER refresh
+              console.log("Using new access token for validation:", newAccessToken);
+
+              if (!newAccessToken) {
+                console.error("Token refresh failed, logging out.");
+                this.logout();
+                return of(false);
+              }
+
+              return this.http.get<boolean>(`${this.apiUrl}/validate-session`, {
+                headers: { Authorization: `Bearer ${newAccessToken}` }
+              });
+            }),
             catchError(() => {
               console.error("Session validation failed after refresh.");
               this.logout();
@@ -117,12 +135,16 @@ export class AuthService {
             })
           );
         }
+
         console.error("Unexpected error in session validation:", error);
         this.logout();
         return of(false);
       })
     );
   }
+
+
+
 
   private handleAuthResponse(response: AuthResponse): void {
     this.storeTokens(response);
@@ -165,4 +187,13 @@ export class AuthService {
       Authorization: `Bearer ${this.getAccessToken()}`,
     });
   }
+
+  getLatestAccessToken(): string | null {
+    return this.getAccessToken();
+  }
+
+  updateTokens(response: AuthResponse): void {
+    this.storeTokens(response);
+  }
+
 }

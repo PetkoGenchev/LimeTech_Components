@@ -84,20 +84,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
         options.Events = new JwtBearerEvents
         {
-            OnMessageReceived = context =>
-            {
-                var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-                if (string.IsNullOrEmpty(token))
-                {
-                    context.NoResult();
-                    return Task.CompletedTask;
-                }
-                context.Token = token;
-                return Task.CompletedTask;
-            },
             OnAuthenticationFailed = context =>
             {
                 Console.WriteLine($"Authentication failed: {context.Exception.Message}");
+                if (context.Exception.InnerException != null)
+                {
+                    Console.WriteLine($"Inner Exception: {context.Exception.InnerException.Message}");
+                }
                 return Task.CompletedTask;
             }
         };

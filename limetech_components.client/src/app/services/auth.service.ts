@@ -97,55 +97,6 @@ export class AuthService {
     return localStorage.getItem('role');
   }
 
-
-
-  validateSession(): Observable<boolean> {
-    const accessToken = this.getAccessToken();
-    if (!accessToken) {
-      this.logout();
-      return of(false);
-    }
-
-    return this.http.get<boolean>(`${this.apiUrl}/validate-session`, {
-      headers: { Authorization: `Bearer ${accessToken}` }
-    }).pipe(
-      catchError(error => {
-        if (error.status === 401) {
-          console.warn("Session expired, attempting token refresh...");
-
-          return this.refreshToken().pipe(
-            switchMap(() => {
-              const newAccessToken = this.getAccessToken(); // Fetch latest token AFTER refresh
-              console.log("Using new access token for validation:", newAccessToken);
-
-              if (!newAccessToken) {
-                console.error("Token refresh failed, logging out.");
-                this.logout();
-                return of(false);
-              }
-
-              return this.http.get<boolean>(`${this.apiUrl}/validate-session`, {
-                headers: { Authorization: `Bearer ${newAccessToken}` }
-              });
-            }),
-            catchError(() => {
-              console.error("Session validation failed after refresh.");
-              this.logout();
-              return of(false);
-            })
-          );
-        }
-
-        console.error("Unexpected error in session validation:", error);
-        this.logout();
-        return of(false);
-      })
-    );
-  }
-
-
-
-
   private handleAuthResponse(response: AuthResponse): void {
     this.storeTokens(response);
     this.authStatusSubject.next({ isSignedIn: true, isAdmin: response.role === 'Admin' });

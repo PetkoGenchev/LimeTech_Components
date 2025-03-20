@@ -116,8 +116,6 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 
-app.UseMiddleware<SessionValidationMiddleware>();
-
 app.UseAuthorization();
 
 app.MapControllers();

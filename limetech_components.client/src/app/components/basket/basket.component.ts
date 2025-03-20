@@ -55,7 +55,7 @@ export class BasketComponent implements OnInit {
       return;
     }
 
-    this.basketService.getBasket(this.customerId).subscribe({
+    this.basketService.getBasket().subscribe({
       next: (data) => {
         this.basket = data;
         this.populateForm();

@@ -5,6 +5,7 @@
     using LimeTech_Components.Server.DTOs;
     using LimeTech_Components.Server.Services.Components;
     using LimeTech_Components.Server.Services.Customers;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
@@ -21,13 +22,22 @@
             _mapper = mapper;
         }
 
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize]
-        [HttpPost("{customerId}/basket")]
+        [HttpPost("basket")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> AddComponentToBasket(string customerId, [FromBody] AddToBasketRequest request)
+        public async Task<IActionResult> AddComponentToBasket([FromBody] AddToBasketRequest request)
         {
+            var customerId = User.FindFirst("sub")?.Value; // Extract customer ID from JWT
+
+            if (string.IsNullOrEmpty(customerId))
+            {
+                Console.WriteLine("Unauthorized: Customer ID missing from token.");
+                return Unauthorized();
+            }
+
             try
             {
                 var result = await _customerService.AddComponentToBasketAsync(customerId, request.ComponentId);
@@ -49,7 +59,7 @@
         [HttpGet("basket")]
         public async Task<IActionResult> GetBasket()
         {
-            var customerId = User.FindFirst("sub")?.Value; // Extract customer ID from JWT
+            var customerId = User.FindFirst("sub")?.Value;
 
             if (string.IsNullOrEmpty(customerId))
             {

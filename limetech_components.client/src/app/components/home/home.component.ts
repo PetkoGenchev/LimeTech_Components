@@ -166,7 +166,7 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    this.basketService.addToBasket(this.customerId, componentId).subscribe({
+    this.basketService.addToBasket(componentId).subscribe({
       next: () => {
         this.showNotification = true;
         setTimeout(() => (this.showNotification = false), 3000);

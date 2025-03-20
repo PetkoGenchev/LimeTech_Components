@@ -11,13 +11,13 @@ export class BasketService {
 
   constructor(private http: HttpClient) { }
 
-  getBasket(customerId: string): Observable<BasketDTO[]> {
-    return this.http.get<BasketDTO[]>(`${this.apiUrl}/${customerId}/basket`);
+  getBasket(): Observable<BasketDTO[]> {
+    return this.http.get<BasketDTO[]>(`${this.apiUrl}/basket`);
   }
 
-  addToBasket(customerId: string, componentId: number): Observable<void> {
+  addToBasket(componentId: number): Observable<void> {
     return this.http.post<void>(
-      `${this.apiUrl}/${customerId}/basket`,
+      `${this.apiUrl}/basket`,
       { componentId },
       { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
     );

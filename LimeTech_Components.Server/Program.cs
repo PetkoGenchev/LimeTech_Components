@@ -81,39 +81,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidAudience = jwtAudience,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
         };
-
-        options.Events = new JwtBearerEvents
-        {
-            OnAuthenticationFailed = context =>
-            {
-                Console.WriteLine($"Authentication failed: {context.Exception.Message}");
-                if (context.Exception.InnerException != null)
-                {
-                    Console.WriteLine($"Inner Exception: {context.Exception.InnerException.Message}");
-                }
-                return Task.CompletedTask;
-            }
-        };
     });
 
 builder.Services.AddAuthorization();
 
 // Custom Middleware for Role & User Initialization
 builder.Services.AddScoped<IRoleAndAdminInitializer, RoleAndAdminInitializer>();
-
-builder.Services.ConfigureApplicationCookie(options =>
-{
-    options.Events.OnRedirectToLogin = context =>
-    {
-        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-        return Task.CompletedTask;
-    };
-    options.Events.OnRedirectToAccessDenied = context =>
-    {
-        context.Response.StatusCode = StatusCodes.Status403Forbidden;
-        return Task.CompletedTask;
-    };
-});
 
 var app = builder.Build();
 
@@ -142,11 +115,10 @@ app.UseCors("AllowAngular");
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
-app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.UseMiddleware<SessionValidationMiddleware>();
+
+app.UseAuthorization();
 
 app.MapControllers();
 

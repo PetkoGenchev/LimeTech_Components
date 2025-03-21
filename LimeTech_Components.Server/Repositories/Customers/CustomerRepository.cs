@@ -48,7 +48,7 @@
                 customer.BasketItems.Add(new BasketItem
                 {
                     Component = component,
-                    CustomerId = customer.Id,
+                    CustomerId = customer.CustomerId,
                     Quantity = 1
                 });
             }

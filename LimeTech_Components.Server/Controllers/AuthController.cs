@@ -127,11 +127,13 @@ namespace LimeTech_Components.Server.Controllers
             user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
             await _userManager.UpdateAsync(user);
 
-            return Ok(new {
+            return Ok(new
+            {
                 customerId = user.CustomerId,
                 role = roles.FirstOrDefault() ?? "User",
-                accessToken = newAccessToken, 
-                refreshToken = newRefreshToken });
+                accessToken = newAccessToken,
+                refreshToken = newRefreshToken
+            });
         }
 
 
@@ -147,17 +149,19 @@ namespace LimeTech_Components.Server.Controllers
             return Ok(new { message = "Logged out successfully" });
         }
 
+
         private string GenerateJwtToken(Customer user, List<string> roles)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var claims = new List<Claim>
-    {
-        new Claim(ClaimTypes.NameIdentifier, user.Id),
-        new Claim(ClaimTypes.Name, user.UserName),
-        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-    };
+                {
+                    new Claim(ClaimTypes.NameIdentifier, user.Id),
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new Claim("customerId", user.CustomerId)
+                };
 
             foreach (var role in roles)
             {

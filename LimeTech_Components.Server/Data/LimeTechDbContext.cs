@@ -42,9 +42,10 @@ namespace LimeTech_Components.Server.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<BasketItem>()
-                .HasOne(bi => bi.Component)
+                .HasOne(bi => bi.Customer)
                 .WithMany(c => c.BasketItems)
-                .HasForeignKey(bi => bi.ComponentId)
+                .HasForeignKey(bi => bi.CustomerId)
+                .HasPrincipalKey(c => c.CustomerId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<BasketItem>()

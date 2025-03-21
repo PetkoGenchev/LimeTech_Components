@@ -22,7 +22,6 @@
             _mapper = mapper;
         }
 
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize]
         [HttpPost("basket")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -30,7 +29,7 @@
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> AddComponentToBasket([FromBody] AddToBasketRequest request)
         {
-            var customerId = User.FindFirst("sub")?.Value; // Extract customer ID from JWT
+            var customerId = User.FindFirst("customerId")?.Value; // Extract customer ID from JWT
 
             if (string.IsNullOrEmpty(customerId))
             {
@@ -59,7 +58,7 @@
         [HttpGet("basket")]
         public async Task<IActionResult> GetBasket()
         {
-            var customerId = User.FindFirst("sub")?.Value;
+            var customerId = User.FindFirst("customerId")?.Value;
 
             if (string.IsNullOrEmpty(customerId))
             {

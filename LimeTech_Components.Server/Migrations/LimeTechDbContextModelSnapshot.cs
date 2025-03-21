@@ -145,7 +145,7 @@ namespace LimeTech_Components.Server.Migrations
 
                     b.Property<string>("CustomerId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -391,12 +391,13 @@ namespace LimeTech_Components.Server.Migrations
                     b.HasOne("LimeTech_Components.Server.Data.Models.Component", "Component")
                         .WithMany("BasketItems")
                         .HasForeignKey("ComponentId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("LimeTech_Components.Server.Data.Models.Customer", "Customer")
                         .WithMany("BasketItems")
                         .HasForeignKey("CustomerId")
+                        .HasPrincipalKey("CustomerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

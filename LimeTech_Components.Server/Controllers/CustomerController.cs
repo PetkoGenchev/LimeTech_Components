@@ -81,8 +81,16 @@
         [HttpDelete("{customerId}/basket/{componentId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> RemoveFromBasket(string customerId, int componentId)
+        public async Task<IActionResult> RemoveFromBasket(int componentId)
         {
+            var customerId = User.FindFirst("customerId")?.Value;
+
+            if (string.IsNullOrEmpty(customerId))
+            {
+                Console.WriteLine("Unauthorized: Customer ID missing from token.");
+                return Unauthorized();
+            }
+
             var success = await _customerService.RemoveFromBasketAsync(customerId, componentId);
             if (!success)
             {

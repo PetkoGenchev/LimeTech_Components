@@ -23,8 +23,8 @@ export class BasketService {
     );
   }
 
-  removeFromBasket(customerId: string, componentId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${customerId}/basket/${componentId}`);
+  removeFromBasket(componentId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/basket/${componentId}`);
   }
 
   clearBasket(customerId: string): Observable<void> {

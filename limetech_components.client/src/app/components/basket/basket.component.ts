@@ -74,7 +74,7 @@ export class BasketComponent implements OnInit {
 
 
   removeFromBasket(index: number, componentId: number): void {
-    this.basketService.removeFromBasket(this.customerId, componentId).subscribe({
+    this.basketService.removeFromBasket(componentId).subscribe({
       next: () => {
         this.basket.splice(index, 1);
         this.selectedItems.removeAt(index);

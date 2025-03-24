@@ -78,7 +78,7 @@
 
 
         [Authorize]
-        [HttpDelete("{customerId}/basket/{componentId}")]
+        [HttpDelete("basket/{componentId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> RemoveFromBasket(int componentId)

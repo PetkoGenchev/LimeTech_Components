@@ -66,22 +66,31 @@ export class BasketComponent implements OnInit {
 
 
   populateForm(): void {
-    this.selectedItems.clear();
+    this.selectedItems.clear(); // Clear existing controls to avoid duplicates
+
+    if (!this.basket || this.basket.length === 0) return;
+
     this.basket.forEach(() => {
-      this.selectedItems.push(this.fb.control(false));
+      this.selectedItems.push(this.fb.control(false)); // Initialize with default value
     });
+
+    console.log("Form array populated with", this.selectedItems.length, "controls");
   }
+
 
 
   removeFromBasket(index: number, componentId: number): void {
     this.basketService.removeFromBasket(componentId).subscribe({
       next: () => {
-        this.basket.splice(index, 1);
-        this.selectedItems.removeAt(index);
+        this.basket.splice(index, 1);   // Remove item from basket array
+        this.selectedItems.removeAt(index);  // Remove corresponding checkbox from the form array
+
+        console.log("Item removed from basket successfully.");
       },
       error: (error) => console.error('Failed to remove item from basket', error),
     });
   }
+
 
 
   clearBasket(): void {

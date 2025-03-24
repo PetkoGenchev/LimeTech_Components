@@ -87,16 +87,16 @@
 
             if (string.IsNullOrEmpty(customerId))
             {
-                Console.WriteLine("Unauthorized: Customer ID missing from token.");
                 return Unauthorized();
             }
 
-            var success = await _customerService.RemoveFromBasketAsync(customerId, componentId);
+            bool success = await _customerService.RemoveFromBasketAsync(customerId, componentId);
+            
             if (!success)
             {
                 return NotFound("Item not found in basket.");
             }
-            return Ok("Item removed successfully.");
+            return NoContent();
         }
 
 

@@ -4,38 +4,40 @@
   <form [formGroup]="basketForm">
     <div *ngIf="basket.length > 0; else emptyBasket">
       <div class="card p-3 shadow-sm">
-        <div *ngFor="let item of basket; let i = index" class="row align-items-center mb-3">
-          <!-- Checkbox -->
-          <div class="col-auto">
-            <input type="checkbox" [formControlName]="i" class="form-check-input" />
-          </div>
+        <div formArrayName="selectedItems">
+          <div *ngFor="let item of basket; let i = index" class="row align-items-center mb-3">
+            <!-- Checkbox -->
+            <div class="col-auto">
+              <input type="checkbox" [formControlName]="i" class="form-check-input" />
+            </div>
 
-          <!-- Component Name -->
-          <div class="col">
-            <span>{{ item.componentName }}</span>
-          </div>
+            <!-- Component Name -->
+            <div class="col">
+              <span>{{ item.componentName }}</span>
+            </div>
 
-          <!-- Quantity Controls -->
-          <div class="col-auto d-flex align-items-center">
-            <button type="button" class="btn btn-outline-secondary btn-sm" (click)="decreaseQuantity(i)">
-              -
-            </button>
-            <span class="mx-2">{{ item.quantity }}</span>
-            <button type="button" class="btn btn-outline-secondary btn-sm" (click)="increaseQuantity(i)">
-              +
-            </button>
-          </div>
+            <!-- Quantity Controls -->
+            <div class="col-auto d-flex align-items-center">
+              <button type="button" class="btn btn-outline-secondary btn-sm" (click)="decreaseQuantity(i)">
+                -
+              </button>
+              <span class="mx-2">{{ item.quantity }}</span>
+              <button type="button" class="btn btn-outline-secondary btn-sm" (click)="increaseQuantity(i)">
+                +
+              </button>
+            </div>
 
-          <!-- Total Price for the Row -->
-          <div class="col-auto">
-            <span>${{ item.totalPrice }}</span>
-          </div>
+            <!-- Total Price for the Row -->
+            <div class="col-auto">
+              <span>${{ item.totalPrice }}</span>
+            </div>
 
-          <!-- Remove Button -->
-          <div class="col-auto">
-            <button type="button" class="btn btn-danger btn-sm" (click)="removeFromBasket(i, item.componentId)">
-              Remove
-            </button>
+            <!-- Remove Button -->
+            <div class="col-auto">
+              <button type="button" class="btn btn-danger btn-sm" (click)="removeFromBasket(i, item.componentId)">
+                Remove
+              </button>
+            </div>
           </div>
         </div>
       </div>

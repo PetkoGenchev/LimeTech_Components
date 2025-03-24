@@ -70,11 +70,13 @@ export class BasketComponent implements OnInit {
 
     if (!this.basket || this.basket.length === 0) return;
 
-    this.basket.forEach(() => {
+    this.basket.forEach((item, index) => {
       this.selectedItems.push(this.fb.control(false)); // Initialize with default value
+      console.log(`Added control at index ${index}`);
     });
 
     console.log("Form array populated with", this.selectedItems.length, "controls");
+    console.log('Basket length:', this.basket.length);
   }
 
 

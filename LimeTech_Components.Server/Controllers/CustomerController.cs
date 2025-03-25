@@ -62,15 +62,11 @@
 
             if (string.IsNullOrEmpty(customerId))
             {
-                Console.WriteLine("Unauthorized: Customer ID missing from token.");
                 return Unauthorized();
             }
 
-            Console.WriteLine($"Fetching basket for customerId: {customerId}");
-
             var basket = await _customerService.GetBasketAsync(customerId);
 
-            Console.WriteLine($"Returning basket with {basket.Count} items");
             return Ok(basket);
         }
 
@@ -101,12 +97,20 @@
 
 
         [Authorize]
-        [HttpPost("{customerId}/purchase")]
+        [HttpPost("purchase")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> PurchaseBasket(string customerId)
+        public async Task<IActionResult> PurchaseBasket()
         {
+            var customerId = User.FindFirst("customerId")?.Value;
+
+            if (string.IsNullOrEmpty(customerId))
+            {
+                return Unauthorized();
+            }
+
             var success = await _customerService.PurchaseBasketAsync(customerId);
+            
             if (!success)
             {
                 return NotFound("Basket is empty or customer not found.");
@@ -116,14 +120,19 @@
 
 
         [Authorize]
-        [HttpGet("{customerId}/purchase-history")]
-        public async Task<IActionResult> GetPurchaseHistory(string customerId)
+        [HttpGet("purchase-history")]
+        public async Task<IActionResult> GetPurchaseHistory()
         {
+            var customerId = User.FindFirst("customerId")?.Value;
+
+            if (string.IsNullOrEmpty(customerId))
+            {
+                return Unauthorized();
+            }
+
             var history = await _customerService.GetPurchaseHistoryAsync(customerId);
+
             return Ok(history);
         }
-
-
-
     }
 }

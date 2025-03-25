@@ -31,7 +31,7 @@ export class BasketService {
     return this.http.delete<void>(`${this.apiUrl}/${customerId}/basket`);
   }
 
-  purchaseBasket(customerId: string, selectedComponents: number[]): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/${customerId}/purchase`, { componentIds: selectedComponents });
+  purchaseBasket(selectedComponents: number[]): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/purchase`, { componentIds: selectedComponents });
   }
 }

@@ -51,7 +51,7 @@
                 CustomerId = customerId,
                 ComponentId = item.ComponentId,
                 ComponentName = item.ComponentName,
-                Producer = item.ComponentProducer,
+                Producer = item.Producer,
                 Quantity = item.Quantity,
                 TotalPrice = item.Quantity * item.PricePerUnit,
                 PurchaseDate = DateTime.UtcNow

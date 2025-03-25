@@ -81,17 +81,29 @@ export class BasketComponent implements OnInit {
 
 
 
-  removeFromBasket(index: number, componentId: number): void {
-    this.basketService.removeFromBasket(componentId).subscribe({
-      next: () => {
-        this.basket.splice(index, 1);   // Remove item from basket array
-        this.selectedItems.removeAt(index);  // Remove corresponding checkbox from the form array
+  removeSelectedFromBasket(): void {
+    const selectedComponents = this.basket
+      .map((item, index) => (this.selectedItems.at(index).value ? item.componentId : null))
+      .filter(id => id !== null) as number[];
 
-        console.log("Item removed from basket successfully.");
-      },
-      error: (error) => console.error('Failed to remove item from basket', error),
-    });
+    if (selectedComponents.length > 0) {
+      console.log("Removing items from basket:", selectedComponents);
+
+      this.basketService.removeFromBasket(selectedComponents).subscribe({
+        next: () => {
+          this.basket = this.basket.filter((item, index) => !this.selectedItems.at(index).value);
+          this.selectedItems.clear();
+          this.basket.forEach(() => this.selectedItems.push(this.fb.control(false)));
+
+          console.log("Selected items removed from basket.");
+        },
+        error: (error) => console.error("Failed to remove selected items from basket", error),
+      });
+    } else {
+      console.warn("No items selected for removal.");
+    }
   }
+
 
 
 
@@ -112,6 +124,7 @@ export class BasketComponent implements OnInit {
   }
 
 
+
   purchaseSelected(): void {
     const selectedComponents = this.basket
       .map((item, index) => (this.selectedItems.at(index).value ? item.componentId : null))
@@ -119,13 +132,29 @@ export class BasketComponent implements OnInit {
 
     if (selectedComponents.length > 0) {
       console.log('Purchasing:', selectedComponents);
-      this.basketService.purchaseBasket(this.customerId, selectedComponents).subscribe(() => {
-        this.loadBasket();
+
+      this.basketService.purchaseBasket(selectedComponents).subscribe({
+        next: () => {
+          // Show purchase confirmation message
+          const totalItems = selectedComponents.length;
+          const totalPrice = this.basket
+            .filter((item, index) => this.selectedItems.at(index).value)
+            .reduce((sum, item) => sum + item.pricePerUnit * item.quantity, 0);
+
+          alert(`Purchased ${totalItems} items for a total of ${totalPrice.toFixed(2)} BGN`);
+
+          // Reload basket to reflect removed items
+          this.loadBasket();
+        },
+        error: (error) => console.error('Failed to purchase items', error)
       });
     } else {
       console.warn('No items selected for purchase.');
     }
   }
+
+
+
 
   increaseQuantity(index: number): void {
     if (this.basket[index].quantity < 10) {

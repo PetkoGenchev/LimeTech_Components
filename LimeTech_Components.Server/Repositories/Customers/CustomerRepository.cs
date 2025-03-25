@@ -77,17 +77,19 @@
 
 
 
-        public async Task<bool> RemoveFromBasketAsync(string customerId, int componentId)
+        public async Task<bool> RemoveFromBasketAsync(string customerId, List<int> componentIds)
         {
-            var item = await _context.BasketItems
-                .FirstOrDefaultAsync(b => b.CustomerId == customerId && b.ComponentId == componentId);
+            var itemsToRemove = await _context.BasketItems
+                .Where(b => b.CustomerId == customerId && componentIds.Contains(b.ComponentId))
+                .ToListAsync();
 
-            if (item == null) return false;
+            if (!itemsToRemove.Any()) return false;
 
-            _context.BasketItems.Remove(item);
+            _context.BasketItems.RemoveRange(itemsToRemove);
             await _context.SaveChangesAsync();
             return true;
         }
+
 
 
         public async Task AddToPurchaseHistoryAsync(List<PurchaseHistory> purchases)
@@ -97,13 +99,6 @@
         }
 
 
-        public async Task ClearBasketAsync(string customerId)
-        {
-            var basketItems = _context.BasketItems.Where(b => b.CustomerId == customerId);
-            _context.BasketItems.RemoveRange(basketItems);
-            await _context.SaveChangesAsync();
-        }
-
         public async Task<List<PurchaseHistory>> GetPurchaseHistoryAsync(string customerId)
         {
             return await _context.PurchaseHistories
@@ -112,6 +107,12 @@
                 .ToListAsync();
         }
 
+        public async Task ClearBasketAsync(string customerId)
+        {
+            var basketItems = _context.BasketItems.Where(b => b.CustomerId == customerId);
+            _context.BasketItems.RemoveRange(basketItems);
+            await _context.SaveChangesAsync();
+        }
 
     }
 }

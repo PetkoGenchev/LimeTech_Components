@@ -74,10 +74,8 @@
 
 
         [Authorize]
-        [HttpDelete("basket/{componentId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> RemoveFromBasket(int componentId)
+        [HttpPost("basket/remove-multiple")]
+        public async Task<IActionResult> RemoveFromBasket([FromBody] List<int> componentIds)
         {
             var customerId = User.FindFirst("customerId")?.Value;
 
@@ -86,21 +84,20 @@
                 return Unauthorized();
             }
 
-            bool success = await _customerService.RemoveFromBasketAsync(customerId, componentId);
-            
+            bool success = await _customerService.RemoveFromBasketAsync(customerId, componentIds);
+
             if (!success)
             {
-                return NotFound("Item not found in basket.");
+                return NotFound("No matching items found in the basket.");
             }
-            return NoContent();
+
+            return Ok("Selected items removed from the basket.");
         }
 
 
         [Authorize]
         [HttpPost("purchase")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> PurchaseBasket()
+        public async Task<IActionResult> PurchaseBasket([FromBody] List<int> componentIds)
         {
             var customerId = User.FindFirst("customerId")?.Value;
 
@@ -109,14 +106,20 @@
                 return Unauthorized();
             }
 
-            var success = await _customerService.PurchaseBasketAsync(customerId);
-            
+            var (success, purchasedItems, totalCost) = await _customerService.PurchaseSelectedItemsAsync(customerId, componentIds);
+
             if (!success)
             {
-                return NotFound("Basket is empty or customer not found.");
+                return NotFound("No valid items selected for purchase.");
             }
-            return Ok("Purchase successful.");
+
+            return Ok(new
+            {
+                Message = $"Purchased {purchasedItems.Count} items for a total of {totalCost:F2} BGN",
+                PurchasedItems = purchasedItems
+            });
         }
+
 
 
         [Authorize]

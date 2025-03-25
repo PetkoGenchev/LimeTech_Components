@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BasketDTO } from '../models/basket.dto';
+import { PurchaseHistoryDTO } from '../models/purchase-history.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -23,15 +24,19 @@ export class BasketService {
     );
   }
 
-  removeFromBasket(componentId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/basket/${componentId}`);
+  removeFromBasket(componentIds: number[]): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/basket/remove-multiple`, { componentIds });
   }
+
 
   clearBasket(customerId: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${customerId}/basket`);
   }
 
-  purchaseBasket(selectedComponents: number[]): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/purchase`, { componentIds: selectedComponents });
+  purchaseBasket(selectedComponents: number[]): Observable<{ message: string; purchasedItems: PurchaseHistoryDTO[] }> {
+    return this.http.post<{ message: string; purchasedItems: PurchaseHistoryDTO[] }>(
+      `${this.apiUrl}/purchase`,
+      selectedComponents
+    );
   }
 }

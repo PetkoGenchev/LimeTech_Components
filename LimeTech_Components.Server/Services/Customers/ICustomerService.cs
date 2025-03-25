@@ -6,8 +6,8 @@ namespace LimeTech_Components.Server.Services.Customers
     {
         Task<bool> AddComponentToBasketAsync(string customerId, int componentId);
         Task<List<BasketItemDTO>> GetBasketAsync(string customerId);
-        Task<bool> RemoveFromBasketAsync(string customerId, int componentId);
-        Task<bool> PurchaseBasketAsync(string customerId);
+        Task<bool> RemoveFromBasketAsync(string customerId, List<int>componentIds);
+        Task<(bool success, List<PurchaseHistoryDTO> purchasedItems, decimal totalCost)> PurchaseSelectedItemsAsync(string customerId, List<int> componentIds);
         Task<List<PurchaseHistoryDTO>> GetPurchaseHistoryAsync(string customerId);
     }
 }

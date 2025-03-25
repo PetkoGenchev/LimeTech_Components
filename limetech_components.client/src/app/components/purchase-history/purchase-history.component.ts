@@ -43,4 +43,5 @@ export class PurchaseHistoryComponent implements OnInit {
       error: (error) => console.error('Failed to load purchase history', error),
     });
   }
+
 }

@@ -30,18 +30,23 @@
         }
 
 
-        public async Task<bool> RemoveFromBasketAsync(string customerId, int componentId)
+        public async Task<bool> RemoveFromBasketAsync(string customerId, List<int> componentId)
         {
             return await _customerRepository.RemoveFromBasketAsync(customerId, componentId);
         }
 
 
-        public async Task<bool> PurchaseBasketAsync(string customerId)
+
+        public async Task<(bool success, List<PurchaseHistoryDTO> purchasedItems, decimal totalCost)>
+            PurchaseSelectedItemsAsync(string customerId, List<int> componentIds)
         {
             var basket = await _customerRepository.GetBasketAsync(customerId);
-            if (basket == null || !basket.Any()) return false;
+            if (basket == null || !basket.Any()) return (false, new List<PurchaseHistoryDTO>(), 0);
 
-            var purchaseHistory = basket.Select(item => new PurchaseHistory
+            var selectedItems = basket.Where(item => componentIds.Contains(item.ComponentId)).ToList();
+            if (!selectedItems.Any()) return (false, new List<PurchaseHistoryDTO>(), 0);
+
+            var purchaseHistory = selectedItems.Select(item => new PurchaseHistory
             {
                 CustomerId = customerId,
                 ComponentId = item.ComponentId,
@@ -53,10 +58,22 @@
             }).ToList();
 
             await _customerRepository.AddToPurchaseHistoryAsync(purchaseHistory);
-            await _customerRepository.ClearBasketAsync(customerId);
+            await _customerRepository.RemoveFromBasketAsync(customerId, componentIds); // Update repository method
 
-            return true;
+            var totalCost = purchaseHistory.Sum(p => p.TotalPrice);
+
+            var purchasedItemsDto = purchaseHistory.Select(p => new PurchaseHistoryDTO
+            {
+                ComponentName = p.ComponentName,
+                Producer = p.Producer,
+                Quantity = p.Quantity,
+                TotalPrice = p.TotalPrice,
+                PurchaseDate = p.PurchaseDate
+            }).ToList();
+
+            return (true, purchasedItemsDto, totalCost);
         }
+
 
         public async Task<List<PurchaseHistoryDTO>> GetPurchaseHistoryAsync(string customerId)
         {

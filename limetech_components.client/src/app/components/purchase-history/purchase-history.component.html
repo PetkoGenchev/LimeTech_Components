@@ -1,1 +1,33 @@
-<p>purchase-history works!</p>
+<div class="container mt-4">
+  <h2 class="text-center mb-4">Purchase History</h2>
+
+  <!-- Filter Section -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <label for="dateFilter" class="fw-bold">Filter by Date:</label>
+    <select class="form-select w-auto"
+            id="dateFilter"
+            [formControl]="dateFilterControl">
+      <option *ngFor="let option of filterOptions" [value]="option.value">{{ option.label }}</option>
+    </select>
+  </div>
+
+  <!-- Purchase List -->
+  <div *ngIf="filteredPurchases.length > 0; else noPurchases">
+    <div class="card mb-3" *ngFor="let purchase of filteredPurchases">
+      <div class="card-body">
+        <h5 class="card-title">{{ purchase.componentName }}</h5>
+        <p class="card-text">
+          <strong>Producer:</strong> {{ purchase.producer }} <br>
+          <strong>Quantity:</strong> {{ purchase.quantity }} <br>
+          <strong>Total Price:</strong> ${{ purchase.totalPrice }} <br>
+          <strong>Purchase Date:</strong> {{ purchase.purchaseDate | date:'longDate' }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Purchases Message -->
+  <ng-template #noPurchases>
+    <div class="alert alert-warning text-center">No purchases found for the period.</div>
+  </ng-template>
+</div>

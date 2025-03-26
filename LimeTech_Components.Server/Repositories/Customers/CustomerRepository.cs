@@ -106,13 +106,5 @@
                 .Include(p => p.Component)
                 .ToListAsync();
         }
-
-        public async Task ClearBasketAsync(string customerId)
-        {
-            var basketItems = _context.BasketItems.Where(b => b.CustomerId == customerId);
-            _context.BasketItems.RemoveRange(basketItems);
-            await _context.SaveChangesAsync();
-        }
-
     }
 }

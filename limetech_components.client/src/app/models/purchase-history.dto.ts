@@ -3,5 +3,5 @@ export interface PurchaseHistoryDTO {
   producer: string;
   quantity: number;
   totalPrice: number;
-  purchaseData: string;
+  purchaseDate: string;
 }

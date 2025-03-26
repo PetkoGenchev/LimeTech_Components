@@ -28,15 +28,9 @@ export class BasketService {
     return this.http.post<void>(`${this.apiUrl}/basket/remove-multiple`, { componentIds });
   }
 
-
-  clearBasket(customerId: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${customerId}/basket`);
-  }
-
-  purchaseBasket(selectedComponents: number[]): Observable<{ message: string; purchasedItems: PurchaseHistoryDTO[] }> {
-    return this.http.post<{ message: string; purchasedItems: PurchaseHistoryDTO[] }>(
-      `${this.apiUrl}/purchase`,
-      selectedComponents
-    );
+  purchaseBasket(selectedComponents: number[]):
+    Observable<{ message: string; purchasedItems: PurchaseHistoryDTO[] }> {
+    return this.http.post<{ message: string; purchasedItems: PurchaseHistoryDTO[] }>
+      (`${this.apiUrl}/purchase`, selectedComponents);
   }
 }

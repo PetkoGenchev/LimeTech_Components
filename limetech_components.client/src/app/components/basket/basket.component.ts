@@ -104,27 +104,6 @@ export class BasketComponent implements OnInit {
     }
   }
 
-
-
-
-  clearBasket(): void {
-    this.basketService.clearBasket(this.customerId).subscribe({
-      next: () => {
-        this.basket = [];
-        this.selectedItems.clear();
-      },
-      error: (error) => console.error('Failed to clear basket', error),
-    });
-  }
-
-
-  toggleSelection(index: number): void {
-    const control = this.selectedItems.at(index);
-    control.setValue(!control.value);
-  }
-
-
-
   purchaseSelected(): void {
     const selectedComponents = this.basket
       .map((item, index) => (this.selectedItems.at(index).value ? item.componentId : null))
@@ -154,6 +133,10 @@ export class BasketComponent implements OnInit {
   }
 
 
+  toggleSelection(index: number): void {
+    const control = this.selectedItems.at(index);
+    control.setValue(!control.value);
+  }
 
 
   increaseQuantity(index: number): void {

@@ -13,8 +13,6 @@ namespace LimeTech_Components.Server.Repositories.Customers
 
         Task AddToPurchaseHistoryAsync(List<PurchaseHistory> purchases);
 
-        Task ClearBasketAsync(string customerId);
-
         Task<List<PurchaseHistory>> GetPurchaseHistoryAsync(string customerId);
     }
 }

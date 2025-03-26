@@ -1,24 +1,45 @@
-<h2>Manage Components</h2>
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>Price</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let component of components">
-      <td>{{ component.name }}</td>
-      <td>{{ component.typeOfProduct }}</td>
-      <td>{{ component.price | currency }}</td>
-      <td>
-        <button (click)="editComponent(component.id)">Edit</button>
-        <button (click)="toggleVisibility(component)">
-          {{ component.isPublic ? 'Hide' : 'Show' }}
-        </button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<div class="container mt-4">
+  <h2 class="text-center mb-4">Manage Components</h2>
+
+  <div *ngIf="components.length > 0; else noComponents">
+    <!-- Alphabetically Sorted Components -->
+    <div class="row">
+      <div class="col-md-6 col-lg-4 mb-4" *ngFor="let component of components | orderBy: 'name'">
+        <div class="card shadow-sm">
+          <img [src]="component.imageUrl || 'assets/no-image.png'" class="card-img-top" alt="Component Image">
+
+          <div class="card-body">
+            <h5 class="card-title">{{ component.name }}</h5>
+            <p class="card-text">
+              <strong>Producer:</strong> {{ component.producer }} <br>
+              <strong>Type:</strong> {{ component.typeOfProduct }} <br>
+              <strong>Price:</strong> ${{ component.price }} <br>
+              <strong>Purchased:</strong> {{ component.purchasedCount }} times <br>
+              <strong>Year:</strong> {{ component.productionYear }} <br>
+              <strong>Power Usage:</strong> {{ component.powerUsage }}W <br>
+              <strong>Status:</strong> <span class="badge" [ngClass]="getStatusClass(component.status)">{{ component.status }}</span> <br>
+              <strong>Stock:</strong> {{ component.stockCount }} items <br>
+              <strong>Public:</strong> <span [class="text-success" *ngIf="component.isPublic">Yes</span>
+              <span [class="text-danger" *ngIf="!component.isPublic">No</span>
+            </p>
+
+            <div class="d-flex justify-content-between">
+              <button class="btn btn-primary btn-sm" (click)="editComponent(component.id)">
+                Edit
+              </button>
+              <button class="btn btn-warning btn-sm" (click)="toggleVisibility(component)">
+                {{ component.isPublic ? 'Make Private' : 'Make Public' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noComponents>
+    <div class="alert alert-warning text-center">
+      No components available.
+    </div>
+  </ng-template>
+</div>

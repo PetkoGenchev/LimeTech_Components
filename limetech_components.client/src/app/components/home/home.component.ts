@@ -92,6 +92,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
+
   updateAvailableFilters(): void {
     const selectedProducer = this.filterForm.value.producer;
     const selectedType = this.filterForm.value.typeOfProduct;

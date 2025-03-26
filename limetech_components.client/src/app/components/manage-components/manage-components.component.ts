@@ -4,6 +4,7 @@ import { ComponentService } from '../../services/component.service';
 import { ComponentDTO } from '../../models/component.dto';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { PartStatus } from '../../models/status.dto';
 
 @Component({
   selector: 'app-manage-components',
@@ -48,4 +49,18 @@ export class ManageComponentsComponent implements OnInit{
       error: (error) => console.error('Failed to update visibility', error),
     });
   }
+
+  getStatusClass(status: PartStatus): string {
+    switch (status) {
+      case PartStatus.Available:
+        return 'badge bg-success';
+      case PartStatus.Sold:
+        return 'badge bg-danger';
+      case PartStatus.WaitingStock:
+        return 'badge bg-secondary';
+      default:
+        return 'badge bg-light';
+    }
+  }
+
 }

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { PurchaseHistoryDTO } from '../../models/purchase-history.dto';
 import { PurchaseHistoryService } from '../../services/purchase-history.service';
 import { AuthService } from '../../services/auth.service';
-import { FormBuilder, FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormArray, FormGroup, ReactiveFormsModule, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-purchase-history',
@@ -34,7 +34,7 @@ export class PurchaseHistoryComponent implements OnInit {
     private fb: FormBuilder,
     private purchaseHistoryService: PurchaseHistoryService,
     private authService: AuthService
-  ){ }
+  ) { }
 
   ngOnInit(): void {
     const storedCustomerId = this.authService.getCustomerId();
@@ -51,8 +51,6 @@ export class PurchaseHistoryComponent implements OnInit {
     this.dateFilterControl.valueChanges.subscribe(() => {
       this.applyFilter();
     });
-
-
   }
 
   loadPurchaseHistory(): void {
@@ -72,7 +70,7 @@ export class PurchaseHistoryComponent implements OnInit {
     if (selectedValue === 'all') {
       this.filteredPurchases = [...this.purchaseHistory];
     } else {
-      const days = parseInt(selectedValue, 10);
+      const days = parseInt(selectedValue ?? '30', 10);
       const cutoffDate = new Date();
       cutoffDate.setDate(cutoffDate.getDate() - days);
 

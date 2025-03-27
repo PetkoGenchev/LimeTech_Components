@@ -9,20 +9,20 @@
 
         [Required]
         [MaxLength(ComponentConstants.PartNameMaxLength)]
-        public string? Name { get; set; }
+        public required string Name { get; set; }
 
         [Required]
         [MaxLength(ComponentConstants.PartNameMaxLength)]
-        public string? Producer { get; set; }
+        public required string Producer { get; set; }
 
 
         [Required]
         [MaxLength(ComponentConstants.PartNameMaxLength)]
-        public string? TypeOfProduct { get; set; }
+        public required string TypeOfProduct { get; set; }
 
         [Required]
         [Url]
-        public string? ImageUrl { get; set; }
+        public required string ImageUrl { get; set; }
 
         [Required]
         public int Price { get; set; }
@@ -33,7 +33,7 @@
         public int ProductionYear { get; set; }
 
         [Required]
-        public int? PowerUsage { get; set; }
+        public required int PowerUsage { get; set; }
 
         public PartStatus Status { get; set; }
 
@@ -46,7 +46,7 @@
         public int BuildId { get; set; }
 
         [Required]
-        public BuildCompatibility BuildCompatibility { get; init; }
+        public BuildCompatibility? BuildCompatibility { get; init; }
 
         public ICollection<BasketItem> BasketItems { get; set; } = new List<BasketItem>();
 

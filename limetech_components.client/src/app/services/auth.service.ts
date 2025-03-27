@@ -133,11 +133,11 @@ export class AuthService {
     return localStorage.getItem('refreshToken');
   }
 
-  private getAuthHeaders(): HttpHeaders {
-    return new HttpHeaders({
-      Authorization: `Bearer ${this.getAccessToken()}`,
-    });
-  }
+  //private getAuthHeaders(): HttpHeaders {
+  //  return new HttpHeaders({
+  //    Authorization: `Bearer ${this.getAccessToken()}`,
+  //  });
+  //}
 
   getLatestAccessToken(): string | null {
     return this.getAccessToken();

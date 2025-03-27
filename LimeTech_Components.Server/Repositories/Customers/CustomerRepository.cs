@@ -4,6 +4,7 @@
     using LimeTech_Components.Server.Data;
     using LimeTech_Components.Server.Data.Models;
     using LimeTech_Components.Server.DTOs;
+    using Microsoft.AspNetCore.Mvc.Diagnostics;
     using Microsoft.EntityFrameworkCore;
     using IConfigurationProvider = AutoMapper.IConfigurationProvider;
     public class CustomerRepository : ICustomerRepository
@@ -68,6 +69,7 @@
                 {
                     ComponentId = b.Component.Id,
                     ComponentName = b.Component.Name,
+                    Producer = b.Component.Producer,
                     Quantity = b.Quantity,
                     PricePerUnit = b.Component.Price
                 })

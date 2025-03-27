@@ -23,9 +23,12 @@
         public async Task<ComponentQueryServiceModel> GetComponentsAsync(
             int currentPage = 1,
             int componentsPerPage = ComponentConstants.ComponentsPerPage,
-            bool publicOnly = true)
+            bool publicOnly = false)
         {
-            var componentQuery = this._context.Components.Where(p => !publicOnly || p.IsPublic);
+            var componentQuery = this._context.Components
+                .Where(p => !publicOnly || p.IsPublic)
+                .OrderBy(p => p.TypeOfProduct)
+                .ThenBy(p => p.Name);
 
             var totalComponents = await componentQuery.CountAsync();
 
@@ -40,8 +43,8 @@
                 ComponentsPerPage = componentsPerPage,
                 Components = components
             };
-
         }
+
 
 
         public async Task<ComponentQueryServiceModel> GetComponentsAsync(

@@ -4,7 +4,7 @@
   <div *ngIf="components.length > 0; else noComponents">
     <!-- Alphabetically Sorted Components -->
     <div class="row">
-      <div class="col-md-6 col-lg-4 mb-4" *ngFor="let component of components | orderBy: 'name'">
+      <div class="col-md-6 col-lg-4 mb-4" *ngFor="let component of components">
         <div class="card shadow-sm">
           <img [src]="component.imageUrl || 'assets/no-image.png'" class="card-img-top" alt="Component Image">
 

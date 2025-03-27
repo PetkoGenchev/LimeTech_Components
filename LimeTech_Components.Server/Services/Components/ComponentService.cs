@@ -18,10 +18,11 @@
         public async Task<ComponentQueryServiceModel> GetComponentsAsync(
             int currentPage = 1,
             int componentsPerPage = ComponentConstants.ComponentsPerPage,
-            bool publicOnly = true)
+            bool publicOnly = false)
         {
             return await _componentRepository.GetComponentsAsync(currentPage, componentsPerPage,publicOnly);
         }
+
 
         public async Task<ComponentQueryServiceModel> GetComponentsAsync(
             string keyword,

@@ -93,6 +93,13 @@ export class HomeComponent implements OnInit {
   }
 
 
+  loadTopPurchased(): void {
+    this.componentService.getTopComponents().subscribe({
+      next: (data) => this.topPurchased = data,
+      error: (error) => console.error('Failed to load top purchased components', error),
+    });
+  }
+
   updateAvailableFilters(): void {
     const selectedProducer = this.filterForm.value.producer;
     const selectedType = this.filterForm.value.typeOfProduct;
@@ -132,14 +139,6 @@ export class HomeComponent implements OnInit {
       this.filteredCategories = [...this.categories];
     }
   }
-
-  loadTopPurchased(): void {
-    this.componentService.getTopComponents().subscribe({
-      next: (data) => this.topPurchased = data,
-      error: (error) => console.error('Failed to load top purchased components', error),
-    });
-  }
-
 
   loadFilters(): void {
     this.componentService.getAllComponents().subscribe({

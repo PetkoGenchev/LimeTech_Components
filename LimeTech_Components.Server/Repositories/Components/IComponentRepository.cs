@@ -1,4 +1,5 @@
 ﻿using LimeTech_Components.Server.Data.Models;
+using LimeTech_Components.Server.DTOs;
 using LimeTech_Components.Server.Services.Components.Models;
 using System.Collections.Generic;
 using static LimeTech_Components.Server.Constants.DataConstants;
@@ -38,5 +39,7 @@ namespace LimeTech_Components.Server.Repositories.Components
         Task UpdateComponentAsync(Component component);
 
         Task<IEnumerable<Component>> GetAllComponentsAsync(string sortBy);
+
+        Task<IEnumerable<Component>> GetAllComponentsSortedByYearAsync();
     }
 }

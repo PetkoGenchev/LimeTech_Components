@@ -83,14 +83,23 @@ export class HomeComponent implements OnInit {
   }
 
   loadComponents(): void {
-    this.componentService.getComponents(this.filterForm.value).subscribe({
-      next: (data: any) => {
-        console.log('API Response:', data);
-        this.components = data.components;
-        this.updateAvailableFilters();
-      },
-      error: (error) => console.error('Failed to load components', error),
-    });
+    if (this.isFilterEmpty()) {
+      this.componentService.getComponentsSortedByYear().subscribe({
+        next: (data) => {
+          this.components = data;
+          this.updateAvailableFilters();
+        },
+        error: (error) => console.error('Failed to load all components', error),
+      });
+    } else {
+      this.componentService.getComponents(this.filterForm.value).subscribe({
+        next: (data: any) => {
+          this.components = data.components;
+          this.updateAvailableFilters();
+        },
+        error: (error) => console.error('Failed to load components', error),
+      });
+    }
   }
 
 
@@ -177,7 +186,15 @@ export class HomeComponent implements OnInit {
 
 
   private isFilterEmpty(): boolean {
-    return Object.values(this.filterForm.value).every(value => value === null || value === '');
+    const values = this.filterForm.value;
+    return !values.name &&
+      !values.producer &&
+      !values.typeOfProduct &&
+      !values.minPrice &&
+      !values.maxPrice &&
+      !values.productionYear &&
+      !values.status &&
+      !values.sortBy;
   }
 
 

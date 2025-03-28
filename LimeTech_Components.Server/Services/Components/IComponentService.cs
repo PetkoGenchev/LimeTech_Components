@@ -1,4 +1,5 @@
 ﻿using LimeTech_Components.Server.Data.Models;
+using LimeTech_Components.Server.DTOs;
 using LimeTech_Components.Server.Services.Components.Models;
 
 namespace LimeTech_Components.Server.Services.Components
@@ -33,5 +34,7 @@ namespace LimeTech_Components.Server.Services.Components
         Task<bool> EditComponentAsync(ComponentServiceModel component);
 
         Task<bool> ChangeComponentVisibilityAsync(int id, bool isVisible);
+
+        Task<IEnumerable<ComponentDTO>> GetAllComponentsSortedByYearAsync();
     }
 }

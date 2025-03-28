@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Component, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -110,6 +110,10 @@ export class ComponentService {
         return throwError(() => new Error('Failed to fetch all components.'));
       })
     );
+  }
+
+  getComponentsSortedByYear(): Observable<ComponentDTO[]> {
+    return this.http.get<ComponentDTO[]>(`${this.apiUrl}/components-by-year`);
   }
 
 

@@ -37,6 +37,24 @@
 
 
 
+
+        [HttpGet("components-by-year")]
+        public async Task<IActionResult> GetAllComponentsSortedByYear()
+        {
+            try
+            {
+                var sortedComponents = await _componentService.GetAllComponentsSortedByYearAsync();
+                return Ok(sortedComponents);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
+
+
+
+
         [HttpGet("components")]
         public async Task<IActionResult> Index(
             [FromQuery] string keyword = null,

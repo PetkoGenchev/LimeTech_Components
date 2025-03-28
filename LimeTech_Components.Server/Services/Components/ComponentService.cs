@@ -1,18 +1,23 @@
 ﻿namespace LimeTech_Components.Server.Services.Components
 {
+    using AutoMapper;
     using LimeTech_Components.Server.Data.Models;
+    using LimeTech_Components.Server.DTOs;
     using LimeTech_Components.Server.Repositories.Components;
     using LimeTech_Components.Server.Services.Components.Models;
+    using System.Globalization;
     using System.Linq;
     using static LimeTech_Components.Server.Constants.DataConstants;
 
     public class ComponentService : IComponentService
     {
         private readonly IComponentRepository _componentRepository;
+        private readonly IMapper _mapper;
 
-        public ComponentService(IComponentRepository componentRepository)
+        public ComponentService(IComponentRepository componentRepository, IMapper mapper)
         {
             _componentRepository = componentRepository;
+            _mapper = mapper;
         }
 
         public async Task<ComponentQueryServiceModel> GetComponentsAsync(
@@ -122,6 +127,12 @@
             await _componentRepository.UpdateComponentAsync(component);
 
             return true;
+        }
+
+        public async Task<IEnumerable<ComponentDTO>> GetAllComponentsSortedByYearAsync()
+        {
+            var components = await _componentRepository.GetAllComponentsSortedByYearAsync();
+            return _mapper.Map<IEnumerable<ComponentDTO>>(components);
         }
     }
 }

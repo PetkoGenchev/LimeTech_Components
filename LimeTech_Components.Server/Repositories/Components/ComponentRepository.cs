@@ -4,6 +4,7 @@
     using AutoMapper.QueryableExtensions;
     using LimeTech_Components.Server.Data;
     using LimeTech_Components.Server.Data.Models;
+    using LimeTech_Components.Server.DTOs;
     using LimeTech_Components.Server.Services.Components.Models;
     using Microsoft.EntityFrameworkCore;
     using static LimeTech_Components.Server.Constants.DataConstants;
@@ -177,6 +178,13 @@
             };
 
             return await query.ToListAsync();
+        }
+
+        public async Task<IEnumerable<Component>> GetAllComponentsSortedByYearAsync()
+        {
+            return await _context.Components
+                .OrderByDescending(c => c.ProductionYear)
+                .ToListAsync();
         }
     }
 }

@@ -254,7 +254,7 @@ namespace LimeTech_Components.Server.Migrations
                         name: "FK_PurchaseHistories_AspNetUsers_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        principalColumn: "CustomerId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_PurchaseHistories_Components_ComponentId",

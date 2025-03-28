@@ -29,6 +29,7 @@ export class HomeComponent implements OnInit {
   filterForm: FormGroup;
 
   searchKeyword = '';
+  showNotification = false;
 
   constructor(
     private fb: FormBuilder,
@@ -153,8 +154,6 @@ export class HomeComponent implements OnInit {
       error: (error) => console.error('Failed to load filters', error),
     });
   }
-
-  showNotification = false;
 
   addToBasket(componentId: number): void {
 

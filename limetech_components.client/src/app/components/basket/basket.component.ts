@@ -17,6 +17,9 @@ export class BasketComponent implements OnInit {
   basketForm: FormGroup;
   customerId: string = '';
 
+  showNotification = false;
+  countOfSelected = 0;
+  totalPrice = 0;
 
   constructor(
     private fb: FormBuilder,
@@ -48,6 +51,9 @@ export class BasketComponent implements OnInit {
     return this.basketForm.get('selectedItems') as FormArray;
   }
 
+  get hasSelectedItems(): boolean {
+    return this.basketForm.get('selectedItems')?.value.some((selected: boolean) => selected);
+  }
 
   loadBasket(): void {
     if (!this.customerId) {
@@ -115,12 +121,14 @@ export class BasketComponent implements OnInit {
       this.basketService.purchaseBasket(selectedComponents).subscribe({
         next: () => {
           // Show purchase confirmation message
-          const totalItems = selectedComponents.length;
-          const totalPrice = this.basket
+          this.countOfSelected = selectedComponents.length;
+          this.totalPrice = this.basket
             .filter((item, index) => this.selectedItems.at(index).value)
             .reduce((sum, item) => sum + item.pricePerUnit * item.quantity, 0);
 
-          alert(`Purchased ${totalItems} items for a total of ${totalPrice.toFixed(2)} BGN`);
+          this.showNotification = true;
+
+          setTimeout(() => this.showNotification = false, 3000);
 
           // Reload basket to reflect removed items
           this.loadBasket();

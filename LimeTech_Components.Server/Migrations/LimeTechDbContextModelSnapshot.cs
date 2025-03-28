@@ -428,6 +428,7 @@ namespace LimeTech_Components.Server.Migrations
                     b.HasOne("LimeTech_Components.Server.Data.Models.Customer", "Customer")
                         .WithMany("PurchaseHistories")
                         .HasForeignKey("CustomerId")
+                        .HasPrincipalKey("CustomerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

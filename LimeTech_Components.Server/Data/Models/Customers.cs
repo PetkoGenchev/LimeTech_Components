@@ -6,11 +6,11 @@
 
     public class Customer : IdentityUser
     {
-        public string CustomerId { get; init; } = Guid.NewGuid().ToString();
+        public string CustomerId { get; set; } = Guid.NewGuid().ToString();
 
         [Required]
         [MaxLength(UserProfile.FullNameMaxLength)]
-        public string FullName { get; set; }
+        public required string FullName { get; set; }
 
         public ICollection<BasketItem> BasketItems { get; private set; } = new List<BasketItem>();
 

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LimeTech_Components.Server.Migrations
 {
     [DbContext(typeof(LimeTechDbContext))]
-    [Migration("20250321123928_InitialCreate")]
+    [Migration("20250328095348_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -431,6 +431,7 @@ namespace LimeTech_Components.Server.Migrations
                     b.HasOne("LimeTech_Components.Server.Data.Models.Customer", "Customer")
                         .WithMany("PurchaseHistories")
                         .HasForeignKey("CustomerId")
+                        .HasPrincipalKey("CustomerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

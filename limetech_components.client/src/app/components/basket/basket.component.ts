@@ -102,6 +102,7 @@ export class BasketComponent implements OnInit {
           this.basket.forEach(() => this.selectedItems.push(this.fb.control(false)));
 
           console.log("Selected items removed from basket.");
+          this.loadBasket();
         },
         error: (error) => console.error("Failed to remove selected items from basket", error),
       });

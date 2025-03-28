@@ -25,7 +25,7 @@ export class BasketService {
   }
 
   removeFromBasket(componentIds: number[]): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/basket/remove-multiple`, { componentIds });
+    return this.http.post<void>(`${this.apiUrl}/basket/remove-multiple`, componentIds);
   }
 
   purchaseBasket(selectedComponents: number[]):

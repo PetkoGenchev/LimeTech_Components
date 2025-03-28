@@ -88,10 +88,10 @@
 
             if (!success)
             {
-                return NotFound("No matching items found in the basket.");
+                return NotFound(new { message = "No matching items found in the basket." });
             }
 
-            return Ok("Selected items removed from the basket.");
+            return Ok(new { message = "Selected items removed from the basket.", success = true });
         }
 
 

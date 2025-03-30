@@ -129,10 +129,10 @@
             return true;
         }
 
-        public async Task<IEnumerable<ComponentDTO>> GetAllComponentsSortedByYearAsync()
+        public async Task<IEnumerable<Component>> GetAllComponentsSortedByYearAsync()
         {
             var components = await _componentRepository.GetAllComponentsSortedByYearAsync();
-            return _mapper.Map<IEnumerable<ComponentDTO>>(components);
+            return _mapper.Map<IEnumerable<Component>>(components);
         }
     }
 }

@@ -113,26 +113,24 @@ export class BasketComponent implements OnInit {
 
   purchaseSelected(): void {
     const selectedComponents = this.basket
-      .map((item, index) => (this.selectedItems.at(index).value ? item.componentId : null))
-      .filter(id => id !== null);
+      .map((item, index) => (this.selectedItems.at(index).value ? item : null)) // Get the item
+      .filter(item => item !== null); // Filter out nulls (unselected items)
 
     if (selectedComponents.length > 0) {
       console.log('Purchasing:', selectedComponents);
 
-      this.basketService.purchaseBasket(selectedComponents).subscribe({
+
+      const selectedComponentIds = selectedComponents.map(item => item.componentId); // Purchase items using their component IDs
+      this.basketService.purchaseBasket(selectedComponentIds).subscribe({
         next: () => {
           // Show purchase confirmation message
-          this.countOfSelected = selectedComponents.length;
-          this.totalPrice = this.basket
-            .filter((item, index) => this.selectedItems.at(index).value)
-            .reduce((sum, item) => sum + item.pricePerUnit * item.quantity, 0);
+          this.countOfSelected = selectedComponents.reduce((total, item) => total + item.quantity, 0); // Sum of quantities of selected items
+          this.totalPrice = selectedComponents.reduce((sum, item) => sum + (item.pricePerUnit * item.quantity), 0); // Total price calculation
 
           this.showNotification = true;
-
           setTimeout(() => this.showNotification = false, 3000);
 
-          // Reload basket to reflect removed items
-          this.loadBasket();
+          this.loadBasket(); // Reload basket to reflect removed items
         },
         error: (error) => console.error('Failed to purchase items', error)
       });
@@ -140,6 +138,7 @@ export class BasketComponent implements OnInit {
       console.warn('No items selected for purchase.');
     }
   }
+
 
 
   toggleSelection(index: number): void {

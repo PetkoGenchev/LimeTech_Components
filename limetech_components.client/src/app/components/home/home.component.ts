@@ -30,6 +30,7 @@ export class HomeComponent implements OnInit {
 
   searchKeyword = '';
   showNotification = false;
+  defaultFilterApplied = true; // Track if the default filter is applied
 
   constructor(
     private fb: FormBuilder,
@@ -59,6 +60,14 @@ export class HomeComponent implements OnInit {
     this.customerId = this.authService.getCustomerId() || '';
 
 
+    // Listen for route changes to detect when Home is clicked
+    this.router.events.subscribe(() => {
+      if (this.router.url === '/home') {
+        this.loadTopPurchased();
+      }
+    });
+
+
     if (this.isFilterEmpty()) {
       this.loadTopPurchased();
     } else {
@@ -81,6 +90,8 @@ export class HomeComponent implements OnInit {
   filterComponents(): void {
     console.log('Filtering components with:', this.searchKeyword);
   }
+
+
 
   loadComponents(): void {
     if (this.isFilterEmpty()) {
@@ -163,6 +174,7 @@ export class HomeComponent implements OnInit {
       error: (error) => console.error('Failed to load filters', error),
     });
   }
+
 
   addToBasket(componentId: number): void {
 

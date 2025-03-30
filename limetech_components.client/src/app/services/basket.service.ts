@@ -25,12 +25,14 @@ export class BasketService {
   }
 
   removeFromBasket(componentIds: number[]): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/basket/remove-multiple`, componentIds);
+    return this.http.delete<void>(`${this.apiUrl}/basket`, {
+      body: componentIds,
+    });
   }
 
   purchaseBasket(selectedComponents: number[]):
     Observable<{ message: string; purchasedItems: PurchaseHistoryDTO[] }> {
     return this.http.post<{ message: string; purchasedItems: PurchaseHistoryDTO[] }>
-      (`${this.apiUrl}/purchase`, selectedComponents);
+      (`${this.apiUrl}/purchases`, selectedComponents);
   }
 }

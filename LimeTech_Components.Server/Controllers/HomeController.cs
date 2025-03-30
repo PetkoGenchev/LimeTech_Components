@@ -21,8 +21,7 @@
 
 
         [HttpGet("all-components")]
-        public async Task<IActionResult> GetAllComponents(
-        [FromQuery] string sortBy = null)
+        public async Task<IActionResult> GetAllComponents([FromQuery] string sortBy = null)
         {
             try
             {

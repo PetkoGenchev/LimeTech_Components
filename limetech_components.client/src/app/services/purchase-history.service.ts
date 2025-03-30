@@ -12,6 +12,6 @@ export class PurchaseHistoryService {
   constructor(private http: HttpClient) { }
 
   getPurchaseHistory(): Observable<PurchaseHistoryDTO[]> {
-    return this.http.get<PurchaseHistoryDTO[]>(`${this.apiUrl}/purchase-history`);
+    return this.http.get<PurchaseHistoryDTO[]>(`${this.apiUrl}/purchases`);
   }
 }

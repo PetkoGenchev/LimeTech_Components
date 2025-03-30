@@ -74,7 +74,7 @@
 
 
         [Authorize]
-        [HttpPost("basket/remove-multiple")]
+        [HttpDelete("basket")]
         public async Task<IActionResult> RemoveFromBasket([FromBody] List<int> componentIds)
         {
             var customerId = User.FindFirst("customerId")?.Value;
@@ -96,7 +96,7 @@
 
 
         [Authorize]
-        [HttpPost("purchase")]
+        [HttpPost("purchases")]
         public async Task<IActionResult> PurchaseBasket([FromBody] List<int> componentIds)
         {
             var customerId = User.FindFirst("customerId")?.Value;
@@ -123,7 +123,7 @@
 
 
         [Authorize]
-        [HttpGet("purchase-history")]
+        [HttpGet("purchases")]
         public async Task<IActionResult> GetPurchaseHistory()
         {
             var customerId = User.FindFirst("customerId")?.Value;

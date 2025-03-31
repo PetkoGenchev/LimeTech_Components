@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { BasketService } from '../../services/basket.service';
@@ -90,37 +90,47 @@ export class HomeComponent implements OnInit {
   filterComponents(): void {
     console.log('Filtering components with:', this.searchKeyword);
 
-    // Update the form value for the name field (assuming search is by name for testing purposes)
-    this.filterForm.patchValue({ name: this.searchKeyword });
+    if (!this.searchKeyword.trim()) {
+      return; // Don't trigger search if empty
+    }
 
-    console.log('Updated filter form:', this.filterForm.value);
+    // Prepare the search query
+    const searchQuery = this.searchKeyword.trim();
 
-    // Call API to fetch filtered components
+    // Set the filter value for backend query
+    this.filterForm.patchValue({
+      name: searchQuery,
+      producer: searchQuery,
+      typeOfProduct: searchQuery,
+      productionYear: searchQuery
+    });
+
+    this.defaultFilterApplied = false; // Show search results
     this.loadComponents();
   }
 
 
 
+
   loadComponents(): void {
-    if (this.isFilterEmpty()) {
-      this.componentService.getComponentsSortedByYear().subscribe({
-        next: (data) => {
-          this.components = data; // Set the component list
-          this.topPurchased = []; // Clear topPurchased when showing all components
-          this.defaultFilterApplied = true; // Mark that no filters are applied
-          this.updateAvailableFilters();
-        },
-        error: (error) => console.error('Failed to load all components', error),
-      });
-    } else {
+    const isFilterActive = !this.isFilterEmpty(); // Check if any filter is applied
+    this.defaultFilterApplied = !isFilterActive; // Show Best Sellers only if no filters are used
+
+    if (isFilterActive) {
       this.componentService.getComponents(this.filterForm.value).subscribe({
         next: (data: any) => {
-          this.components = data.components; // Set filtered components
-          this.topPurchased = []; // Ensure best sellers are cleared
-          this.defaultFilterApplied = false; // Mark that filters are active
+          this.components = data.components;
           this.updateAvailableFilters();
         },
         error: (error) => console.error('Failed to load components', error),
+      });
+    } else {
+      this.componentService.getComponentsSortedByYear().subscribe({
+        next: (data) => {
+          this.components = data;
+          this.updateAvailableFilters();
+        },
+        error: (error) => console.error('Failed to load all components', error),
       });
     }
   }

@@ -29,11 +29,11 @@
         }
 
 
-        public async Task<ComponentQueryServiceModel> GetComponentsAsync(
-            string keyword,
-            string name,
-            string producer,
-            string typeOfProduct,
+        public async Task<ComponentQueryServiceModel> SearchAndFilterComponentsAsync(
+            string? keyword,
+            string? name,
+            string? producer,
+            string? typeOfProduct,
             int? minPrice,
             int? maxPrice,
             int? productionYear,
@@ -41,7 +41,7 @@
             int currentPage = 1,
             int componentsPerPage = ComponentConstants.ComponentsPerPage)
         {
-            return await _componentRepository.GetComponentsAsync(
+            return await _componentRepository.SearchAndFilterComponentsAsync(
                 keyword,
                 name, 
                 producer,
@@ -133,12 +133,6 @@
         {
             var components = await _componentRepository.GetAllComponentsSortedByYearAsync();
             return _mapper.Map<IEnumerable<Component>>(components);
-        }
-
-        public async Task<IEnumerable<ComponentDTO>> SearchComponentsAsync(string query)
-        {
-            var components = await _componentRepository.SearchComponentsAsync(query);
-            return _mapper.Map<IEnumerable<ComponentDTO>>(components);
         }
     }
 }

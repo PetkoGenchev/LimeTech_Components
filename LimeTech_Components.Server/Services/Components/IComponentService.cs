@@ -12,11 +12,11 @@ namespace LimeTech_Components.Server.Services.Components
             int componentsPerPage,
             bool publicOnly);
 
-        Task<ComponentQueryServiceModel> GetComponentsAsync(
-            string keyword,
-            string name,
-            string producer,
-            string typeOfProduct,
+        Task<ComponentQueryServiceModel> SearchAndFilterComponentsAsync(
+            string? keyword,
+            string? name,
+            string? producer,
+            string? typeOfProduct,
             int? minPrice,
             int? maxPrice,
             int? productionYear,
@@ -37,6 +37,5 @@ namespace LimeTech_Components.Server.Services.Components
 
         Task<IEnumerable<Component>> GetAllComponentsSortedByYearAsync();
 
-        Task<IEnumerable<ComponentDTO>> SearchComponentsAsync(string query);
     }
 }

@@ -55,11 +55,11 @@
 
 
         [HttpGet("components")]
-        public async Task<IActionResult> Index(
-            [FromQuery] string keyword = null,
-            [FromQuery] string name = null,
-            [FromQuery] string producer = null,
-            [FromQuery] string typeOfProduct = null,
+        public async Task<IActionResult> GetComponents(
+            [FromQuery] string? keyword = null,
+            [FromQuery] string? name = null,
+            [FromQuery] string? producer = null,
+            [FromQuery] string? typeOfProduct = null,
             [FromQuery] int? minPrice = null,
             [FromQuery] int? maxPrice = null,
             [FromQuery] int? productionYear = null,
@@ -70,53 +70,23 @@
             try
             {
                 var hasFilters = !string.IsNullOrEmpty(keyword) ||
-                    !string.IsNullOrEmpty(name) ||
-                    !string.IsNullOrEmpty(producer) ||
-                    !string.IsNullOrEmpty(typeOfProduct) ||
-                    minPrice.HasValue ||
-                    maxPrice.HasValue ||
-                    productionYear.HasValue ||
-                    status.HasValue;
+                                 !string.IsNullOrEmpty(name) ||
+                                 !string.IsNullOrEmpty(producer) ||
+                                 !string.IsNullOrEmpty(typeOfProduct) ||
+                                 minPrice.HasValue ||
+                                 maxPrice.HasValue ||
+                                 productionYear.HasValue ||
+                                 status.HasValue;
 
-                if (hasFilters)
-                {
+                var components = await _componentService.SearchAndFilterComponentsAsync(
+                    keyword, name, producer, typeOfProduct, minPrice, maxPrice, productionYear, status, currentPage, componentsPerPage);
 
-                    var filteredComponents = await _componentService.GetComponentsAsync(
-                        keyword,
-                        name,
-                        producer,
-                        typeOfProduct,
-                        minPrice,
-                        maxPrice,
-                        productionYear,
-                        status,
-                        currentPage,
-                        componentsPerPage);
-
-                    return Ok(filteredComponents);
-                }
-                else
-                {
-                    var topPurchasedComponents = await _componentService.GetTopPurchasedComponentsAsync();
-                    return Ok(topPurchasedComponents);
-                }
+                return Ok(components);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
-
-
-        [HttpGet("search")]
-        public async Task<IActionResult> SearchComponents([FromQuery] string query)
-        {
-            if (string.IsNullOrWhiteSpace(query) || query.Length > 50)
-                return BadRequest("Invalid search query.");
-
-            var components = await _componentService.SearchComponentsAsync(query);
-            return Ok(components);
-        }
-
     }
 }

@@ -76,33 +76,26 @@ export class ComponentService {
 
 
 
-  getComponents(filters: any): Observable<ComponentDTO[]> {
-    let params = new HttpParams();
-
-    Object.keys(filters).forEach(key => {
-      const value = filters[key];
-
-      // Ensure we don't send null, undefined, or empty values
-      if (value !== null && value !== undefined && value !== '') {
-        params = params.set(key, String(value)); // Convert all values to strings
-      }
-    });
-
-    console.log('Sending request with params:', params.toString()); // Debugging
-
-    return this.http.get<ComponentDTO[]>(`${this.apiUrl}/components`, { params }).pipe(
-      catchError(error => {
-        console.error('Error fetching components', error);
-        return throwError(() => new Error('Failed to fetch components'));
-      })
-    );
+  getComponents(filters: any): Observable<ComponentDTO> {
+    return this.http.get<ComponentDTO>(`${this.apiUrl}/components`, { params: filters })
+      .pipe(
+        catchError(error => {
+          console.error('Error fetching filtered components:', error);
+          return throwError(() => new Error('Failed to fetch filtered components.'));
+        })
+      );
   }
 
 
 
-
   getComponentById(id: number): Observable<ComponentDTO> {
-    return this.http.get<ComponentDTO>(`${this.apiUrl}/${id}`);
+    return this.http.get<ComponentDTO>(`${this.apiUrl}/${id}`)
+      .pipe(
+        catchError(error => {
+          console.error('Error fetching top components:', error);
+          return throwError(() => new Error('Failed to fetch top components.'));
+        })
+      );
   }
 
 
@@ -112,12 +105,13 @@ export class ComponentService {
       params = params.set('sortBy', sortBy);
     }
 
-    return this.http.get<ComponentDTO[]>(`${this.apiUrl}/all-components`, { params }).pipe(
-      catchError(error => {
-        console.error('Error fetching all components:', error);
-        return throwError(() => new Error('Failed to fetch all components.'));
-      })
-    );
+    return this.http.get<ComponentDTO[]>(`${this.apiUrl}/all-components`, { params })
+      .pipe(
+        catchError(error => {
+          console.error('Error fetching all components:', error);
+          return throwError(() => new Error('Failed to fetch all components.'));
+        })
+      );
   }
 
   getComponentsSortedByYear(): Observable<ComponentDTO[]> {

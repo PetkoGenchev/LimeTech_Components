@@ -48,11 +48,11 @@
 
 
 
-        public async Task<ComponentQueryServiceModel> GetComponentsAsync(
-            string keyword,
-            string name,
-            string producer,
-            string typeOfProduct,
+        public async Task<ComponentQueryServiceModel> SearchAndFilterComponentsAsync(
+            string? keyword,
+            string? name,
+            string? producer,
+            string? typeOfProduct,
             int? minPrice,
             int? maxPrice,
             int? productionYear,
@@ -63,63 +63,67 @@
             var query = _context.Components.AsQueryable();
 
 
-            if (!string.IsNullOrEmpty(keyword))
+            // Keyword search (matches at least one word, two if multiple words are given)
+            if (!string.IsNullOrWhiteSpace(keyword))
             {
-                query = query.Where(c =>
-                    c.Name.Contains(keyword) ||
-                    c.TypeOfProduct.Contains(keyword) ||
-                    c.ProductionYear.ToString().Contains(keyword));
-            }
-
-            if (!string.IsNullOrEmpty(name))
-            {
-                query = query.Where(c => c.Name.Contains(name));
-            }
-
-            if (!string.IsNullOrEmpty(producer))
-            {
-                query = query.Where(c => c.Producer.Contains(producer));
+                var words = keyword.ToLower().Split(" ", StringSplitOptions.RemoveEmptyEntries);
+                query = query.Where(c => words.Count(w =>
+                    c.Name.ToLower().Contains(w) ||
+                    c.Producer.ToLower().Contains(w) ||
+                    c.TypeOfProduct.ToLower().Contains(w) ||
+                    c.ProductionYear.ToString().Contains(w)) >= Math.Min(2, words.Length));
             }
 
 
-            if (!string.IsNullOrEmpty(typeOfProduct))
-            {
-                query = query.Where(t => t.TypeOfProduct == typeOfProduct);
-            }
+            // Additional filters
+            if (!string.IsNullOrWhiteSpace(name))
+                query = query.Where(c => c.Name.ToLower().Contains(name.ToLower()));
 
+            if (!string.IsNullOrWhiteSpace(producer))
+                query = query.Where(c => c.Producer.ToLower().Contains(producer.ToLower()));
+
+            if (!string.IsNullOrWhiteSpace(typeOfProduct))
+                query = query.Where(c => c.TypeOfProduct.ToLower().Contains(typeOfProduct.ToLower()));
 
             if (minPrice.HasValue)
-            {
                 query = query.Where(c => c.Price >= minPrice.Value);
-            }
 
             if (maxPrice.HasValue)
-            {
                 query = query.Where(c => c.Price <= maxPrice.Value);
-            }
 
             if (productionYear.HasValue)
-            {
                 query = query.Where(c => c.ProductionYear == productionYear.Value);
-            }
 
             if (status.HasValue)
-            {
-                query = query.Where(c => c.Status == status);
-            }
+                query = query.Where(c => c.Status == status.Value);
 
-            var components = await GetComponentsAsync(query
+
+            // Sorting and pagination
+            var totalItems = await query.CountAsync();
+            var items = await query
+                .OrderByDescending(c => c.ProductionYear)
                 .Skip((currentPage - 1) * componentsPerPage)
-                .Take(componentsPerPage));
-
-            var totalComponents = components.Count();
+                .Take(componentsPerPage)
+                .Select(c => new ComponentServiceModel
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Producer = c.Producer,
+                    TypeOfProduct = c.TypeOfProduct,
+                    ProductionYear = c.ProductionYear,
+                    ImageUrl = c.ImageUrl,
+                    Status = c.Status,
+                    Price = c.Price,
+                    PowerUsage = c.PowerUsage
+                })
+                .ToListAsync();
 
             return new ComponentQueryServiceModel
             {
+                Components = items,
+                TotalComponents = totalItems,
                 CurrentPage = currentPage,
-                TotalComponents = totalComponents,
-                ComponentsPerPage = componentsPerPage,
-                Components = components
+                ComponentsPerPage = componentsPerPage
             };
         }
 
@@ -184,21 +188,6 @@
         {
             return await _context.Components
                 .OrderByDescending(c => c.ProductionYear)
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<Component>> SearchComponentsAsync(string query)
-        {
-            var words = query.ToLower().Split(" ", StringSplitOptions.RemoveEmptyEntries);
-
-            if (words.Length == 0) return new List<Component>();
-
-            return await _context.Components
-                .Where(c => words.Count(w =>
-                    c.Name.ToLower().Contains(w) ||
-                    c.Producer.ToLower().Contains(w) ||
-                    c.TypeOfProduct.ToLower().Contains(w) ||
-                    c.ProductionYear.ToString().Contains(w)) >= Math.Min(2, words.Length)) // At least 2 words must match
                 .ToListAsync();
         }
     }

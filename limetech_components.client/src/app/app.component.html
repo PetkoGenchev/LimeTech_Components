@@ -3,9 +3,15 @@
     <a routerLink="/" class="navbar-brand">LIME Components</a>
 
     <!-- Search Bar -->
-    <div class="margin-left-20 flex-grow-1 d-flex justify-content-center ">
-      <input type="text" class="form-control w-100 custom-search" placeholder="Search components..." (input)="onSearchInput($event)" />
+    <div class="margin-left-20 flex-grow-1 d-flex justify-content-center">
+      <input type="text"
+             class="form-control w-100 custom-search"
+             placeholder="Search components..."
+             (input)="onSearchInput($event)"
+             (keydown)="onKeyPress($event)"
+             maxlength="50" />
     </div>
+
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>

@@ -186,5 +186,20 @@
                 .OrderByDescending(c => c.ProductionYear)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<Component>> SearchComponentsAsync(string query)
+        {
+            var words = query.ToLower().Split(" ", StringSplitOptions.RemoveEmptyEntries);
+
+            if (words.Length == 0) return new List<Component>();
+
+            return await _context.Components
+                .Where(c => words.Count(w =>
+                    c.Name.ToLower().Contains(w) ||
+                    c.Producer.ToLower().Contains(w) ||
+                    c.TypeOfProduct.ToLower().Contains(w) ||
+                    c.ProductionYear.ToString().Contains(w)) >= Math.Min(2, words.Length)) // At least 2 words must match
+                .ToListAsync();
+        }
     }
 }

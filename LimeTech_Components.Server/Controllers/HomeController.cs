@@ -106,5 +106,17 @@
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
+
+
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchComponents([FromQuery] string query)
+        {
+            if (string.IsNullOrWhiteSpace(query) || query.Length > 50)
+                return BadRequest("Invalid search query.");
+
+            var components = await _componentService.SearchComponentsAsync(query);
+            return Ok(components);
+        }
+
     }
 }

@@ -76,14 +76,19 @@ export class ComponentService {
 
 
 
-  // Get all components with filters
   getComponents(filters: any): Observable<ComponentDTO[]> {
     let params = new HttpParams();
+
     Object.keys(filters).forEach(key => {
-      if (filters[key] !== null && filters[key] !== '') {
-        params = params.set(key, filters[key]);
+      const value = filters[key];
+
+      // Ensure we don't send null, undefined, or empty values
+      if (value !== null && value !== undefined && value !== '') {
+        params = params.set(key, String(value)); // Convert all values to strings
       }
     });
+
+    console.log('Sending request with params:', params.toString()); // Debugging
 
     return this.http.get<ComponentDTO[]>(`${this.apiUrl}/components`, { params }).pipe(
       catchError(error => {
@@ -92,6 +97,9 @@ export class ComponentService {
       })
     );
   }
+
+
+
 
   getComponentById(id: number): Observable<ComponentDTO> {
     return this.http.get<ComponentDTO>(`${this.apiUrl}/${id}`);

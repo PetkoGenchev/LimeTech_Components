@@ -36,5 +36,7 @@ namespace LimeTech_Components.Server.Services.Components
         Task<bool> ChangeComponentVisibilityAsync(int id, bool isVisible);
 
         Task<IEnumerable<Component>> GetAllComponentsSortedByYearAsync();
+
+        Task<IEnumerable<ComponentDTO>> SearchComponentsAsync(string query);
     }
 }

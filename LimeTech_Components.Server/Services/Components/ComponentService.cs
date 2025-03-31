@@ -134,5 +134,11 @@
             var components = await _componentRepository.GetAllComponentsSortedByYearAsync();
             return _mapper.Map<IEnumerable<Component>>(components);
         }
+
+        public async Task<IEnumerable<ComponentDTO>> SearchComponentsAsync(string query)
+        {
+            var components = await _componentRepository.SearchComponentsAsync(query);
+            return _mapper.Map<IEnumerable<ComponentDTO>>(components);
+        }
     }
 }

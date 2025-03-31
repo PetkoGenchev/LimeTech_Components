@@ -41,5 +41,7 @@ namespace LimeTech_Components.Server.Repositories.Components
         Task<IEnumerable<Component>> GetAllComponentsAsync(string sortBy);
 
         Task<IEnumerable<Component>> GetAllComponentsSortedByYearAsync();
+
+        Task<IEnumerable<Component>> SearchComponentsAsync(string query);
     }
 }

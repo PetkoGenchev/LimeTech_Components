@@ -89,6 +89,14 @@ export class HomeComponent implements OnInit {
 
   filterComponents(): void {
     console.log('Filtering components with:', this.searchKeyword);
+
+    // Update the form value for the name field (assuming search is by name for testing purposes)
+    this.filterForm.patchValue({ name: this.searchKeyword });
+
+    console.log('Updated filter form:', this.filterForm.value);
+
+    // Call API to fetch filtered components
+    this.loadComponents();
   }
 
 
@@ -97,7 +105,9 @@ export class HomeComponent implements OnInit {
     if (this.isFilterEmpty()) {
       this.componentService.getComponentsSortedByYear().subscribe({
         next: (data) => {
-          this.components = data;
+          this.components = data; // Set the component list
+          this.topPurchased = []; // Clear topPurchased when showing all components
+          this.defaultFilterApplied = true; // Mark that no filters are applied
           this.updateAvailableFilters();
         },
         error: (error) => console.error('Failed to load all components', error),
@@ -105,13 +115,16 @@ export class HomeComponent implements OnInit {
     } else {
       this.componentService.getComponents(this.filterForm.value).subscribe({
         next: (data: any) => {
-          this.components = data.components;
+          this.components = data.components; // Set filtered components
+          this.topPurchased = []; // Ensure best sellers are cleared
+          this.defaultFilterApplied = false; // Mark that filters are active
           this.updateAvailableFilters();
         },
         error: (error) => console.error('Failed to load components', error),
       });
     }
   }
+
 
 
   loadTopPurchased(): void {

@@ -85,8 +85,6 @@ export class HomeComponent implements OnInit {
     });
   }
 
-
-
   filterComponents(): void {
     console.log('Filtering components with:', this.searchKeyword);
 

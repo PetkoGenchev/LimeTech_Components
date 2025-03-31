@@ -78,10 +78,19 @@
                                  productionYear.HasValue ||
                                  status.HasValue;
 
-                var components = await _componentService.SearchAndFilterComponentsAsync(
+                if (hasFilters)
+                {
+
+                    var components = await _componentService.SearchAndFilterComponentsAsync(
                     keyword, name, producer, typeOfProduct, minPrice, maxPrice, productionYear, status, currentPage, componentsPerPage);
 
-                return Ok(components);
+                    return Ok(components);
+                }
+                else
+                {
+                    var topPurchasedComponents = await _componentService.GetTopPurchasedComponentsAsync();
+                    return Ok(topPurchasedComponents);
+                }
             }
             catch (Exception ex)
             {

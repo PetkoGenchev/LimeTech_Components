@@ -76,15 +76,18 @@ export class ComponentService {
 
 
 
-  getComponents(filters: any): Observable<ComponentDTO> {
-    return this.http.get<ComponentDTO>(`${this.apiUrl}/components`, { params: filters })
-      .pipe(
-        catchError(error => {
-          console.error('Error fetching filtered components:', error);
-          return throwError(() => new Error('Failed to fetch filtered components.'));
-        })
-      );
-  }
+getComponents(filters: { [key: string]: any }) {
+  let params = new HttpParams();
+  Object.keys(filters).forEach(key => {
+    if (filters[key] !== null && filters[key] !== undefined) {
+      params = params.set(key, filters[key]);
+    }
+  });
+
+  return this.http.get<ComponentDTO[]>(`${this.apiUrl}/components`, { params });
+}
+
+
 
 
 

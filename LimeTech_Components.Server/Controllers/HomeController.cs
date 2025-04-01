@@ -69,6 +69,10 @@
         {
             try
             {
+                // Debugging: Log received query params
+                Console.WriteLine($"Received query: keyword={keyword}, name={name}, producer={producer}, typeOfProduct={typeOfProduct}, " +
+                                  $"minPrice={minPrice}, maxPrice={maxPrice}, productionYear={productionYear}, status={status}");
+
                 var hasFilters = !string.IsNullOrEmpty(keyword) ||
                                  !string.IsNullOrEmpty(name) ||
                                  !string.IsNullOrEmpty(producer) ||
@@ -80,9 +84,8 @@
 
                 if (hasFilters)
                 {
-
                     var components = await _componentService.SearchAndFilterComponentsAsync(
-                    keyword, name, producer, typeOfProduct, minPrice, maxPrice, productionYear, status, currentPage, componentsPerPage);
+                        keyword, name, producer, typeOfProduct, minPrice, maxPrice, productionYear, status, currentPage, componentsPerPage);
 
                     return Ok(components);
                 }
@@ -97,5 +100,6 @@
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
+
     }
 }

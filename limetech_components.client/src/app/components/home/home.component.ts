@@ -92,18 +92,16 @@ export class HomeComponent implements OnInit {
       return; // Don't trigger search if empty
     }
 
-    // Prepare the search query
     const searchQuery = this.searchKeyword.trim();
 
-    // Set the filter value for backend query
     this.filterForm.patchValue({
       name: searchQuery,
-      producer: searchQuery,
-      typeOfProduct: searchQuery,
-      productionYear: searchQuery
+      producer: '', // Clear producer when doing a keyword search
+      typeOfProduct: '', // Clear typeOfProduct when doing a keyword search
+      productionYear: null, // Ensure productionYear is null instead of string
     });
 
-    this.defaultFilterApplied = false; // Show search results
+    this.defaultFilterApplied = false;
     this.loadComponents();
   }
 
@@ -111,8 +109,8 @@ export class HomeComponent implements OnInit {
 
 
   loadComponents(): void {
-    const isFilterActive = !this.isFilterEmpty(); // Check if any filter is applied
-    this.defaultFilterApplied = !isFilterActive; // Show Best Sellers only if no filters are used
+    const isFilterActive = !this.isFilterEmpty();
+    this.defaultFilterApplied = !isFilterActive;
 
     if (isFilterActive) {
       this.componentService.getComponents(this.filterForm.value).subscribe({
@@ -123,6 +121,7 @@ export class HomeComponent implements OnInit {
         error: (error) => console.error('Failed to load components', error),
       });
     } else {
+      // Ensure this API call exists in your backend
       this.componentService.getComponentsSortedByYear().subscribe({
         next: (data) => {
           this.components = data;
@@ -132,6 +131,7 @@ export class HomeComponent implements OnInit {
       });
     }
   }
+
 
 
 

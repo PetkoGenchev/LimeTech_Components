@@ -25,7 +25,7 @@
             int componentsPerPage = ComponentConstants.ComponentsPerPage,
             bool publicOnly = false)
         {
-            return await _componentRepository.GetComponentsAsync(currentPage, componentsPerPage,publicOnly);
+            return await _componentRepository.GetComponentsAsync(currentPage, componentsPerPage, publicOnly);
         }
 
 
@@ -43,33 +43,60 @@
         {
             return await _componentRepository.SearchAndFilterComponentsAsync(
                 keyword,
-                name, 
+                name,
                 producer,
-                typeOfProduct, 
-                minPrice, 
-                maxPrice, 
-                productionYear, 
+                typeOfProduct,
+                minPrice,
+                maxPrice,
+                productionYear,
                 status,
                 currentPage,
                 componentsPerPage);
         }
 
 
-        public async Task<IEnumerable<Component>> GetTopPurchasedComponentsAsync()
+        public async Task<IEnumerable<ComponentDTO>> GetTopPurchasedComponentsAsync()
         {
-            return await _componentRepository.GetTopPurchasedComponentsAsync();
+            var components = await _componentRepository.GetTopPurchasedComponentsAsync();
+
+            return components.Select(c => new ComponentDTO
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Producer = c.Producer,
+                TypeOfProduct = c.TypeOfProduct,
+                ImageUrl = c.ImageUrl,
+                Price = c.Price,
+                ProductionYear = c.ProductionYear,
+                PowerUsage = c.PowerUsage,
+                Status = c.Status
+
+            }).ToList();
         }
 
 
-        public async Task<IEnumerable<Component>> GetAllComponentsAsync(string sortBy = null)
+        public async Task<IEnumerable<ComponentDTO>> GetAllComponentsAsync(string sortBy = null)
         {
-            return await _componentRepository.GetAllComponentsAsync(sortBy);
+            var components = await _componentRepository.GetAllComponentsAsync(sortBy);
+
+            return components.Select(c => new ComponentDTO
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Producer = c.Producer,
+                TypeOfProduct = c.TypeOfProduct,
+                ImageUrl = c.ImageUrl,
+                Price = c.Price,
+                ProductionYear = c.ProductionYear,
+                PowerUsage = c.PowerUsage,
+                Status = c.Status
+
+            }).ToList();
         }
 
 
         public async Task AddComponentAsync(ComponentServiceModel componentServiceModel)
         {
-            // Add business logic
             var component = new Component
             {
                 Name = componentServiceModel.Name,
@@ -129,10 +156,23 @@
             return true;
         }
 
-        public async Task<IEnumerable<Component>> GetAllComponentsSortedByYearAsync()
+        public async Task<IEnumerable<ComponentDTO>> GetAllComponentsSortedByYearAsync()
         {
             var components = await _componentRepository.GetAllComponentsSortedByYearAsync();
-            return _mapper.Map<IEnumerable<Component>>(components);
+
+            return components.Select(c => new ComponentDTO
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Producer = c.Producer,
+                TypeOfProduct = c.TypeOfProduct,
+                ImageUrl = c.ImageUrl,
+                Price = c.Price,
+                ProductionYear = c.ProductionYear,
+                PowerUsage = c.PowerUsage,
+                Status = c.Status
+
+            }).ToList();
         }
     }
 }

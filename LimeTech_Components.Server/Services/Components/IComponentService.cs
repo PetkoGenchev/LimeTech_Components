@@ -25,9 +25,9 @@ namespace LimeTech_Components.Server.Services.Components
             int componentsPerPage);
 
 
-        Task<IEnumerable<Component>> GetTopPurchasedComponentsAsync();
+        Task<IEnumerable<ComponentDTO>> GetTopPurchasedComponentsAsync();
 
-        Task<IEnumerable<Component>> GetAllComponentsAsync(string sortBy);
+        Task<IEnumerable<ComponentDTO>> GetAllComponentsAsync(string sortBy);
 
         Task AddComponentAsync(ComponentServiceModel component);
 
@@ -35,7 +35,7 @@ namespace LimeTech_Components.Server.Services.Components
 
         Task<bool> ChangeComponentVisibilityAsync(int id, bool isVisible);
 
-        Task<IEnumerable<Component>> GetAllComponentsSortedByYearAsync();
+        Task<IEnumerable<ComponentDTO>> GetAllComponentsSortedByYearAsync();
 
     }
 }

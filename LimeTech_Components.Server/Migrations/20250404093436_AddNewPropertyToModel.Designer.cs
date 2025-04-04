@@ -4,6 +4,7 @@ using LimeTech_Components.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LimeTech_Components.Server.Migrations
 {
     [DbContext(typeof(LimeTechDbContext))]
-    partial class LimeTechDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250404093436_AddNewPropertyToModel")]
+    partial class AddNewPropertyToModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -7,7 +7,7 @@ namespace LimeTech_Components.Server.Repositories.Customers
     {
         Task<bool> AddComponentToBasketAsync(string customerId, int componentId);
 
-        Task<List<BasketItemDTO>> GetBasketAsync(string customerId);
+        Task<List<BasketItem>> GetBasketAsync(string customerId);
 
         Task<bool> RemoveFromBasketAsync(string customerId, List<int> componentIds);
 

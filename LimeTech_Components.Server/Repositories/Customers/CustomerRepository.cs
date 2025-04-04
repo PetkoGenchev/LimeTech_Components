@@ -60,19 +60,11 @@
         }
 
 
-        public async Task<List<BasketItemDTO>> GetBasketAsync(string customerId)
+        public async Task<List<BasketItem>> GetBasketAsync(string customerId)
         {
             return await _context.BasketItems
                 .Where(b => b.CustomerId == customerId)
                 .Include(b => b.Component)
-                .Select(b => new BasketItemDTO
-                {
-                    ComponentId = b.Component.Id,
-                    ComponentName = b.Component.Name,
-                    Producer = b.Component.Producer,
-                    Quantity = b.Quantity,
-                    PricePerUnit = b.Component.Price
-                })
                 .ToListAsync();
         }
 

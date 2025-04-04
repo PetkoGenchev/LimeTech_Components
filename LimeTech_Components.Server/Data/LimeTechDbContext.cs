@@ -59,6 +59,10 @@ namespace LimeTech_Components.Server.Data
                 .Property(p => p.TotalPrice)
                 .HasPrecision(18, 2);
 
+            builder.Entity<PurchaseHistory>()
+                .Property(p => p.PricePerUnit)
+                .HasPrecision(18, 2);
+
 
 
         }

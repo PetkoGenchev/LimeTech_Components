@@ -59,19 +59,7 @@
         {
             var components = await _componentRepository.GetTopPurchasedComponentsAsync();
 
-            return components.Select(c => new ComponentDTO
-            {
-                Id = c.Id,
-                Name = c.Name,
-                Producer = c.Producer,
-                TypeOfProduct = c.TypeOfProduct,
-                ImageUrl = c.ImageUrl,
-                Price = c.Price,
-                ProductionYear = c.ProductionYear,
-                PowerUsage = c.PowerUsage,
-                Status = c.Status
-
-            }).ToList();
+            return _mapper.Map<List<ComponentDTO>>(components);
         }
 
 
@@ -79,38 +67,13 @@
         {
             var components = await _componentRepository.GetAllComponentsAsync(sortBy);
 
-            return components.Select(c => new ComponentDTO
-            {
-                Id = c.Id,
-                Name = c.Name,
-                Producer = c.Producer,
-                TypeOfProduct = c.TypeOfProduct,
-                ImageUrl = c.ImageUrl,
-                Price = c.Price,
-                ProductionYear = c.ProductionYear,
-                PowerUsage = c.PowerUsage,
-                Status = c.Status
-
-            }).ToList();
+            return _mapper.Map<List<ComponentDTO>>(components);
         }
 
 
         public async Task AddComponentAsync(ComponentServiceModel componentServiceModel)
         {
-            var component = new Component
-            {
-                Name = componentServiceModel.Name,
-                Producer = componentServiceModel.Producer,
-                TypeOfProduct = componentServiceModel.TypeOfProduct,
-                ImageUrl = componentServiceModel.ImageUrl,
-                Price = componentServiceModel.Price,
-                PurchasedCount = componentServiceModel.PurchasedCount,
-                ProductionYear = componentServiceModel.ProductionYear,
-                PowerUsage = componentServiceModel.PowerUsage,
-                Status = componentServiceModel.Status,
-                StockCount = componentServiceModel.StockCount,
-                IsPublic = componentServiceModel.IsPublic,
-            };
+            var component = _mapper.Map<Component>(componentServiceModel);
 
             await _componentRepository.AddComponentAsync(component);
         }
@@ -124,17 +87,7 @@
                 return false;
             }
 
-            existingComponent.Name = componentServiceModel.Name;
-            existingComponent.Producer = componentServiceModel.Producer;
-            existingComponent.TypeOfProduct = componentServiceModel.TypeOfProduct;
-            existingComponent.ImageUrl = componentServiceModel.ImageUrl;
-            existingComponent.Price = componentServiceModel.Price;
-            existingComponent.PurchasedCount = componentServiceModel.PurchasedCount;
-            existingComponent.ProductionYear = componentServiceModel.ProductionYear;
-            existingComponent.PowerUsage = componentServiceModel.PowerUsage;
-            existingComponent.Status = componentServiceModel.Status;
-            existingComponent.StockCount = componentServiceModel.StockCount;
-            existingComponent.IsPublic = componentServiceModel.IsPublic;
+            _mapper.Map(componentServiceModel, existingComponent);
 
             await _componentRepository.UpdateComponentAsync(existingComponent);
 
@@ -160,19 +113,7 @@
         {
             var components = await _componentRepository.GetAllComponentsSortedByYearAsync();
 
-            return components.Select(c => new ComponentDTO
-            {
-                Id = c.Id,
-                Name = c.Name,
-                Producer = c.Producer,
-                TypeOfProduct = c.TypeOfProduct,
-                ImageUrl = c.ImageUrl,
-                Price = c.Price,
-                ProductionYear = c.ProductionYear,
-                PowerUsage = c.PowerUsage,
-                Status = c.Status
-
-            }).ToList();
+            return _mapper.Map<List<ComponentDTO>>(components);
         }
     }
 }

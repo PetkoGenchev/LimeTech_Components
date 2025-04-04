@@ -41,35 +41,31 @@
             PurchaseSelectedItemsAsync(string customerId, List<int> componentIds)
         {
             var basket = await _customerRepository.GetBasketAsync(customerId);
+
             if (basket == null || !basket.Any()) return (false, new List<PurchaseHistoryDTO>(), 0);
 
             var selectedItems = basket.Where(item => componentIds.Contains(item.ComponentId)).ToList();
+
             if (!selectedItems.Any()) return (false, new List<PurchaseHistoryDTO>(), 0);
+
 
             var purchaseHistory = selectedItems.Select(item => new PurchaseHistory
             {
                 CustomerId = customerId,
                 ComponentId = item.ComponentId,
-                ComponentName = item.ComponentName,
-                Producer = item.Producer,
+                ComponentName = item.Component.Name,
+                Producer = item.Component.Producer,
                 Quantity = item.Quantity,
-                TotalPrice = item.Quantity * item.PricePerUnit,
+                TotalPrice = item.Quantity * item.Component.Price,
                 PurchaseDate = DateTime.UtcNow
             }).ToList();
 
             await _customerRepository.AddToPurchaseHistoryAsync(purchaseHistory);
-            await _customerRepository.RemoveFromBasketAsync(customerId, componentIds); // Update repository method
+            await _customerRepository.RemoveFromBasketAsync(customerId, componentIds);
 
             var totalCost = purchaseHistory.Sum(p => p.TotalPrice);
 
-            var purchasedItemsDto = purchaseHistory.Select(p => new PurchaseHistoryDTO
-            {
-                ComponentName = p.ComponentName,
-                Producer = p.Producer,
-                Quantity = p.Quantity,
-                TotalPrice = p.TotalPrice,
-                PurchaseDate = p.PurchaseDate
-            }).ToList();
+            var purchasedItemsDto = _mapper.Map<List<PurchaseHistoryDTO>>(purchaseHistory);
 
             return (true, purchasedItemsDto, totalCost);
         }
@@ -78,14 +74,7 @@
         public async Task<List<PurchaseHistoryDTO>> GetPurchaseHistoryAsync(string customerId)
         {
             var purchaseHistory = await _customerRepository.GetPurchaseHistoryAsync(customerId);
-            return purchaseHistory.Select(p => new PurchaseHistoryDTO
-            {
-                PurchaseDate = p.PurchaseDate,
-                ComponentName = p.Component.Name,
-                Producer = p.Component.Producer,
-                Quantity = p.Quantity,
-                TotalPrice = p.TotalPrice
-            }).ToList();
+            return _mapper.Map<List<PurchaseHistoryDTO>>(purchaseHistory);
         }
 
 

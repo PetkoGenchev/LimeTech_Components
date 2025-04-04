@@ -15,9 +15,12 @@
                 .ForMember(dest => dest.PricePerUnit, opt => opt.MapFrom(src => src.Component.Price))
                 .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.Quantity * src.Component.Price));
 
-            this.CreateMap<PurchaseHistory, PurchaseHistoryDTO>();
-
             this.CreateMap<Component, ComponentDTO>();
+
+            this.CreateMap<BasketItem, PurchaseHistory>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore());
+            
+            this.CreateMap<PurchaseHistory, PurchaseHistoryDTO>();
 
 
         }

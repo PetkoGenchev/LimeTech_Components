@@ -37,5 +37,7 @@ namespace LimeTech_Components.Server.Services.Components
 
         Task<IEnumerable<ComponentDTO>> GetAllComponentsSortedByYearAsync();
 
+        //Task<bool> ReduceStockCountAsync(int componentId, int quantity);
+
     }
 }

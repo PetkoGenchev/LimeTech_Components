@@ -149,6 +149,7 @@
             await _context.SaveChangesAsync();
         }
 
+
         private async Task<IEnumerable<ComponentServiceModel>> GetComponentsAsync(IQueryable<Component> componentQuery)
             => await componentQuery
                 .ProjectTo<ComponentServiceModel>(this.mapper)

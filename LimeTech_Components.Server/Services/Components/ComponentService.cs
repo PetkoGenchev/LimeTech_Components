@@ -5,6 +5,7 @@
     using LimeTech_Components.Server.DTOs;
     using LimeTech_Components.Server.Repositories.Components;
     using LimeTech_Components.Server.Services.Components.Models;
+    using Microsoft.AspNetCore.Components.Rendering;
     using System.Globalization;
     using System.Linq;
     using static LimeTech_Components.Server.Constants.DataConstants;
@@ -115,5 +116,26 @@
 
             return _mapper.Map<List<ComponentDTO>>(components);
         }
+
+
+        //public async Task<bool> ReduceStockCountAsync(int componentId, int quantity)
+        //{
+        //    var component = await _componentRepository.GetComponentByIdAsync(componentId);
+        //    if (component == null || component.StockCount < quantity)
+        //    {
+        //        return false;
+        //    }
+
+        //    component.StockCount -= quantity;
+
+        //    if (component.StockCount == 0)
+        //    {
+        //        component.Status = PartStatus.Sold;
+        //    }
+
+        //    await _componentRepository.UpdateComponentAsync(component);
+        //    return true;
+        //}
+
     }
 }

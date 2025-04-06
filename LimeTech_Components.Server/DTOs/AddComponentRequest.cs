@@ -12,7 +12,7 @@ namespace LimeTech_Components.Server.DTOs
 
         public int Price { get; init; }
 
-        public int PurchasedCount { get; init; }
+        public int PurchasedCount { get; init; } = 0;
 
         public int ProductionYear { get; init; }
 

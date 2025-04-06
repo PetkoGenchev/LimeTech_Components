@@ -1,62 +1,60 @@
-<div class="add-component-form">
-  <h2>Add New Component</h2>
-  <form [formGroup]="addComponentForm" (ngSubmit)="addComponent()">
-    <div>
-      <label for="name">Name:</label>
-      <input id="name" formControlName="name" required />
-      <span *ngIf="addComponentForm.get('name')?.invalid && addComponentForm.get('name')?.touched">Required</span>
-    </div>
+<form [formGroup]="addComponentForm" (ngSubmit)="addComponent()" class="form-container">
+  <div>
+    <label>Name:</label>
+    <input formControlName="name" class="form-control" />
+  </div>
 
-    <div>
-      <label for="type">Type:</label>
-      <input id="type" formControlName="typeOfProduct" required />
-      <span *ngIf="addComponentForm.get('typeOfProduct')?.invalid && addComponentForm.get('typeOfProduct')?.touched">Required</span>
-    </div>
+  <div>
+    <label>Producer:</label>
+    <input formControlName="producer" class="form-control" />
+  </div>
 
-    <div>
-      <label for="imageUrl">Image URL:</label>
-      <input id="imageUrl" formControlName="imageUrl" />
-    </div>
+  <div>
+    <label>Type of Product:</label>
+    <input formControlName="typeOfProduct" class="form-control" />
+  </div>
 
-    <div>
-      <label for="price">Price:</label>
-      <input id="price" formControlName="price" type="number" required />
-      <span *ngIf="addComponentForm.get('price')?.invalid && addComponentForm.get('price')?.touched">Must be a positive number</span>
-    </div>
+  <div>
+    <label>Image URL:</label>
+    <input formControlName="imageUrl" class="form-control" />
+  </div>
 
-    <div>
-      <label for="productionYear">Production Year:</label>
-      <input id="productionYear" formControlName="productionYear" type="number" />
-      <span *ngIf="addComponentForm.get('productionYear')?.invalid && addComponentForm.get('productionYear')?.touched">Must be between 2000 and current year</span>
-    </div>
+  <div>
+    <label>Price:</label>
+    <input type="number" formControlName="price" class="form-control" />
+  </div>
 
-    <div>
-      <label for="powerUsage">Power Usage:</label>
-      <input id="powerUsage" formControlName="powerUsage" type="number" />
-      <span *ngIf="addComponentForm.get('powerUsage')?.invalid && addComponentForm.get('powerUsage')?.touched">Must be positive</span>
-    </div>
+  <div>
+    <label>Production Year:</label>
+    <input type="number" formControlName="productionYear" class="form-control" />
+  </div>
 
-    <div>
-      <label for="status">Status:</label>
-      <select id="status" formControlName="status">
-        <option value="Available">Available</option>
-        <option value="Sold">Sold</option>
-        <option value="Discounted">Discounted</option>
-        <option value="WaitingStock">Waiting Stock</option>
-      </select>
-    </div>
+  <div>
+    <label>Power Usage (W):</label>
+    <input type="number" formControlName="powerUsage" class="form-control" />
+  </div>
 
-    <div>
-      <label for="stockCount">Stock Count:</label>
-      <input id="stockCount" formControlName="stockCount" type="number" />
-      <span *ngIf="addComponentForm.get('stockCount')?.invalid && addComponentForm.get('stockCount')?.touched">Must be positive</span>
-    </div>
+  <div>
+    <label>Status:</label>
+    <select formControlName="status" class="form-control">
+      <option [value]="PartStatus.Available">Available</option>
+      <option [value]="PartStatus.Sold">Sold</option>
+      <option [value]="PartStatus.Discounted">Discounted</option>
+      <option [value]="PartStatus.WaitingStock">Waiting Stock</option>
+    </select>
+  </div>
 
-    <div>
-      <label for="isPublic">Is Public:</label>
-      <input id="isPublic" formControlName="isPublic" type="checkbox" />
-    </div>
+  <div>
+    <label>Stock Count:</label>
+    <input type="number" formControlName="stockCount" class="form-control" />
+  </div>
 
-    <button type="submit" [disabled]="addComponentForm.invalid">Add Component</button>
-  </form>
-</div>
+  <div>
+    <label>
+      <input type="checkbox" formControlName="isPublic" />
+      Public
+    </label>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Add Component</button>
+</form>

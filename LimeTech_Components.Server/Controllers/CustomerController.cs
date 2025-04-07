@@ -97,7 +97,7 @@
 
         [Authorize]
         [HttpPost("purchases")]
-        public async Task<IActionResult> PurchaseBasket([FromBody] List<int> componentIds)
+        public async Task<IActionResult> PurchaseBasket([FromBody] PurchaseRequestDTO request)
         {
             var customerId = User.FindFirst("customerId")?.Value;
 
@@ -106,7 +106,10 @@
                 return Unauthorized();
             }
 
-            var (success, purchasedItems, totalCost) = await _customerService.PurchaseSelectedItemsAsync(customerId, componentIds);
+            var componentIds = request.Quantities.Keys.ToList();
+
+            var (success, purchasedItems, totalCost) = await _customerService
+                .PurchaseSelectedItemsAsync(customerId, componentIds, request.Quantities);
 
             if (!success)
             {
@@ -119,6 +122,7 @@
                 PurchasedItems = purchasedItems
             });
         }
+
 
 
 

@@ -7,10 +7,10 @@ namespace LimeTech_Components.Server.Services.Components
     public interface IComponentService
     {
 
-        Task<ComponentQueryServiceModel> GetComponentsAsync(
-            int currentPage,
-            int componentsPerPage,
-            bool publicOnly);
+        //Task<ComponentQueryServiceModel> GetComponentsAsync(
+        //    int currentPage,
+        //    int componentsPerPage,
+        //    bool publicOnly);
 
         Task<ComponentQueryServiceModel> SearchAndFilterComponentsAsync(
             string? keyword,
@@ -36,8 +36,6 @@ namespace LimeTech_Components.Server.Services.Components
         Task<bool> ChangeComponentVisibilityAsync(int id, bool isVisible);
 
         Task<IEnumerable<ComponentDTO>> GetAllComponentsSortedByYearAsync();
-
-        //Task<bool> ReduceStockCountAsync(int componentId, int quantity);
 
     }
 }

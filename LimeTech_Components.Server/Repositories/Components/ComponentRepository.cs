@@ -48,6 +48,13 @@
 
 
 
+        private async Task<IEnumerable<ComponentServiceModel>> GetComponentsAsync(IQueryable<Component> componentQuery)
+        => await componentQuery
+        .ProjectTo<ComponentServiceModel>(this.mapper)
+        .ToListAsync();
+
+
+
         public async Task<ComponentQueryServiceModel> SearchAndFilterComponentsAsync(
             string? keyword,
             string? name,
@@ -150,16 +157,11 @@
         }
 
 
-        private async Task<IEnumerable<ComponentServiceModel>> GetComponentsAsync(IQueryable<Component> componentQuery)
-            => await componentQuery
-                .ProjectTo<ComponentServiceModel>(this.mapper)
-                .ToListAsync();
-
-
         public async Task<Component> GetComponentByIdAsync(int id)
         {
             return await _context.Components.FindAsync(id);
         }
+
 
         public async Task UpdateComponentAsync(Component component)
         {

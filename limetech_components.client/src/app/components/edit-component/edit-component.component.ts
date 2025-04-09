@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ComponentService } from '../../services/component.service';
+import { ComponentService } from '../../services/home.service';
 import { ComponentDTO } from '../../models/component.dto';
 import { PartStatus } from '../../models/status.dto';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';

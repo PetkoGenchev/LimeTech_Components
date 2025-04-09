@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ComponentService } from '../../services/component.service';
+import { ComponentService } from '../../services/home.service';
 import { ComponentDTO } from '../../models/component.dto';
 import { PartStatus } from '../../models/status.dto';
 

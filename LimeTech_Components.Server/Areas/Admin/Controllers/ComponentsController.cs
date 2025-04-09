@@ -22,36 +22,6 @@
         }
 
 
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetComponents(
-        [FromQuery] int currentPage = 1,
-        [FromQuery] int componentsPerPage = ComponentConstants.ComponentsPerPage)
-        {
-            if (currentPage < 1 || componentsPerPage < 1)
-            {
-                return BadRequest("Current page and components per page must be greater than zero.");
-            }
-
-            try
-            {
-                var components = await _componentService.GetComponentsAsync(
-                    currentPage: currentPage,
-                    componentsPerPage: componentsPerPage,
-                    publicOnly: false);
-
-                return Ok(components);
-            }
-            catch (Exception ex)
-            {
-                // Log the exception
-                return StatusCode(500, "An error occurred while retrieving components.");
-            }
-        }
-
-
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -164,6 +134,51 @@
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
+
+
+        [HttpGet("all-components")]
+        public async Task<IActionResult> GetAllComponents([FromQuery] string sortBy = null)
+        {
+            try
+            {
+                var components = await _componentService.GetAllComponentsAsync(sortBy);
+                return Ok(components);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
+
+
+        //[HttpGet]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        //public async Task<IActionResult> GetComponents(
+        //[FromQuery] int currentPage = 1,
+        //[FromQuery] int componentsPerPage = ComponentConstants.ComponentsPerPage)
+        //{
+        //    if (currentPage < 1 || componentsPerPage < 1)
+        //    {
+        //        return BadRequest("Current page and components per page must be greater than zero.");
+        //    }
+
+        //    try
+        //    {
+        //        var components = await _componentService.GetComponentsAsync(
+        //            currentPage: currentPage,
+        //            componentsPerPage: componentsPerPage,
+        //            publicOnly: false);
+
+        //        return Ok(components);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Log the exception
+        //        return StatusCode(500, "An error occurred while retrieving components.");
+        //    }
+        //}
 
 
 

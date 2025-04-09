@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
-import { ComponentService } from '../../services/component.service';
+import { ComponentService } from '../../services/home.service';
 import { ComponentDTO } from '../../models/component.dto';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';

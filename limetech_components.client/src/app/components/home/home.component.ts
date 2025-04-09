@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { BasketService } from '../../services/basket.service';
-import { ComponentService } from '../../services/component.service';
+import { ComponentService } from '../../services/home.service';
 import { ComponentDTO } from '../../models/component.dto';
 import { SearchService } from '../../services/search.service';
 import { AuthService } from '../../services/auth.service';

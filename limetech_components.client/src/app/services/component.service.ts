@@ -9,12 +9,11 @@ import { ComponentDTO } from '../models/component.dto';
   providedIn: 'root'
 })
 export class ComponentService {
-  private apiUrl = 'https://localhost:7039/api/home';
+  private apiUrl = 'https://localhost:7039/api/components';
 
   constructor(private http: HttpClient) { }
 
-  // Add a component to the database
-  // NOT DONE - Used to add new components, for ComponentController and add-component.component.ts 
+  // Add a component to the database 
   addComponent(component: ComponentDTO): Observable<ComponentDTO> {
     if (!component) {
       throw new Error('Component data missing.');
@@ -30,7 +29,6 @@ export class ComponentService {
 
 
   // Edit a component in the database
-  // NOT DONE - Used to edit components, for ComponentController and edit-component.component.ts
   editComponent(id: number, component: ComponentDTO): Observable<ComponentDTO> {
     if (!id || id <= 0) {
       throw new Error('Invalid component ID.');
@@ -49,7 +47,6 @@ export class ComponentService {
 
 
   // Change visibility of a component
-  // NOT DONE - Used to edit components, for ComponentController and edit-component.component.ts
   toggleVisibility(id: number, isPublic: boolean): Observable<void> {
     if (!id || id <= 0) {
       throw new Error('Invalid component ID.');
@@ -63,43 +60,6 @@ export class ComponentService {
       );
   }
 
-  // Get the top 8 components based on purchasedCount
-  getTopComponents(): Observable<ComponentDTO[]> {
-    return this.http.get<ComponentDTO[]>(`${this.apiUrl}/components`)
-      .pipe(
-        catchError(error => {
-          console.error('Error fetching top components:', error);
-          return throwError(() => new Error('Failed to fetch top components.'));
-        })
-      );
-  }
-
-
-
-getComponents(filters: { [key: string]: any }) {
-  let params = new HttpParams();
-  Object.keys(filters).forEach(key => {
-    if (filters[key] !== null && filters[key] !== undefined) {
-      params = params.set(key, filters[key]);
-    }
-  });
-
-  return this.http.get<ComponentDTO[]>(`${this.apiUrl}/components`, { params });
-}
-
-
-
-
-
-  getComponentById(id: number): Observable<ComponentDTO> {
-    return this.http.get<ComponentDTO>(`${this.apiUrl}/${id}`)
-      .pipe(
-        catchError(error => {
-          console.error('Error fetching top components:', error);
-          return throwError(() => new Error('Failed to fetch top components.'));
-        })
-      );
-  }
 
 
   getAllComponents(sortBy: string = ''): Observable<ComponentDTO[]> {
@@ -116,10 +76,4 @@ getComponents(filters: { [key: string]: any }) {
         })
       );
   }
-
-  getComponentsSortedByYear(): Observable<ComponentDTO[]> {
-    return this.http.get<ComponentDTO[]>(`${this.apiUrl}/components-by-year`);
-  }
-
-
 }

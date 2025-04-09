@@ -21,13 +21,13 @@
             _mapper = mapper;
         }
 
-        public async Task<ComponentQueryServiceModel> GetComponentsAsync(
-            int currentPage = 1,
-            int componentsPerPage = ComponentConstants.ComponentsPerPage,
-            bool publicOnly = false)
-        {
-            return await _componentRepository.GetComponentsAsync(currentPage, componentsPerPage, publicOnly);
-        }
+        //public async Task<ComponentQueryServiceModel> GetComponentsAsync(
+        //    int currentPage = 1,
+        //    int componentsPerPage = ComponentConstants.ComponentsPerPage,
+        //    bool publicOnly = false)
+        //{
+        //    return await _componentRepository.GetComponentsAsync(currentPage, componentsPerPage, publicOnly);
+        //}
 
 
         public async Task<ComponentQueryServiceModel> SearchAndFilterComponentsAsync(
@@ -116,26 +116,5 @@
 
             return _mapper.Map<List<ComponentDTO>>(components);
         }
-
-
-        //public async Task<bool> ReduceStockCountAsync(int componentId, int quantity)
-        //{
-        //    var component = await _componentRepository.GetComponentByIdAsync(componentId);
-        //    if (component == null || component.StockCount < quantity)
-        //    {
-        //        return false;
-        //    }
-
-        //    component.StockCount -= quantity;
-
-        //    if (component.StockCount == 0)
-        //    {
-        //        component.Status = PartStatus.Sold;
-        //    }
-
-        //    await _componentRepository.UpdateComponentAsync(component);
-        //    return true;
-        //}
-
     }
 }

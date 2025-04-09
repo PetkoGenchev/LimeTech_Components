@@ -9,10 +9,10 @@ namespace LimeTech_Components.Server.Repositories.Components
     public interface IComponentRepository
     {
 
-        Task<ComponentQueryServiceModel> GetComponentsAsync(
-            int currentPage,
-            int componentsPerPage,
-            bool publicOnly);
+        //Task<ComponentQueryServiceModel> GetComponentsAsync(
+        //    int currentPage,
+        //    int componentsPerPage,
+        //    bool publicOnly);
 
         Task<ComponentQueryServiceModel> SearchAndFilterComponentsAsync(
             string? keyword,

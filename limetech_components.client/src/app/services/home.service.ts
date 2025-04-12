@@ -49,8 +49,6 @@ export class HomeService {
       params = params.set('sortBy', sortBy);
     }
 
-
-
     return this.http.get<ComponentDTO[]>(`${this.apiUrl}/all-components`, { params })
       .pipe(
         catchError(error => {

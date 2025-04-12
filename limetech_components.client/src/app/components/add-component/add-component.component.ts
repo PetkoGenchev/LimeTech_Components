@@ -15,6 +15,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class AddComponentComponent {
   addComponentForm: FormGroup;
+  PartStatus = PartStatus;
 
   constructor(
     private fb: FormBuilder,

@@ -136,19 +136,6 @@
         }
 
 
-        [HttpGet("all-components")]
-        public async Task<IActionResult> GetAllComponents([FromQuery] string sortBy = null)
-        {
-            try
-            {
-                var components = await _componentService.GetAllComponentsAsync(sortBy);
-                return Ok(components);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"An error occurred: {ex.Message}");
-            }
-        }
 
 
         //[HttpGet]

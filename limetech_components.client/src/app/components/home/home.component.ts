@@ -7,6 +7,7 @@ import { ComponentDTO } from '../../models/component.dto';
 import { SearchService } from '../../services/search.service';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { NavigationEnd } from '@angular/router';
 
 
 @Component({
@@ -60,10 +61,16 @@ export class HomeComponent implements OnInit {
     this.customerId = this.authService.getCustomerId() || '';
 
 
-    // Listen for route changes to detect when Home is clicked
-    this.router.events.subscribe(() => {
-      if (this.router.url === '/home') {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd && event.urlAfterRedirects === '/') {
+        // Reset filters and show top purchased when Home is clicked, even if already on home
+        this.filterForm.reset();
+        this.searchService.updateSearchKeyword(''); // Clear the global search bar
+        this.defaultFilterApplied = true;
         this.loadTopPurchased();
+        this.components = [];
+
+        window.scrollTo({ top: 0, behavior: 'smooth' }); // Smooth scroll to top
       }
     });
 
@@ -141,6 +148,7 @@ export class HomeComponent implements OnInit {
       error: (error) => console.error('Failed to load top purchased components', error),
     });
   }
+
 
   updateAvailableFilters(): void {
     const selectedProducer = this.filterForm.value.producer;

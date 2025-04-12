@@ -9,29 +9,36 @@
 
 .component-card:hover {
   transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
 }
 
 .status {
   display: block;
-  color: white;
   padding: 5px 10px;
-  border-radius: 5px;
-  font-weight: bold;
-  width: 100%;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  width: fit-content;
   text-align: center;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
 }
 
-
 .status-available {
-  background-color: green;
+  background-color: #e0f7e9;
+  color: #2e7d32;
 }
 
 .status-waiting {
-  background-color: orange;
+  background-color: #fff3cd;
+  color: #856404;
 }
 
 .status-sold {
-  background-color: red;
+  background-color: #fdecea;
+  color: #c62828;
 }
 
 .image-container {
@@ -84,32 +91,34 @@
 
 .card-bottom {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   width: 100%;
   align-items: center;
+  margin-top: 12px;
 }
 
   .card-bottom button {
-    background: #007bff;
+    background: #3f51b5;
     color: white;
     border: none;
-    padding: 8px;
-    border-radius: 12px;
+    padding: 8px 16px;
+    border-radius: 10px;
     cursor: pointer;
-    transition: background 0.2s, transform 0.2s;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-weight: 500;
   }
 
     .card-bottom button:hover {
-      background: #0056b3;
-      transform: scale(1.05);
+      background: #303f9f;
+      transform: translateY(-2px);
     }
 
   .card-bottom .price {
     font-weight: bold;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     color: #333;
-    margin-top: 15px;
   }
+
 
 .currency {
   font-weight: bold;
@@ -154,6 +163,19 @@
   position: relative;
   justify-content: space-between;
   align-content: flex-start;
+  animation: fadeInUp 0.5s ease-in;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .page-layout {

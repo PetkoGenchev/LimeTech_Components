@@ -8,7 +8,7 @@ import { ComponentDTO } from '../models/component.dto';
 @Injectable({
   providedIn: 'root'
 })
-export class ComponentService {
+export class HomeService {
   private apiUrl = 'https://localhost:7039/api/home';
 
   constructor(private http: HttpClient) { }
@@ -37,20 +37,27 @@ export class ComponentService {
     return this.http.get<ComponentDTO[]>(`${this.apiUrl}/components`, { params });
   }
 
-
-
-  getComponentById(id: number): Observable<ComponentDTO> {
-    return this.http.get<ComponentDTO>(`${this.apiUrl}/${id}`)
-      .pipe(
-        catchError(error => {
-          console.error('Error fetching top components:', error);
-          return throwError(() => new Error('Failed to fetch top components.'));
-        })
-      );
-  }
-
   getComponentsSortedByYear(): Observable<ComponentDTO[]> {
     return this.http.get<ComponentDTO[]>(`${this.apiUrl}/components-by-year`);
+  }
+
+
+
+  getAllComponents(sortBy: string = ''): Observable<ComponentDTO[]> {
+    let params = new HttpParams();
+    if (sortBy) {
+      params = params.set('sortBy', sortBy);
+    }
+
+
+
+    return this.http.get<ComponentDTO[]>(`${this.apiUrl}/all-components`, { params })
+      .pipe(
+        catchError(error => {
+          console.error('Error fetching all components:', error);
+          return throwError(() => new Error('Failed to fetch all components.'));
+        })
+      );
   }
 
 

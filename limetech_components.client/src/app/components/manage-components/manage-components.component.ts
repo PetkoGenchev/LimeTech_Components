@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
-import { ComponentService } from '../../services/home.service';
+import { ComponentService } from '../../services/component.service';
+import { HomeService } from '../../services/home.service';
 import { ComponentDTO } from '../../models/component.dto';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -19,6 +20,7 @@ export class ManageComponentsComponent implements OnInit{
 
   constructor(
     private componentService: ComponentService,
+    private homeService: HomeService,
     private router: Router
   ) { }
 
@@ -27,7 +29,7 @@ export class ManageComponentsComponent implements OnInit{
   }
 
   loadComponents(): void {
-    this.componentService.getComponents({}).subscribe({
+    this.homeService.getComponents({}).subscribe({
       next: (data) => (this.components = data),
       error: (error) => console.error('Failed to load components', error),
     });

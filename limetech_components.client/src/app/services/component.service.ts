@@ -60,19 +60,12 @@ export class ComponentService {
       );
   }
 
-
-
-  getAllComponents(sortBy: string = ''): Observable<ComponentDTO[]> {
-    let params = new HttpParams();
-    if (sortBy) {
-      params = params.set('sortBy', sortBy);
-    }
-
-    return this.http.get<ComponentDTO[]>(`${this.apiUrl}/all-components`, { params })
+  getComponentById(id: number): Observable<ComponentDTO> {
+    return this.http.get<ComponentDTO>(`${this.apiUrl}/${id}`)
       .pipe(
         catchError(error => {
-          console.error('Error fetching all components:', error);
-          return throwError(() => new Error('Failed to fetch all components.'));
+          console.error('Error fetching top components:', error);
+          return throwError(() => new Error('Failed to fetch top components.'));
         })
       );
   }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { BasketService } from '../../services/basket.service';
-import { ComponentService } from '../../services/home.service';
+import { HomeService } from '../../services/home.service';
 import { ComponentDTO } from '../../models/component.dto';
 import { SearchService } from '../../services/search.service';
 import { AuthService } from '../../services/auth.service';
@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private componentService: ComponentService,
+    private homeService: HomeService,
     private basketService: BasketService,
     private searchService: SearchService,
     private authService: AuthService,
@@ -113,7 +113,7 @@ export class HomeComponent implements OnInit {
     this.defaultFilterApplied = !isFilterActive;
 
     if (isFilterActive) {
-      this.componentService.getComponents(this.filterForm.value).subscribe({
+      this.homeService.getComponents(this.filterForm.value).subscribe({
         next: (data: any) => {
           this.components = data.components;
           this.updateAvailableFilters();
@@ -122,7 +122,7 @@ export class HomeComponent implements OnInit {
       });
     } else {
       // Ensure this API call exists in your backend
-      this.componentService.getComponentsSortedByYear().subscribe({
+      this.homeService.getComponentsSortedByYear().subscribe({
         next: (data) => {
           this.components = data;
           this.updateAvailableFilters();
@@ -136,7 +136,7 @@ export class HomeComponent implements OnInit {
 
 
   loadTopPurchased(): void {
-    this.componentService.getTopComponents().subscribe({
+    this.homeService.getTopComponents().subscribe({
       next: (data) => this.topPurchased = data,
       error: (error) => console.error('Failed to load top purchased components', error),
     });
@@ -183,7 +183,7 @@ export class HomeComponent implements OnInit {
   }
 
   loadFilters(): void {
-    this.componentService.getAllComponents().subscribe({
+    this.homeService.getAllComponents().subscribe({
       next: (data) => {
         this.categories = [...new Set(data.map(c => c.typeOfProduct).filter(x => x !== null))] as string[];
         this.producers = [...new Set(data.map(c => c.producer).filter(x => x !== null))] as string[];

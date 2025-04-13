@@ -16,8 +16,23 @@ export const routes: Routes = [
   { path: 'purchase-history', component: PurchaseHistoryComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'add', component: AddComponentComponent, canActivate: [AdminGuard] },
-  { path: 'edit/:id', component: EditComponentComponent, canActivate: [AdminGuard] },
-  { path: 'manage', component: ManageComponentsComponent, canActivate: [AdminGuard] },
+  {
+    path: 'admin',
+    children: [
+      { path: 'add-component', component: AddComponentComponent, canActivate: [AdminGuard] }
+    ]
+  },
+  {
+    path: 'admin',
+    children: [
+      { path: 'edit/:id', component: EditComponentComponent, canActivate: [AdminGuard] },
+    ]
+  },
+  {
+    path: 'admin',
+    children: [
+      { path: 'manage', component: ManageComponentsComponent, canActivate: [AdminGuard] },
+    ]
+  },
   { path: '**', redirectTo: '' }
 ];

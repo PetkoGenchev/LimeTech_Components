@@ -18,19 +18,10 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   {
     path: 'admin',
+    canActivate: [AdminGuard],
     children: [
-      { path: 'add-component', component: AddComponentComponent, canActivate: [AdminGuard] }
-    ]
-  },
-  {
-    path: 'admin',
-    children: [
+      { path: 'add-component', component: AddComponentComponent, canActivate: [AdminGuard] },
       { path: 'edit/:id', component: EditComponentComponent, canActivate: [AdminGuard] },
-    ]
-  },
-  {
-    path: 'admin',
-    children: [
       { path: 'manage', component: ManageComponentsComponent, canActivate: [AdminGuard] },
     ]
   },
